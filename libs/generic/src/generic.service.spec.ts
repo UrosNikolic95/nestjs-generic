@@ -1,13 +1,19 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import { DataSource } from 'typeorm';
 import { getConnection, TestEntity } from '../testing/connection';
 import { RequestManyDto } from './generic.dto';
 import { GenericFunctions } from './generic.functions';
+import { EntityType } from './generic.interface';
 
-describe('GenericFuntions', async () => {
-  const connection = await getConnection();
-
-  const service = new GenericFunctions(connection.getRepository(TestEntity));
+describe('GenericFuntions', () => {
+  let connection: DataSource;
+  let service: GenericFunctions<TestEntity>;
   let data0: TestEntity;
+
+  beforeAll(async () => {
+    connection = await getConnection();
+    service = new GenericFunctions(connection.getRepository(TestEntity));
+  });
 
   it('should be defined', () => {
     expect(service).toBeDefined();
@@ -28,11 +34,16 @@ describe('GenericFuntions', async () => {
       limit: 1,
       page: 1,
     } as RequestManyDto);
-    expect(data2.items).toEqual(data2.limit);
+    expect(data2.items.length).toEqual(data2.limit);
   });
 
   it('test delete', async () => {
     const data3 = await service.delete(data0.id);
+    console.log({ data3 });
     expect(data3.id).toEqual(data0.id);
+  });
+
+  afterAll(async () => {
+    await connection.destroy();
   });
 });

@@ -35,7 +35,7 @@ export class GenericFunctions<T extends EntityType>
       .where({ id })
       .getOne();
     await found.remove();
-    return found;
+    return { ...found, id };
   }
 
   async update(body: DeepPartial<T>): Promise<T> {

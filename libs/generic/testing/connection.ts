@@ -1,3 +1,5 @@
+import * as dotenv from 'dotenv';
+dotenv.config();
 import {
   BaseEntity,
   Column,
@@ -20,6 +22,7 @@ export async function getConnection() {
     type: 'postgres',
     url: process.env.DB_URL,
     entities: [TestEntity],
+    synchronize: true,
   });
   await connection.initialize();
   return connection;
