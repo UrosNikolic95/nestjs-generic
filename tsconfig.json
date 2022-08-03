@@ -13,18 +13,8 @@
     "incremental": true,
     "skipLibCheck": true,
     "paths": {
-      "generic/generic": [
-        "libs/generic/src"
-      ],
-      "generic/generic/*": [
-        "libs/generic/src/*"
-      ],
-      "un95/un95": [
-        "libs/un95/src"
-      ],
-      "un95/un95/*": [
-        "libs/un95/src/*"
-      ]
+      "generic/generic": ["libs/generic/src"],
+      "generic/generic/*": ["libs/generic/src/*"]
     }
   }
 }
