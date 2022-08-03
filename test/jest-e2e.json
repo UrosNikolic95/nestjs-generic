@@ -1,0 +1,19 @@
+{
+  "moduleFileExtensions": [
+    "js",
+    "json",
+    "ts"
+  ],
+  "rootDir": ".",
+  "testEnvironment": "node",
+  "testRegex": ".e2e-spec.ts$",
+  "transform": {
+    "^.+\\.(t|j)s$": "ts-jest"
+  },
+  "moduleNameMapper": {
+    "generic/generic/(.*)": "<rootDir>/../libs/generic/src/$1",
+    "generic/generic": "<rootDir>/../libs/generic/src",
+    "un95/un95/(.*)": "<rootDir>/../libs/un95/src/$1",
+    "un95/un95": "<rootDir>/../libs/un95/src"
+  }
+}
