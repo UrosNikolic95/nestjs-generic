@@ -29,8 +29,15 @@ export class RequestManyResponeDto<T> {
     Object.assign(this, obj);
   }
 
+  @ApiProperty()
   items: T[];
+
+  @ApiProperty()
   count: number;
+
+  @ApiProperty()
   page: number;
+
+  @ApiProperty()
   limit: number;
 }

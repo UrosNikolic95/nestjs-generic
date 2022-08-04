@@ -14,7 +14,7 @@ import { EntityMetadata, Repository } from 'typeorm';
 import { RequestManyDto, RequestManyResponeDto } from './generic.dto';
 import { EntityType, IGenericController } from './generic.interface';
 import { GenericFunctions } from './generic.functions';
-import { ApiBody, ApiQuery, ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 export function getController<T extends EntityType>(
   entity: Type<T>,
@@ -32,7 +32,7 @@ export function getController<T extends EntityType>(
       this.service = new GenericFunctions(repo);
     }
 
-    @ApiQuery({ type: RequestManyDto })
+    @ApiResponse({ type: RequestManyResponeDto<T> })
     @Get()
     requestMany(
       @Query() query: RequestManyDto,
@@ -40,23 +40,27 @@ export function getController<T extends EntityType>(
       return this.service.requestMany(query);
     }
 
+    @ApiResponse({ type: entity })
     @Get(':id')
     requestOne(@Param('id') id: number): Promise<T> {
       return this.service.requestOne(id);
     }
 
     @ApiBody({ type: entity })
+    @ApiResponse({ type: entity })
     @Post()
     create(@Body() body: T): Promise<T> {
       return this.service.create(body);
     }
 
+    @ApiResponse({ type: entity })
     @Delete(':id')
     delete(@Param('id') id: number): Promise<T> {
       return this.service.delete(id);
     }
 
     @ApiBody({ type: entity })
+    @ApiResponse({ type: entity })
     @Put(':id')
     update(@Param('id') id: number, @Body() body: T): Promise<T> {
       return this.service.update(id, body);
