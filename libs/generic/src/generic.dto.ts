@@ -26,21 +26,15 @@ export class RequestManyDto {
   }
 }
 
-export function getPaginationType<T>(
-  entity: TypeInterface<T>,
-): TypeInterface<IPaginationResponse<T>> {
-  class RequestManyResponeDto<T> implements IPaginationResponse<T> {
-    @ApiProperty({ isArray: true, type: entity })
-    items: T[];
+export class RequestManyResponeDto<T> implements IPaginationResponse<T> {
+  items: T[];
 
-    @ApiProperty()
-    count: number;
+  @ApiProperty()
+  count: number;
 
-    @ApiProperty()
-    page: number;
+  @ApiProperty()
+  page: number;
 
-    @ApiProperty()
-    limit: number;
-  }
-  return RequestManyResponeDto;
+  @ApiProperty()
+  limit: number;
 }

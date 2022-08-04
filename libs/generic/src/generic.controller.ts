@@ -11,10 +11,20 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { EntityMetadata, Repository } from 'typeorm';
-import { getPaginationType, RequestManyDto } from './generic.dto';
-import { EntityType, IGenericController } from './generic.interface';
+import { RequestManyDto, RequestManyResponeDto } from './generic.dto';
+import {
+  EntityType,
+  IGenericController,
+  IPaginationResponse,
+} from './generic.interface';
 import { GenericFunctions } from './generic.functions';
-import { ApiBody, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBody,
+  ApiExtraModels,
+  ApiResponse,
+  ApiTags,
+  getSchemaPath,
+} from '@nestjs/swagger';
 
 export function getController<T extends EntityType>(
   entity: Type<T>,
@@ -23,6 +33,7 @@ export function getController<T extends EntityType>(
 
   const name = entity.prototype.constructor.name;
 
+  @ApiExtraModels(RequestManyResponeDto)
   @ApiTags(name)
   @Controller(name)
   class GenericController implements IGenericController<T> {
@@ -32,11 +43,28 @@ export function getController<T extends EntityType>(
       this.service = new GenericFunctions(repo);
     }
 
-    @ApiResponse({ type: getPaginationType(entity) })
+    @ApiResponse({
+      schema: {
+        allOf: [
+          { $ref: getSchemaPath(RequestManyResponeDto) },
+          {
+            type: 'object',
+            properties: {
+              items: {
+                type: 'array',
+                items: {
+                  $ref: getSchemaPath(entity),
+                },
+              },
+            },
+          },
+        ],
+      },
+    })
     @Get()
     requestMany(
       @Query() query: RequestManyDto,
-    ): Promise<RequestManyResponeDto<T>> {
+    ): Promise<IPaginationResponse<T>> {
       return this.service.requestMany(query);
     }
 

@@ -1,18 +1,18 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { DataSource } from 'typeorm';
-import { getConnection, TestEntity } from '../testing/connection';
+import { getConnection, Test1Entity } from '../testing/connection';
 import { RequestManyDto } from './generic.dto';
 import { GenericFunctions } from './generic.functions';
 import { EntityType } from './generic.interface';
 
 describe('GenericFuntions', () => {
   let connection: DataSource;
-  let service: GenericFunctions<TestEntity>;
-  let data0: TestEntity;
+  let service: GenericFunctions<Test1Entity>;
+  let data0: Test1Entity;
 
   beforeAll(async () => {
     connection = await getConnection();
-    service = new GenericFunctions(connection.getRepository(TestEntity));
+    service = new GenericFunctions(connection.getRepository(Test1Entity));
   });
 
   it('should be defined', () => {

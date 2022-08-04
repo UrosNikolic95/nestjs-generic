@@ -10,7 +10,7 @@ import {
 } from 'typeorm';
 
 @Entity()
-export class TestEntity extends BaseEntity {
+export class Test1Entity extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -19,11 +19,21 @@ export class TestEntity extends BaseEntity {
   field: string;
 }
 
+@Entity()
+export class Test2Entity extends BaseEntity {
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  @ApiProperty()
+  @Column()
+  number: number;
+}
+
 export async function getConnection() {
   const connection = new DataSource({
     type: 'postgres',
     url: process.env.DB_URL,
-    entities: [TestEntity],
+    entities: [Test1Entity, Test2Entity],
     synchronize: true,
   });
   await connection.initialize();
