@@ -11,7 +11,7 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { EntityMetadata, Repository } from 'typeorm';
-import { RequestManyDto, RequestManyResponeDto } from './generic.dto';
+import { getPaginationType, RequestManyDto } from './generic.dto';
 import { EntityType, IGenericController } from './generic.interface';
 import { GenericFunctions } from './generic.functions';
 import { ApiBody, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
@@ -32,7 +32,7 @@ export function getController<T extends EntityType>(
       this.service = new GenericFunctions(repo);
     }
 
-    @ApiResponse({ type: RequestManyResponeDto<T> })
+    @ApiResponse({ type: getPaginationType(entity) })
     @Get()
     requestMany(
       @Query() query: RequestManyDto,

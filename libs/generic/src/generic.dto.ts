@@ -1,17 +1,19 @@
+import { Type as TypeInterface } from '@nestjs/common';
 import { ApiProperty } from '@nestjs/swagger';
-import { Type } from 'class-transformer';
+import { Type as TypeTransformer } from 'class-transformer';
 import { IsNumber, IsOptional } from 'class-validator';
+import { IPaginationResponse } from './generic.interface';
 
 export class RequestManyDto {
   @ApiProperty({ type: Number, default: 1, required: false })
   @IsOptional()
-  @Type(() => Number)
+  @TypeTransformer(() => Number)
   @IsNumber()
   page = 1;
 
   @ApiProperty({ type: Number, default: 10, required: false })
   @IsOptional()
-  @Type(() => Number)
+  @TypeTransformer(() => Number)
   @IsNumber()
   limit = 10;
 
@@ -24,20 +26,21 @@ export class RequestManyDto {
   }
 }
 
-export class RequestManyResponeDto<T> {
-  constructor(obj: RequestManyResponeDto<T>) {
-    Object.assign(this, obj);
+export function getPaginationType<T>(
+  entity: TypeInterface<T>,
+): TypeInterface<IPaginationResponse<T>> {
+  class RequestManyResponeDto<T> implements IPaginationResponse<T> {
+    @ApiProperty({ isArray: true, type: entity })
+    items: T[];
+
+    @ApiProperty()
+    count: number;
+
+    @ApiProperty()
+    page: number;
+
+    @ApiProperty()
+    limit: number;
   }
-
-  @ApiProperty()
-  items: T[];
-
-  @ApiProperty()
-  count: number;
-
-  @ApiProperty()
-  page: number;
-
-  @ApiProperty()
-  limit: number;
+  return RequestManyResponeDto;
 }
