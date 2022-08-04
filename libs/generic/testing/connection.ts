@@ -1,3 +1,4 @@
+import { ApiProperty } from '@nestjs/swagger';
 import * as dotenv from 'dotenv';
 dotenv.config();
 import {
@@ -13,6 +14,7 @@ export class TestEntity extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
+  @ApiProperty()
   @Column()
   field: string;
 }

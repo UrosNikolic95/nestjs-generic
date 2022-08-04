@@ -8,5 +8,5 @@ export interface IGenericController<T extends EntityType> {
   requestOne(id: number): Promise<T>;
   create(body: DeepPartial<T>): Promise<T>;
   delete(id: number): Promise<T>;
-  update(body: DeepPartial<T>): Promise<T>;
+  update(id: number, body: DeepPartial<T>): Promise<T>;
 }

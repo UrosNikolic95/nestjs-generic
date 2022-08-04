@@ -38,7 +38,11 @@ export class GenericFunctions<T extends EntityType>
     return { ...found, id };
   }
 
-  async update(body: DeepPartial<T>): Promise<T> {
-    return this.repo.save(body);
+  async update(id: number, body: DeepPartial<T>): Promise<T> {
+    const find = await this.repo
+      .createQueryBuilder('root')
+      .where({ id })
+      .getOne();
+    return Object.assign(find, body).save();
   }
 }

@@ -9,15 +9,27 @@ import {
   Type,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { BaseEntity, Repository, UpdateDateColumn } from 'typeorm';
+import {
+  BaseEntity,
+  DataSource,
+  EntityMetadata,
+  Repository,
+  UpdateDateColumn,
+} from 'typeorm';
 import { RequestManyDto, RequestManyResponeDto } from './generic.dto';
 import { EntityType, IGenericController } from './generic.interface';
 import { GenericFunctions } from './generic.functions';
+import { ApiBody, ApiTags } from '@nestjs/swagger';
 
 export function getController<T extends EntityType>(
   entity: Type<T>,
 ): Type<IGenericController<T>> {
-  @Controller()
+  EntityMetadata;
+
+  const name = entity.prototype.constructor.name;
+
+  @ApiTags(name)
+  @Controller(name)
   class GenericController implements IGenericController<T> {
     service: GenericFunctions<T>;
 
@@ -27,27 +39,29 @@ export function getController<T extends EntityType>(
 
     @Get()
     requestMany(query: RequestManyDto): Promise<RequestManyResponeDto<T>> {
-      return this.requestMany(query);
+      return this.service.requestMany(query);
     }
 
     @Get(':id')
     requestOne(@Param('id') id: number): Promise<T> {
-      return this.requestOne(id);
+      return this.service.requestOne(id);
     }
 
+    @ApiBody({ type: entity })
     @Post()
     create(@Body() body: T): Promise<T> {
-      return this.create(body);
+      return this.service.create(body);
     }
 
     @Delete(':id')
-    delete(@Param() id: number): Promise<T> {
-      return this.delete(id);
+    delete(@Param('id') id: number): Promise<T> {
+      return this.service.delete(id);
     }
 
-    @Put()
-    update(@Body() body: T): Promise<T> {
-      return this.update(body);
+    @ApiBody({ type: entity })
+    @Put(':id')
+    update(@Param('id') id: number, @Body() body: T): Promise<T> {
+      return this.service.update(id, body);
     }
   }
 
