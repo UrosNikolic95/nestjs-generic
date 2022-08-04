@@ -6,20 +6,15 @@ import {
   Param,
   Post,
   Put,
+  Query,
   Type,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import {
-  BaseEntity,
-  DataSource,
-  EntityMetadata,
-  Repository,
-  UpdateDateColumn,
-} from 'typeorm';
+import { EntityMetadata, Repository } from 'typeorm';
 import { RequestManyDto, RequestManyResponeDto } from './generic.dto';
 import { EntityType, IGenericController } from './generic.interface';
 import { GenericFunctions } from './generic.functions';
-import { ApiBody, ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiQuery, ApiTags } from '@nestjs/swagger';
 
 export function getController<T extends EntityType>(
   entity: Type<T>,
@@ -37,8 +32,11 @@ export function getController<T extends EntityType>(
       this.service = new GenericFunctions(repo);
     }
 
+    @ApiQuery({ type: RequestManyDto })
     @Get()
-    requestMany(query: RequestManyDto): Promise<RequestManyResponeDto<T>> {
+    requestMany(
+      @Query() query: RequestManyDto,
+    ): Promise<RequestManyResponeDto<T>> {
       return this.service.requestMany(query);
     }
 
