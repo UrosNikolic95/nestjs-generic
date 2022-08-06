@@ -25,12 +25,11 @@ import {
   ApiTags,
   getSchemaPath,
 } from '@nestjs/swagger';
+import { ApiPaginatedResponse } from './generic.decorators';
 
 export function getController<T extends EntityType>(
   entity: Type<T>,
 ): Type<IGenericController<T>> {
-  EntityMetadata;
-
   const name = entity.prototype.constructor.name;
 
   @ApiExtraModels(RequestManyResponeDto)
@@ -43,24 +42,7 @@ export function getController<T extends EntityType>(
       this.service = new GenericFunctions(repo);
     }
 
-    @ApiResponse({
-      schema: {
-        allOf: [
-          { $ref: getSchemaPath(RequestManyResponeDto) },
-          {
-            type: 'object',
-            properties: {
-              items: {
-                type: 'array',
-                items: {
-                  $ref: getSchemaPath(entity),
-                },
-              },
-            },
-          },
-        ],
-      },
-    })
+    @ApiPaginatedResponse(entity)
     @Get()
     requestMany(
       @Query() query: RequestManyDto,
