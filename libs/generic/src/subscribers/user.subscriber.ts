@@ -1,5 +1,6 @@
 import { exec } from 'child_process';
 import {
+  DataSource,
   EntitySubscriberInterface,
   EventSubscriber,
   InsertEvent,
@@ -10,6 +11,10 @@ import { hash } from 'bcrypt';
 
 @EventSubscriber()
 export class UserSubscriber implements EntitySubscriberInterface<UserEntity> {
+  constructor(dataSource: DataSource) {
+    dataSource.subscribers.push(this);
+  }
+
   async beforeInsert(
     event: InsertEvent<UserEntity>,
   ): Promise<void | Promise<any>> {

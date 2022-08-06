@@ -3,11 +3,12 @@ import {
   UnauthorizedException,
   UnprocessableEntityException,
 } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
+import { InjectDataSource, InjectRepository } from '@nestjs/typeorm';
 import { compare } from 'bcrypt';
 import { Request } from 'express';
-import { Repository } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
 import { UserEntity } from '../entities/user.entity';
+import { UserSubscriber } from '../subscribers/user.subscriber';
 import { DeleteDto } from './dto/delete.dto';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
@@ -27,7 +28,7 @@ export class AuthService {
     const found = await this.userRepo.findOne({ where: { email: body.email } });
     if (!found)
       throw new UnprocessableEntityException('No user by that email.');
-    if (await compare(found.password, body.password)) {
+    if (await compare(body.password, found.password)) {
       req.session['payload'] = found.email;
       return found;
     } else {
