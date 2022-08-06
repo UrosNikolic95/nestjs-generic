@@ -2,7 +2,7 @@ import { Type as TypeInterface } from '@nestjs/common';
 import { ApiProperty } from '@nestjs/swagger';
 import { Type as TypeTransformer } from 'class-transformer';
 import { IsNumber, IsOptional } from 'class-validator';
-import { IPaginationResponse } from './generic.interface';
+import { IPaginationResponse } from './crud.interface';
 
 export class RequestManyDto {
   @ApiProperty({ type: Number, default: 1, required: false })

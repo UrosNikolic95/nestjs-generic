@@ -1,10 +1,10 @@
 import { DeepPartial, Repository } from 'typeorm';
-import { RequestManyDto } from './generic.dto';
+import { RequestManyDto } from './crud.dto';
 import {
   EntityType,
   IGenericController,
   IPaginationResponse,
-} from './generic.interface';
+} from './crud.interface';
 
 export class GenericFunctions<T extends EntityType>
   implements IGenericController<T>

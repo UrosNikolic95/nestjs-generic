@@ -1,7 +1,7 @@
 import { Module, Type } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { getController } from './generic.controller';
-import { EntityType } from './generic.interface';
+import { getController } from './crud.controller';
+import { EntityType } from './crud.interface';
 
 export function getGenericModule(entities: Type<EntityType>[]): Type {
   @Module({

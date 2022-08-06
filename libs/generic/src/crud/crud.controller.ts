@@ -11,13 +11,13 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { EntityMetadata, Repository } from 'typeorm';
-import { RequestManyDto, RequestManyResponeDto } from './generic.dto';
+import { RequestManyDto, RequestManyResponeDto } from './crud.dto';
 import {
   EntityType,
   IGenericController,
   IPaginationResponse,
-} from './generic.interface';
-import { GenericFunctions } from './generic.functions';
+} from './crud.interface';
+import { GenericFunctions } from './crud.functions';
 import {
   ApiBody,
   ApiExtraModels,
@@ -25,7 +25,7 @@ import {
   ApiTags,
   getSchemaPath,
 } from '@nestjs/swagger';
-import { ApiPaginatedResponse } from './generic.decorators';
+import { ApiPaginatedResponse } from './crud.decorators';
 
 export function getController<T extends EntityType>(
   entity: Type<T>,

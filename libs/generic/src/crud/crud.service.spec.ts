@@ -1,9 +1,9 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { DataSource } from 'typeorm';
-import { getConnection, Test1Entity } from '../testing/connection';
-import { RequestManyDto } from './generic.dto';
-import { GenericFunctions } from './generic.functions';
-import { EntityType } from './generic.interface';
+import { getConnection, Test1Entity } from '../../testing/connection';
+import { RequestManyDto } from './crud.dto';
+import { GenericFunctions } from './crud.functions';
+import { EntityType } from './crud.interface';
 
 describe('GenericFuntions', () => {
   let connection: DataSource;
@@ -39,7 +39,6 @@ describe('GenericFuntions', () => {
 
   it('test delete', async () => {
     const data3 = await service.delete(data0.id);
-    console.log({ data3 });
     expect(data3.id).toEqual(data0.id);
   });
 

@@ -1,6 +1,6 @@
 import { Type } from '@nestjs/common';
 import { ApiResponse, getSchemaPath } from '@nestjs/swagger';
-import { RequestManyResponeDto } from './generic.dto';
+import { RequestManyResponeDto } from './crud.dto';
 
 export function ApiPaginatedResponse<T>(entity: Type<T>) {
   return ApiResponse({

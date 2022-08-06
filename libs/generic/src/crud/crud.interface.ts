@@ -1,5 +1,5 @@
 import { BaseEntity, DeepPartial } from 'typeorm';
-import { RequestManyDto } from './generic.dto';
+import { RequestManyDto } from './crud.dto';
 
 export type EntityType = { id: number } & BaseEntity;
 
