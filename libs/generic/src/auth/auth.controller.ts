@@ -1,10 +1,12 @@
 import { Body, Controller, Post, Req } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiTags } from '@nestjs/swagger';
 import { Request } from 'express';
 import { AuthService } from './auth.service';
 import { DeleteDto } from './dto/delete.dto';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
+import { JwtAuth } from './guards/jwt.guard';
+import { LocalAuth } from './guards/local.guard';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -16,11 +18,15 @@ export class AuthController {
     this.authService.register(body);
   }
 
+  @ApiBody({ type: LoginDto })
+  @LocalAuth()
   @Post('login')
-  login(@Req() req: Request, @Body() body: LoginDto) {
-    return this.authService.login(req, body);
+  login(@Req() req: Request) {
+    req.session;
+    return req.user;
   }
 
+  @JwtAuth()
   @Post('delete')
   delete(@Req() req: Request, @Body() body: DeleteDto) {
     return this.authService.delete(req, body);

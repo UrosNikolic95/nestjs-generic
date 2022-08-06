@@ -20,19 +20,25 @@ export class AuthService {
     private readonly userRepo: Repository<UserEntity>,
   ) {}
 
+  validate(email: string) {
+    return this.userRepo.findOne({
+      where: {
+        email,
+      },
+    });
+  }
+
   register(body: RegisterDto) {
     return this.userRepo.save(body);
   }
 
-  async login(req: Request, body: LoginDto) {
+  async login(body: LoginDto) {
     const found = await this.userRepo.findOne({ where: { email: body.email } });
-    if (!found)
-      throw new UnprocessableEntityException('No user by that email.');
+    if (!found) throw new UnauthorizedException('No user by that email.');
     if (await compare(body.password, found.password)) {
-      req.session['payload'] = found.email;
       return found;
     } else {
-      throw new UnprocessableEntityException('Wrong password.');
+      throw new UnauthorizedException('Wrong password.');
     }
   }
 
