@@ -3,9 +3,10 @@ import {
   UnauthorizedException,
   UnprocessableEntityException,
 } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
 import { InjectDataSource, InjectRepository } from '@nestjs/typeorm';
 import { compare } from 'bcrypt';
-import { Request } from 'express';
+import { Request, Response } from 'express';
 import { DataSource, Repository } from 'typeorm';
 import { UserEntity } from '../entities/user.entity';
 import { UserSubscriber } from '../subscribers/user.subscriber';
@@ -18,6 +19,7 @@ export class AuthService {
   constructor(
     @InjectRepository(UserEntity)
     private readonly userRepo: Repository<UserEntity>,
+    private readonly jwtService: JwtService,
   ) {}
 
   validate(email: string) {
@@ -32,6 +34,17 @@ export class AuthService {
     return this.userRepo.save(body);
   }
 
+  makeJwtToken(user: any, res: Response) {
+    res.cookie(
+      'Authorization',
+      'Bearer ' + this.jwtService.sign({ email: user.email }),
+    );
+  }
+
+  decodeJwtToken(str: string) {
+    return this.jwtService.decode(str);
+  }
+
   async login(body: LoginDto) {
     const found = await this.userRepo.findOne({ where: { email: body.email } });
     if (!found) throw new UnauthorizedException('No user by that email.');
@@ -43,9 +56,9 @@ export class AuthService {
   }
 
   async delete(req: Request, body: DeleteDto) {
-    if (await compare(req.user['password'], body.password)) {
+    if (await compare(body.password, req.user['password'])) {
       const user = req.user as UserEntity;
-      await user.softRemove();
+      await user.remove();
       return req.user;
     }
     throw new UnauthorizedException('Wrong password.');

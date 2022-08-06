@@ -1,6 +1,6 @@
-import { Body, Controller, Post, Req } from '@nestjs/common';
+import { Body, Controller, Get, Post, Req, Res } from '@nestjs/common';
 import { ApiBody, ApiTags } from '@nestjs/swagger';
-import { Request } from 'express';
+import { Request, Response } from 'express';
 import { AuthService } from './auth.service';
 import { DeleteDto } from './dto/delete.dto';
 import { LoginDto } from './dto/login.dto';
@@ -21,8 +21,8 @@ export class AuthController {
   @ApiBody({ type: LoginDto })
   @LocalAuth()
   @Post('login')
-  login(@Req() req: Request) {
-    req.session;
+  async login(@Req() req: Request, @Res({ passthrough: true }) res: Response) {
+    this.authService.makeJwtToken(req.user, res);
     return req.user;
   }
 
@@ -30,5 +30,13 @@ export class AuthController {
   @Post('delete')
   delete(@Req() req: Request, @Body() body: DeleteDto) {
     return this.authService.delete(req, body);
+  }
+
+  @Get()
+  findAll(@Req() request: Request) {
+    request.session['visits'] = request.session['visits']
+      ? request.session['visits'] + 1
+      : 1;
+    return request.session['visits'];
   }
 }

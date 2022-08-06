@@ -18,7 +18,7 @@ import { LocalGuard } from './guards/local.guard';
     PassportModule.register({ session: true }),
     JwtModule.register({
       secret: jwtSecret,
-      signOptions: { expiresIn: '60s' },
+      signOptions: { expiresIn: '10d' },
     }),
   ],
   controllers: [AuthController],
