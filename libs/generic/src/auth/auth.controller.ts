@@ -28,15 +28,12 @@ export class AuthController {
 
   @JwtAuth()
   @Post('delete')
-  delete(@Req() req: Request, @Body() body: DeleteDto) {
+  delete(
+    @Req() req: Request,
+    @Body() body: DeleteDto,
+    @Res({ passthrough: true }) res: Response,
+  ) {
+    res.clearCookie('Authorization');
     return this.authService.delete(req, body);
-  }
-
-  @Get()
-  findAll(@Req() request: Request) {
-    request.session['visits'] = request.session['visits']
-      ? request.session['visits'] + 1
-      : 1;
-    return request.session['visits'];
   }
 }

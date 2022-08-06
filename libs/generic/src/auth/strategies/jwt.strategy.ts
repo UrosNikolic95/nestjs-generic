@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { Request } from 'express';
-import { Strategy, ExtractJwt } from 'passport-jwt';
+import { ExtractJwt, Strategy } from 'passport-jwt';
 import { jwtSecret } from '../../consts/consts';
 import { AuthService } from '../auth.service';
 
@@ -11,7 +11,7 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
     super({
       jwtFromRequest: (req: Request) => {
         const token = req.cookies['Authorization'];
-        return token.replace('Bearer', '').trim();
+        return token?.replace('Bearer', '')?.trim();
       },
       ignoreExpiration: true,
       secretOrKey: jwtSecret,

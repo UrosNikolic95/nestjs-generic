@@ -35,10 +35,7 @@ export class AuthService {
   }
 
   makeJwtToken(user: any, res: Response) {
-    res.cookie(
-      'Authorization',
-      'Bearer ' + this.jwtService.sign({ email: user.email }),
-    );
+    res.cookie('Authorization', this.jwtService.sign({ email: user.email }));
   }
 
   decodeJwtToken(str: string) {
