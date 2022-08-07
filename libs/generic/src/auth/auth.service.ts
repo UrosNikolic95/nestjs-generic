@@ -9,6 +9,7 @@ import { compare } from 'bcrypt';
 import { Request, Response } from 'express';
 import { DataSource, Repository } from 'typeorm';
 import { UserEntity } from '../entities/user.entity';
+import { checkRequirements } from '../helpers/password.helpers';
 import { UserSubscriber } from '../subscribers/user.subscriber';
 import { DeleteDto } from './dto/delete.dto';
 import { LoginDto } from './dto/login.dto';
@@ -31,6 +32,7 @@ export class AuthService {
   }
 
   register(body: RegisterDto) {
+    checkRequirements(body.password);
     return this.userRepo.save(body);
   }
 
