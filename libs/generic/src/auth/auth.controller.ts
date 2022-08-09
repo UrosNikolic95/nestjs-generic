@@ -1,10 +1,11 @@
-import { Body, Controller, Get, Post, Req, Res } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Req, Res } from '@nestjs/common';
 import { ApiBody, ApiTags } from '@nestjs/swagger';
 import { Request, Response } from 'express';
 import { AuthService } from './auth.service';
 import { DeleteDto } from './dto/delete.dto';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
+import { ResetPasswordDto } from './dto/reset-password.dto';
 import { JwtAuth } from './guards/jwt.guard';
 import { LocalAuth } from './guards/local.guard';
 
@@ -17,14 +18,18 @@ export class AuthController {
   forgotPassword() {}
 
   @Post('reset-password')
-  resetPassword() {}
+  resetPassword(@Req() req: Request, @Body() body: ResetPasswordDto) {
+    return this.authService.resetPassword(req, body);
+  }
 
-  @Post('set-password')
-  setPassword() {}
+  @Post('set-password/:hash')
+  setPassword(@Param('hash') hash: string, @Body() body) {
+    return this.authService.setPassword(hash);
+  }
 
   @Post('register')
   register(@Body() body: RegisterDto) {
-    this.authService.register(body);
+    return this.authService.register(body);
   }
 
   @ApiBody({ type: LoginDto })

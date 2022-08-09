@@ -6,15 +6,19 @@ import {
 import { JwtService } from '@nestjs/jwt';
 import { InjectDataSource, InjectRepository } from '@nestjs/typeorm';
 import { compare, compareSync } from 'bcrypt';
+import { randomBytes } from 'crypto';
 import { Request, Response } from 'express';
 import { DataSource, Repository } from 'typeorm';
 import { UserEntity } from '../entities/user.entity';
 import { checkRequirements } from '../helpers/password.helpers';
+import { MailService } from '../mail/mail.service';
 import { UserSubscriber } from '../subscribers/user.subscriber';
 import { DeleteDto } from './dto/delete.dto';
+import { ForgotPasswordDto } from './dto/forgot-password.dto';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
 import { ResetPasswordDto } from './dto/reset-password.dto';
+import { SetPasswordDto } from './dto/set-password.dto';
 
 @Injectable()
 export class AuthService {
@@ -22,6 +26,7 @@ export class AuthService {
     @InjectRepository(UserEntity)
     private readonly userRepo: Repository<UserEntity>,
     private readonly jwtService: JwtService,
+    private readonly mailService: MailService,
   ) {}
 
   validate(email: string) {
@@ -64,15 +69,43 @@ export class AuthService {
     throw new UnauthorizedException('Wrong password.');
   }
 
-  async forgotPassword() {}
+  async forgotPassword(body: ForgotPasswordDto) {
+    const user = await this.userRepo.findOne({
+      where: {
+        email: body.email,
+      },
+    });
+    if (!user) {
+      throw new UnprocessableEntityException('No user with this email.');
+    }
+    user.setPasswordHash = randomBytes(20).toString('hex');
+    await user.save();
+    this.mailService.sendMail(
+      user.email,
+      'Forgot email.',
+      'Go to link in order to restart password: ' +
+        process.env.FORGOT_PASSWORD_LINK,
+    );
+  }
 
   async resetPassword(req: Request, body: ResetPasswordDto) {
     if (compareSync(body.oldPassword, req.user.password)) {
       req.user.password = body.newPassword;
       await req.user.save();
     }
-    throw new UnprocessableEntityException('Old password do not match.');
+    throw new UnprocessableEntityException('Old password does not match.');
   }
 
-  async setPassword() {}
+  async setPassword(setPasswordHash: string, body: SetPasswordDto) {
+    const user = await this.userRepo.findOne({
+      where: {
+        setPasswordHash,
+      },
+    });
+    if (!user) {
+      throw new UnprocessableEntityException('No user owns that hash.');
+    }
+    user.password = body.newPassword;
+    await user.save();
+  }
 }

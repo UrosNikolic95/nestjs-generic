@@ -31,5 +31,5 @@ export class UserEntity extends BaseEntity {
   password: string;
 
   @Column({ nullable: true, select: false })
-  forgotPasswordHash: string;
+  setPasswordHash: string;
 }

@@ -11,6 +11,7 @@ import { PassportModule } from '@nestjs/passport';
 import { jwtSecret } from '../consts/consts';
 import { LocalStrategy } from './strategies/local.strategy';
 import { LocalGuard } from './guards/local.guard';
+import { MailModule } from '../mail/mail.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { LocalGuard } from './guards/local.guard';
       secret: jwtSecret,
       signOptions: { expiresIn: '10d' },
     }),
+    MailModule,
   ],
   controllers: [AuthController],
   providers: [
