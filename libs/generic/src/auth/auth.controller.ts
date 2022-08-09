@@ -13,6 +13,15 @@ import { LocalAuth } from './guards/local.guard';
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
+  @Post('forgot-password')
+  forgotPassword() {}
+
+  @Post('reset-password')
+  resetPassword() {}
+
+  @Post('set-password')
+  setPassword() {}
+
   @Post('register')
   register(@Body() body: RegisterDto) {
     this.authService.register(body);

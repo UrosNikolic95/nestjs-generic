@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectDataSource, InjectRepository } from '@nestjs/typeorm';
-import { compare } from 'bcrypt';
+import { compare, compareSync } from 'bcrypt';
 import { Request, Response } from 'express';
 import { DataSource, Repository } from 'typeorm';
 import { UserEntity } from '../entities/user.entity';
@@ -14,6 +14,7 @@ import { UserSubscriber } from '../subscribers/user.subscriber';
 import { DeleteDto } from './dto/delete.dto';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
+import { ResetPasswordDto } from './dto/reset-password.dto';
 
 @Injectable()
 export class AuthService {
@@ -56,10 +57,22 @@ export class AuthService {
 
   async delete(req: Request, body: DeleteDto) {
     if (await compare(body.password, req.user['password'])) {
-      const user = req.user as UserEntity;
+      const user = req.user;
       await user.remove();
       return req.user;
     }
     throw new UnauthorizedException('Wrong password.');
   }
+
+  async forgotPassword() {}
+
+  async resetPassword(req: Request, body: ResetPasswordDto) {
+    if (compareSync(body.oldPassword, req.user.password)) {
+      req.user.password = body.newPassword;
+      await req.user.save();
+    }
+    throw new UnprocessableEntityException('Old password do not match.');
+  }
+
+  async setPassword() {}
 }

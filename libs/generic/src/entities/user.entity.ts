@@ -29,4 +29,7 @@ export class UserEntity extends BaseEntity {
   @Exclude()
   @Column()
   password: string;
+
+  @Column({ nullable: true, select: false })
+  forgotPasswordHash: string;
 }
