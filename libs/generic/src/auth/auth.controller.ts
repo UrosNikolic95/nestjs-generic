@@ -3,9 +3,11 @@ import { ApiBody, ApiTags } from '@nestjs/swagger';
 import { Request, Response } from 'express';
 import { AuthService } from './auth.service';
 import { DeleteDto } from './dto/delete.dto';
+import { ForgotPasswordDto } from './dto/forgot-password.dto';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
 import { ResetPasswordDto } from './dto/reset-password.dto';
+import { SetPasswordDto } from './dto/set-password.dto';
 import { JwtAuth } from './guards/jwt.guard';
 import { LocalAuth } from './guards/local.guard';
 
@@ -15,7 +17,9 @@ export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post('forgot-password')
-  forgotPassword() {}
+  forgotPassword(body: ForgotPasswordDto) {
+    return this.authService.forgotPassword(body);
+  }
 
   @Post('reset-password')
   resetPassword(@Req() req: Request, @Body() body: ResetPasswordDto) {
@@ -23,8 +27,8 @@ export class AuthController {
   }
 
   @Post('set-password/:hash')
-  setPassword(@Param('hash') hash: string, @Body() body) {
-    return this.authService.setPassword(hash);
+  setPassword(@Param('hash') hash: string, @Body() body: SetPasswordDto) {
+    return this.authService.setPassword(hash, body);
   }
 
   @Post('register')
