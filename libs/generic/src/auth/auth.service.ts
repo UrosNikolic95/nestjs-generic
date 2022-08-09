@@ -105,6 +105,7 @@ export class AuthService {
     if (!user) {
       throw new UnprocessableEntityException('No user owns that hash.');
     }
+    user.setPasswordHash = null;
     user.password = body.newPassword;
     await user.save();
   }
