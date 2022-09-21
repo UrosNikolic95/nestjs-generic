@@ -5,7 +5,6 @@ import { AppModule } from './app.module';
 import { setupSwagger } from './main.helpers';
 import { ClassSerializerInterceptor, ValidationPipe } from '@nestjs/common';
 import * as session from 'express-session';
-import { jwtSecret } from '../libs/generic/src/consts/consts';
 import * as cookieParser from 'cookie-parser';
 
 async function bootstrap() {
@@ -16,7 +15,7 @@ async function bootstrap() {
   app.use(cookieParser());
   app.use(
     session({
-      secret: jwtSecret,
+      secret: process.env.JWT_SECRET,
       resave: false,
       saveUninitialized: false,
     }),

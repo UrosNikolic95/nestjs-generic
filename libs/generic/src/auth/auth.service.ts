@@ -4,15 +4,14 @@ import {
   UnprocessableEntityException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { InjectDataSource, InjectRepository } from '@nestjs/typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
 import { compare, compareSync } from 'bcrypt';
 import { randomBytes } from 'crypto';
 import { Request, Response } from 'express';
-import { DataSource, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { UserEntity } from '../entities/user.entity';
 import { checkRequirements } from '../helpers/password.helpers';
 import { MailService } from '../mail/mail.service';
-import { UserSubscriber } from '../subscribers/user.subscriber';
 import { DeleteDto } from './dto/delete.dto';
 import { ForgotPasswordDto } from './dto/forgot-password.dto';
 import { LoginDto } from './dto/login.dto';
