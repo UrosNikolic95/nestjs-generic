@@ -16,8 +16,8 @@ export class MailService {
     });
   }
 
-  sendMail(to: string, subject: string, text: string) {
-    this.transport.sendMail({
+  async sendMail(to: string, subject: string, text: string) {
+    return await this.transport.sendMail({
       from: process.env.SMTP_FROM,
       to,
       subject,
