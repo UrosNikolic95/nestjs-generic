@@ -1,14 +1,15 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { databaseConfig } from '../../../../data/database.config';
 import { AuthController } from './auth.controller';
-import { AuthService } from './auth.service';
+import { AuthModule } from './auth.module';
 
 describe('AuthController', () => {
   let controller: AuthController;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      controllers: [AuthController],
-      providers: [AuthService],
+      imports: [AuthModule, TypeOrmModule.forRoot(databaseConfig)],
     }).compile();
 
     controller = module.get<AuthController>(AuthController);

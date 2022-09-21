@@ -8,10 +8,16 @@ import {
 } from 'typeorm';
 import { UserEntity } from '../entities/user.entity';
 import { hash } from 'bcrypt';
+import { InjectDataSource } from '@nestjs/typeorm';
+import { Injectable } from '@nestjs/common';
 
-@EventSubscriber()
+@Injectable()
+// @EventSubscriber()
 export class UserSubscriber implements EntitySubscriberInterface<UserEntity> {
-  constructor(dataSource: DataSource) {
+  constructor(
+    @InjectDataSource()
+    dataSource: DataSource,
+  ) {
     dataSource.subscribers.push(this);
   }
 
