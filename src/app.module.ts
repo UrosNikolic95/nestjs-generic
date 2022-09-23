@@ -21,13 +21,11 @@ import { AppService } from './app.service';
     AppController,
     getViewerController('view', Test1Entity, {
       select: {
-        abc: (el) => el.field,
+        a1: (el) => el.field,
+        a2: (el) => el.test_2.number,
+        a3: (el) => el.test_2.test_1.field,
       },
-      orderBy: {
-        abc: 'ASC',
-      },
-      skip: 0,
-      take: 10,
+      limit: 3,
     }),
   ],
   providers: [AppService],

@@ -1,6 +1,6 @@
 import { Controller, Get, Type } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { QueryHelper, Select, SelectSpecific } from 'type-safe-select';
+import { QueryHelper, SelectSpecific } from 'type-safe-select';
 import { Repository } from 'typeorm';
 
 export function getViewerController<T, result>(

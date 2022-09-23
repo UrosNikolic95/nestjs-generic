@@ -5,6 +5,7 @@ import {
   PrimaryGeneratedColumn,
   Column,
   ManyToOne,
+  JoinColumn,
 } from 'typeorm';
 import { Test2Entity } from './test2.entity';
 
@@ -17,10 +18,11 @@ export class Test1Entity extends BaseEntity {
   @Column()
   field: string;
 
+  @ApiProperty()
   @Column({ nullable: true })
   test_2_id: number;
 
-  @ApiProperty()
   @ManyToOne(() => Test2Entity, (el) => el.test_1)
+  @JoinColumn({ name: 'test_2_id' })
   test_2: Test2Entity;
 }
