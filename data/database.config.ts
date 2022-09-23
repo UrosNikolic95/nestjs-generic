@@ -1,7 +1,7 @@
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { UserEntity } from '../libs/generic/src/entities/user.entity';
-import { UserSubscriber } from '../libs/generic/src/subscribers/user.subscriber';
-import { Test1Entity, Test2Entity } from '../libs/generic/testing/connection';
+import { Test1Entity } from '../libs/generic/testing/test1.entity';
+import { Test2Entity } from '../libs/generic/testing/test2.entity';
 
 export const databaseConfig: TypeOrmModuleOptions = {
   type: 'postgres',

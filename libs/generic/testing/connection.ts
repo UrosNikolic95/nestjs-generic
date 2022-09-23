@@ -1,33 +1,8 @@
-import { ApiProperty } from '@nestjs/swagger';
 import * as dotenv from 'dotenv';
 dotenv.config();
-import {
-  BaseEntity,
-  Column,
-  DataSource,
-  Entity,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
-
-@Entity()
-export class Test1Entity extends BaseEntity {
-  @PrimaryGeneratedColumn()
-  id: number;
-
-  @ApiProperty()
-  @Column()
-  field: string;
-}
-
-@Entity()
-export class Test2Entity extends BaseEntity {
-  @PrimaryGeneratedColumn()
-  id: number;
-
-  @ApiProperty()
-  @Column()
-  number: number;
-}
+import { DataSource } from 'typeorm';
+import { Test1Entity } from './test1.entity';
+import { Test2Entity } from './test2.entity';
 
 export async function getConnection() {
   const connection = new DataSource({

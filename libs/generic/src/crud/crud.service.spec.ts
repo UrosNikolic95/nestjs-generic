@@ -1,9 +1,8 @@
-import { Test, TestingModule } from '@nestjs/testing';
 import { DataSource } from 'typeorm';
-import { getConnection, Test1Entity } from '../../testing/connection';
+import { getConnection } from '../../testing/connection';
+import { Test1Entity } from '../../testing/test1.entity';
 import { RequestManyDto } from './crud.dto';
 import { GenericFunctions } from './crud.functions';
-import { EntityType } from './crud.interface';
 
 describe('GenericFuntions', () => {
   let connection: DataSource;

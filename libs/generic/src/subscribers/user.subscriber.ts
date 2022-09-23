@@ -2,7 +2,6 @@ import { exec } from 'child_process';
 import {
   DataSource,
   EntitySubscriberInterface,
-  EventSubscriber,
   InsertEvent,
   UpdateEvent,
 } from 'typeorm';
@@ -12,7 +11,6 @@ import { InjectDataSource } from '@nestjs/typeorm';
 import { Injectable } from '@nestjs/common';
 
 @Injectable()
-// @EventSubscriber()
 export class UserSubscriber implements EntitySubscriberInterface<UserEntity> {
   constructor(
     @InjectDataSource()
