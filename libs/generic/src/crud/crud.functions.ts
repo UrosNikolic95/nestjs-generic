@@ -12,11 +12,12 @@ export class GenericFunctions<T extends EntityType>
   constructor(private readonly repo: Repository<T>) {}
 
   async requestMany(query: RequestManyDto): Promise<IPaginationResponse<T>> {
-    const { skip, take, page, limit } = query;
+    const { page, limit } = query;
+    const skip = (page - 1) * limit;
     const [items, count] = await this.repo
       .createQueryBuilder('root')
       .skip(skip)
-      .take(take)
+      .take(limit)
       .getManyAndCount();
     return {
       items,

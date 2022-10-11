@@ -18,7 +18,7 @@ import { MailModule } from '../mail/mail.module';
     PassportModule.register({ session: true }),
     JwtModule.register({
       secret: process.env.JWT_SECRET,
-      signOptions: { expiresIn: '10d' },
+      signOptions: { expiresIn: process.env.JWT_EXPIRES },
     }),
     MailModule,
   ],

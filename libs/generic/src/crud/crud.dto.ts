@@ -16,14 +16,6 @@ export class RequestManyDto {
   @TypeTransformer(() => Number)
   @IsNumber()
   limit = 10;
-
-  get skip() {
-    return (this.page - 1) * this.limit;
-  }
-
-  get take() {
-    return this.limit;
-  }
 }
 
 export class RequestManyResponeDto<T> implements IPaginationResponse<T> {
