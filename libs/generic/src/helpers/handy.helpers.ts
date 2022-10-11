@@ -24,7 +24,7 @@ export interface ITimedFunction {
   total_runs: number;
 }
 
-const times = {} as ITimedFunctions;
+export const times = {} as ITimedFunctions;
 
 export function insertFunctions(obj: any) {
   const prototype = Object.getPrototypeOf(obj);
