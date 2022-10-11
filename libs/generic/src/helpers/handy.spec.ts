@@ -1,4 +1,8 @@
-import { getFunctionNames, getNonDefaultFunctionNames } from './handy.helpers';
+import {
+  getFunctionNames,
+  getNonDefaultFunctionNames,
+  insertFunctions,
+} from './handy.helpers';
 
 describe('handy.helpers', () => {
   class A0 {
@@ -25,11 +29,17 @@ describe('handy.helpers', () => {
     }
   }
 
-  it('getNonDefaultFunctionNames', () => {
+  it('getNonDefaultFunctionNames 1', () => {
     const obj = new A1();
     const funcNames = getNonDefaultFunctionNames(obj);
-    console.log(funcNames, getFunctionNames(obj));
-
+    console.log('???', getFunctionNames(obj));
     expect(funcNames.length).toEqual(6);
+  });
+
+  it('getNonDefaultFunctionNames 2', () => {
+    const obj = new A1();
+    insertFunctions(obj);
+    const res = obj.f1();
+    expect(res).toEqual('f1');
   });
 });
