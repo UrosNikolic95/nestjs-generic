@@ -1,4 +1,5 @@
 import {
+  Encapsulate,
   getFunctionNames,
   getNonDefaultFunctionNames,
   insertFunctions,
@@ -27,6 +28,13 @@ describe('handy.helpers', () => {
     }
     f6() {
       return 'f6';
+    }
+  }
+
+  class A2 {
+    @Encapsulate()
+    f7(str: string) {
+      return 'f7' + str;
     }
   }
 
@@ -64,5 +72,17 @@ describe('handy.helpers', () => {
     insertFunctions(obj);
     const res = obj.f4(1, 2);
     expect(res).toEqual('f43');
+  });
+
+  it('vrap function decorator', () => {
+    const obj = new A2();
+    const res = obj.f7('?');
+    expect(res).toEqual('f7?');
+  });
+
+  it('vrap function decorator', () => {
+    const obj = new A2();
+    obj.f7('?');
+    expect(times['A2.f7'].total_runs).toEqual(2);
   });
 });
