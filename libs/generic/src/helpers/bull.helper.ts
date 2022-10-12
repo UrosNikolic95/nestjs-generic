@@ -12,6 +12,8 @@ const queueOptions = {
   },
 } as QueueOptions;
 
+const alreadyMade = new Set<string>();
+
 export class QueueHelper {
   constructor() {
     const functionNames = getNonDefaultFunctionNames(this);
@@ -22,10 +24,13 @@ export class QueueHelper {
       this[functionName] = (...args: any[]) => {
         queue.add(functionName, args);
       };
-      queue.process(functionName, (job, done) => {
-        func(...job.data);
-        done();
-      });
+      if (!alreadyMade.has(functionName)) {
+        queue.process(functionName, (job, done) => {
+          func(...job.data);
+          done();
+        });
+        alreadyMade.add(functionName);
+      }
     });
   }
 }
