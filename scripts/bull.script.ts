@@ -1,8 +1,8 @@
 import * as dotenv from 'dotenv';
 dotenv.config();
-import { QueueHelper } from '../libs/generic/src/helpers/bull.helper';
+import { QueueHelperClass } from '../libs/generic/src/helpers/bull.helper';
 
-class TestClass extends QueueHelper {
+class TestClass extends QueueHelperClass {
   async func1(str1: string, str2: string) {
     console.log('func1', '-', str1, '-', str2, '-', process.env.pm_id);
     return str1 + Date.now();
@@ -16,6 +16,6 @@ class TestClass extends QueueHelper {
 
 const test = new TestClass();
 for (let i = 0; i < 10; i++) {
-  test.func1('hey', process.env.pm_id);
+  test.func1('f1', process.env.pm_id);
   test.func2('f2', process.env.pm_id);
 }

@@ -1,7 +1,7 @@
 import * as dotenv from 'dotenv';
 dotenv.config();
 import * as Queue from 'bull';
-import { QueueOptions } from 'bull';
+import { QueueOptions, Queue as IQueue } from 'bull';
 import { getNonDefaultFunctionNames } from './handy.helpers';
 
 const queueOptions = {
@@ -13,24 +13,30 @@ const queueOptions = {
 } as QueueOptions;
 
 const alreadyMade = new Set<string>();
+const queue = new Queue('default', queueOptions);
 
-export class QueueHelper {
-  constructor() {
-    const functionNames = getNonDefaultFunctionNames(this);
-    functionNames.forEach((functionName) => {
-      const func = this[functionName] as Function;
-      const queueName = this.constructor.name;
-      const queue = new Queue(queueName, queueOptions);
-      this[functionName] = (...args: any[]) => {
-        queue.add(functionName, args);
-      };
-      if (!alreadyMade.has(functionName)) {
-        queue.process(functionName, (job, done) => {
-          func(...job.data);
-          done();
-        });
-        alreadyMade.add(functionName);
-      }
-    });
+export function createQueueHelper(queue: IQueue) {
+  class QueueHelper {
+    constructor() {
+      const functionNames = getNonDefaultFunctionNames(this);
+      functionNames.forEach((functionName) => {
+        const func = this[functionName] as Function;
+        const className = this.constructor.name;
+        const jobName = className + '.' + functionName;
+        this[functionName] = (...args: any[]) => {
+          queue.add(jobName, args);
+        };
+        if (!alreadyMade.has(jobName)) {
+          queue.process(jobName, (job, done) => {
+            func(...job.data);
+            done();
+          });
+          alreadyMade.add(jobName);
+        }
+      });
+    }
   }
+  return QueueHelper;
 }
+
+export const QueueHelperClass = createQueueHelper(queue);
