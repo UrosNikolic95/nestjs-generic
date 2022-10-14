@@ -8,8 +8,6 @@ const client = createClient({
   password: process.env.REDIS_PASS,
 });
 
-client.on('error', (err) => console.log('Redis Client Error', err));
-
 export async function getSyncData<T>(subKey: string): Promise<T> {
   const pub = client.duplicate();
   await pub.connect();
