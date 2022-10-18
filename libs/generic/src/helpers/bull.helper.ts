@@ -3,6 +3,7 @@ dotenv.config();
 import * as Queue from 'bull';
 import { QueueOptions, Queue as IQueue } from 'bull';
 import { getNonDefaultFunctionNames } from './handy.helpers';
+import { Type } from '@nestjs/common';
 
 const queueOptions = {
   redis: {
@@ -15,7 +16,7 @@ const queueOptions = {
 const alreadyMade = new Set<string>();
 const queue = new Queue('default', queueOptions);
 
-export function createQueueHelper(queue: IQueue) {
+export function createQueueHelper(queue: IQueue): Type {
   class QueueHelper {
     constructor() {
       const functionNames = getNonDefaultFunctionNames(this);

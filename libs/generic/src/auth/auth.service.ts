@@ -38,7 +38,7 @@ export class AuthService {
 
   register(body: RegisterDto) {
     checkRequirements(body.password);
-    return this.userRepo.save(body);
+    return this.userRepo.create(body).save();
   }
 
   makeJwtToken(user: any, res: Response) {

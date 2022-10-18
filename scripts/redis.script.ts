@@ -9,9 +9,10 @@ function sleep(milliseconds: number) {
 async function main() {
   const data = await getSyncData<{ [key: string]: string }>('data');
 
+  await sleep(1000);
   data[process.env.pm_id] = 'HEY!';
 
-  await sleep(2000);
+  await sleep(1000);
   console.log(data);
 }
 main();
