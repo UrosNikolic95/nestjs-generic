@@ -21,11 +21,9 @@ export function createWatchSubscriber<T>(
     async beforeUpdate(event: UpdateEvent<T>): Promise<any> {
       const entity = event.entity as T;
       const databaseEntity = event.databaseEntity as T;
-
-      if (
-        valueGetter(entity)?.toString() !=
-        valueGetter(databaseEntity)?.toString()
-      ) {
+      const oldVal = valueGetter(databaseEntity)?.toString();
+      const newVal = valueGetter(entity)?.toString();
+      if (newVal && oldVal != newVal) {
         await event.manager
           .create(WatchEntity, {
             instance_id: idGetter(entity)?.toString(),
