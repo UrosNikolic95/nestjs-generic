@@ -1,13 +1,14 @@
 import { Type } from '@nestjs/common';
 import { getField } from 'type-safe-select';
 import {
+  BaseEntity,
   EntitySubscriberInterface,
   EventSubscriber,
   UpdateEvent,
 } from 'typeorm';
 import { WatchEntity } from './watch.entity';
 
-export function createWatchSubscriber<T>(
+export function createWatchSubscriber<T extends BaseEntity>(
   entity: Type<T>,
   idGetter: (el: T) => any,
   valueGetter: (el: T) => any,
