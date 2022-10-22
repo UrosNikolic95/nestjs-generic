@@ -34,8 +34,6 @@ export function createWatchSubscriber<T extends BaseEntity>(
         (el) => el.propertyName == field,
       ).type;
 
-      console.log('>>>', type);
-
       if (newVal && oldVal != newVal) {
         const label =
           (await event.manager.findOne(WatchLabelEntity, {
