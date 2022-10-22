@@ -3,22 +3,22 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  ManyToOne,
+  PrimaryColumn,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { WatchLabelEntity } from './watch-label';
 
 @Entity()
-export class WatchEntity extends BaseEntity {
+export class WatchValueEntity extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column()
-  instance_id: string;
+  label_id: number;
 
-  @Column()
-  emtity_name: string;
-
-  @Column()
-  field_name: string;
+  @ManyToOne(() => WatchLabelEntity, (el) => el.values)
+  label: WatchLabelEntity;
 
   @Column()
   value: string;

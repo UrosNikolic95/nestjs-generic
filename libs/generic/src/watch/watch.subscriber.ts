@@ -6,7 +6,8 @@ import {
   EventSubscriber,
   UpdateEvent,
 } from 'typeorm';
-import { WatchEntity } from './watch.entity';
+import { WatchLabelEntity } from './watch-label';
+import { WatchValueEntity } from './watch-value.entity';
 
 export function createWatchSubscriber<T extends BaseEntity>(
   entity: Type<T>,
@@ -25,11 +26,25 @@ export function createWatchSubscriber<T extends BaseEntity>(
       const oldVal = valueGetter(databaseEntity)?.toString();
       const newVal = valueGetter(entity)?.toString();
       if (newVal && oldVal != newVal) {
+        const label =
+          (await event.manager.findOne(WatchLabelEntity, {
+            where: {
+              instance_id: idGetter(entity)?.toString(),
+              entity_name: Object.getPrototypeOf(entity)?.constructor?.name,
+              field_name: getField(valueGetter),
+            },
+          })) ||
+          (await event.manager
+            .create(WatchLabelEntity, {
+              instance_id: idGetter(entity)?.toString(),
+              entity_name: Object.getPrototypeOf(entity)?.constructor?.name,
+              field_name: getField(valueGetter),
+            })
+            .save());
+
         await event.manager
-          .create(WatchEntity, {
-            instance_id: idGetter(entity)?.toString(),
-            emtity_name: Object.getPrototypeOf(entity)?.constructor?.name,
-            field_name: getField(valueGetter),
+          .create(WatchValueEntity, {
+            label_id: label.id,
             value: valueGetter(entity)?.toString(),
           })
           .save();
