@@ -1,6 +1,8 @@
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { DefaultNamingStrategy, NamingStrategyInterface } from 'typeorm';
 import { UserEntity } from '../libs/generic/src/entities/user.entity';
+import { WatchFloatValueEntity } from '../libs/generic/src/watch/watch-float-value.entity';
+import { WatchIntValueEntity } from '../libs/generic/src/watch/watch-int-value.entity';
 import { WatchLabelEntity } from '../libs/generic/src/watch/watch-label';
 import { WatchValueEntity } from '../libs/generic/src/watch/watch-value.entity';
 import { createWatchSubscriber } from '../libs/generic/src/watch/watch.subscriber';
@@ -22,6 +24,8 @@ export const databaseConfig: TypeOrmModuleOptions = {
     UserEntity,
     WatchValueEntity,
     WatchLabelEntity,
+    WatchIntValueEntity,
+    WatchFloatValueEntity,
   ],
   synchronize: true,
   logging: true,
@@ -31,6 +35,11 @@ export const databaseConfig: TypeOrmModuleOptions = {
       UserEntity,
       (el) => el.id,
       (el) => el.email,
+    ),
+    createWatchSubscriber(
+      Test2Entity,
+      (el) => el.id,
+      (el) => el.number,
     ),
   ],
 };

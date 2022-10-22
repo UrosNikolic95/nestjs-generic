@@ -1,16 +1,19 @@
 import {
-  BaseEntity,
-  Column,
-  CreateDateColumn,
   Entity,
-  ManyToOne,
+  BaseEntity,
   PrimaryGeneratedColumn,
+  Column,
+  ManyToOne,
+  CreateDateColumn,
 } from 'typeorm';
 import { WatchLabelEntity } from './watch-label';
 import { IWatch } from './watch.interface';
 
 @Entity()
-export class WatchValueEntity extends BaseEntity implements IWatch<string> {
+export class WatchFloatValueEntity
+  extends BaseEntity
+  implements IWatch<number>
+{
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -20,8 +23,8 @@ export class WatchValueEntity extends BaseEntity implements IWatch<string> {
   @ManyToOne(() => WatchLabelEntity, (el) => el.values)
   label: WatchLabelEntity;
 
-  @Column()
-  value: string;
+  @Column({ type: 'float' })
+  value: number;
 
   @CreateDateColumn()
   time: Date;
