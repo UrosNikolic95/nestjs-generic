@@ -5,7 +5,8 @@
   "author": "",
   "private": false,
   "license": "MIT",
-  "main": "dist/libs/generic",
+  "main": "dist/libs/generic/index.js",
+  "types": "dist/libs/generic/index.d.ts",
   "files": [
     "dist/libs/generic/**/*"
   ],
