@@ -1,0 +1,12 @@
+{
+  "name": "nestjs-generic",
+  "version": "0.0.18",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "pp": "tsc && npm version patch && npm publish"
+  },
+  "author": "",
+  "license": "MIT"
+}
