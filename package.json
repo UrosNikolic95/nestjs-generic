@@ -8,7 +8,7 @@
   "main": "dist/libs/generic",
   "types": "dest/libs/generic",
   "directories": {
-    "lib": "lib"
+    "lib": "dist"
   },
   "scripts": {
     "prebuild": "rimraf dist",
@@ -26,7 +26,7 @@
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "build:tsc": "rm -rf dist & tsc --project ./tsconfig.build.json",
     "build:libs": "rm -rf dist & tsc --project ./libs/generic/tsconfig.lib.json",
-    "pub": "npm version patch && npm publish"
+    "pub": "rm -rf dist && npm run build && npm version patch && npm publish"
   },
   "dependencies": {
     "@nestjs/common": "^8.0.0",
