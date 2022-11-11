@@ -3,7 +3,7 @@
   "version": "0.0.2",
   "description": "",
   "author": "",
-  "private": true,
+  "private": false,
   "license": "MIT",
   "main": "dist/libs/generic",
   "scripts": {
