@@ -50,10 +50,15 @@ export class AuthService {
   }
 
   async login(body: LoginDto) {
-    const found = await this.userRepo.findOne({ where: { email: body.email } });
+    const found = await this.userRepo.findOne({
+      select: ['password'],
+      where: { email: body.email },
+    });
     if (!found) throw new UnauthorizedException('No user by that email.');
     if (await compare(body.password, found.password)) {
-      return found;
+      return await this.userRepo.findOne({
+        where: { email: body.email },
+      });
     } else {
       throw new UnauthorizedException('Wrong password.');
     }

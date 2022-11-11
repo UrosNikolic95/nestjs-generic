@@ -27,7 +27,7 @@ export class UserEntity extends BaseEntity {
   phone: string;
 
   @Exclude()
-  @Column()
+  @Column({ select: false })
   password: string;
 
   @Column({ nullable: true, select: false })
