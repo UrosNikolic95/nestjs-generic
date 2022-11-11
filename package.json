@@ -6,9 +6,6 @@
   "private": false,
   "license": "MIT",
   "main": "dist/libs/generic",
-  "files": [
-    "dist/libs/generic/**/*"
-  ],
   "scripts": {
     "prebuild": "rimraf dist",
     "build": "nest build",
@@ -25,7 +22,7 @@
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "build:tsc": "rm -rf dist & tsc --project ./tsconfig.build.json",
     "build:libs": "rm -rf dist & tsc --project ./libs/generic/tsconfig.lib.json",
-    "pub": "rm -rf dist && npm run build generic && npm version patch && npm publish"
+    "pub": "npm run build:libs & npm version patch && npm publish"
   },
   "dependencies": {
     "@nestjs/common": "^8.0.0",
