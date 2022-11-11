@@ -7,6 +7,9 @@
   "license": "MIT",
   "main": "dist/libs/generic",
   "types": "dest/libs/generic",
+  "files": [
+    "dest/**/*"
+  ],
   "scripts": {
     "prebuild": "rimraf dist",
     "build": "nest build",
