@@ -6,6 +6,9 @@
   "private": false,
   "license": "MIT",
   "main": "dist/libs/generic",
+  "files": [
+    "dist/libs/generic/**/*"
+  ],
   "scripts": {
     "prebuild": "rimraf dist",
     "build": "nest build",
