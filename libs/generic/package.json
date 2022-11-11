@@ -2,11 +2,19 @@
   "name": "nestjs-generic",
   "version": "0.0.18",
   "description": "",
-  "main": "index.js",
+  "main": "dist/index.js",
+  "types": "dist/main.d.ts",
+  "type": "commonjs",
+  "files": [
+    "lib/**/*"
+  ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "pp": "tsc && npm version patch && npm publish"
+    "pp": "tsc --project ./tsconfig.lib.json && npm version patch && npm publish"
   },
   "author": "",
-  "license": "MIT"
+  "license": "MIT",
+  "directories": {
+    "lib": "dist"
+  }
 }
