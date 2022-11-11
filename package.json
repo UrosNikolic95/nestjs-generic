@@ -6,7 +6,6 @@
   "private": false,
   "license": "MIT",
   "main": "dist/libs/generic",
-  "types": "dest/libs/generic",
   "directories": {
     "lib": "dist"
   },
