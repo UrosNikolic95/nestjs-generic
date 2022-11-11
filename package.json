@@ -20,7 +20,8 @@
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "build:tsc": "rm -rf dist & tsc --project ./tsconfig.build.json",
-    "build:libs": "rm -rf dist & tsc --project ./libs/generic/tsconfig.lib.json"
+    "build:libs": "rm -rf dist & tsc --project ./libs/generic/tsconfig.lib.json",
+    "publish:lib": "cd libs/generic && npm run pp"
   },
   "dependencies": {
     "@nestjs/common": "^8.0.0",
