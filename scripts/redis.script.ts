@@ -1,6 +1,6 @@
 import * as dotenv from 'dotenv';
 dotenv.config();
-import { getSyncData } from '../libs/generic/src/helpers/shared-data.helper';
+import { getSyncData } from '../src/helpers/shared-data.helper';
 
 function sleep(milliseconds: number) {
   return new Promise((res) => setInterval(res, milliseconds));

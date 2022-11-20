@@ -1,6 +1,6 @@
 import * as dotenv from 'dotenv';
 dotenv.config();
-import { QueueHelperClass } from '../libs/generic/src/helpers/bull.helper';
+import { QueueHelperClass } from '../src/helpers/bull.helper';
 
 class TestClass extends QueueHelperClass {
   async func1(str1: string, str2: string) {
