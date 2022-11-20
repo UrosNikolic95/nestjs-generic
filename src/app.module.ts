@@ -7,8 +7,6 @@ import { UserEntity } from '../libs/generic/src/entities/user.entity';
 import { getViewerController } from '../libs/generic/src/viewer/viewer.controller';
 import { Test1Entity } from '../libs/generic/testing/test1.entity';
 import { Test2Entity } from '../libs/generic/testing/test2.entity';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 
 @Module({
   imports: [
@@ -18,7 +16,6 @@ import { AppService } from './app.service';
     AuthModule,
   ],
   controllers: [
-    AppController,
     getViewerController('view', Test1Entity, {
       select: {
         a1: (el) => el.field,
@@ -28,6 +25,6 @@ import { AppService } from './app.service';
       limit: 3,
     }),
   ],
-  providers: [AppService],
+  providers: [],
 })
 export class AppModule {}
