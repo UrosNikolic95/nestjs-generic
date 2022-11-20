@@ -41,3 +41,6 @@ export function createQueueHelper(queue: IQueue): Type {
 }
 
 export const QueueHelperClass = createQueueHelper(queue);
+export async function closeBull() {
+  await queue.close();
+}

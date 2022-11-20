@@ -2,9 +2,10 @@ import * as dotenv from 'dotenv';
 dotenv.config();
 import { Test, TestingModule } from '@nestjs/testing';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { databaseConfig } from '../../../../data/database.config';
 import { AuthModule } from './auth.module';
 import { AuthService } from './auth.service';
+import { databaseConfig } from '../../data/database.config';
+import { closeBull } from '../helpers/bull.helper';
 
 describe('AuthService', () => {
   let service: AuthService;
@@ -19,5 +20,9 @@ describe('AuthService', () => {
 
   it('should be defined', () => {
     expect(service).toBeDefined();
+  });
+
+  afterEach(async () => {
+    await closeBull();
   });
 });
