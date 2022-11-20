@@ -1,6 +1,6 @@
 import { DataSource } from 'typeorm';
-import { getConnection } from '../../testing/connection';
-import { Test1Entity } from '../../testing/test1.entity';
+import { getConnection } from '../../test/data/connection';
+import { Test1Entity } from '../../test/data/test1.entity';
 import { RequestManyDto } from './crud.dto';
 import { GenericFunctions } from './crud.functions';
 

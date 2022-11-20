@@ -1,12 +1,12 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { databaseConfig } from '../data/database.config';
-import { AuthModule } from '../libs/generic/src/auth/auth.module';
-import { getGenericModule } from '../libs/generic/src/crud/crud.module';
-import { UserEntity } from '../libs/generic/src/entities/user.entity';
-import { getViewerController } from '../libs/generic/src/viewer/viewer.controller';
-import { Test1Entity } from '../libs/generic/testing/test1.entity';
-import { Test2Entity } from '../libs/generic/testing/test2.entity';
+import { Test1Entity } from '../test/data/test1.entity';
+import { Test2Entity } from '../test/data/test2.entity';
+import { AuthModule } from './auth/auth.module';
+import { getGenericModule } from './crud/crud.module';
+import { UserEntity } from './entities/user.entity';
+import { getViewerController } from './viewer/viewer.controller';
 
 @Module({
   imports: [
