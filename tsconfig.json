@@ -11,10 +11,6 @@
     "outDir": "./dist",
     "baseUrl": "./",
     "incremental": true,
-    "skipLibCheck": true,
-    "paths": {
-      "generic/generic": ["libs/generic/src"],
-      "generic/generic/*": ["libs/generic/src/*"]
-    }
+    "skipLibCheck": true
   }
 }
