@@ -14,8 +14,8 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "build": "rm -rf dist && tsc",
-    "pp": "tsc && npm version patch && npm publish"
+    "build": "rm -rf dist && tsc --project tsconfig.build.json",
+    "pp": "npm run build && npm version patch && npm publish"
   },
   "author": "",
   "license": "MIT",
