@@ -20,13 +20,6 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "@nestjs/common": "^8.0.0",
-    "@nestjs/core": "^8.0.0",
-    "@nestjs/jwt": "^9.0.0",
-    "@nestjs/passport": "^9.0.0",
-    "@nestjs/platform-express": "^8.0.0",
-    "@nestjs/swagger": "^6.0.5",
-    "@nestjs/typeorm": "^9.0.0",
     "bcrypt": "^5.0.1",
     "bull": "^4.10.0",
     "class-transformer": "^0.5.1",
@@ -46,6 +39,15 @@
     "type-safe-select": "^1.0.29",
     "typeorm": "^0.3.7",
     "webpack": "^5.74.0"
+  },
+  "peerDependencies": {
+    "@nestjs/common": "^8.0.0",
+    "@nestjs/core": "^8.0.0",
+    "@nestjs/jwt": "^9.0.0",
+    "@nestjs/passport": "^9.0.0",
+    "@nestjs/platform-express": "^8.0.0",
+    "@nestjs/swagger": "^6.0.5",
+    "@nestjs/typeorm": "^9.0.0"
   },
   "jest": {
     "moduleFileExtensions": [
