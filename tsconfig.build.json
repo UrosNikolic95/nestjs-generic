@@ -10,6 +10,6 @@
     "dist",
     "**/*.e2e-spec.ts",
     "**/*spec.ts",
-    "main.ts"
+    "src/main.ts"
   ]
 }
