@@ -44,6 +44,11 @@ export class AuthController {
     return req.user;
   }
 
+  @Post('logout')
+  async logout(@Res({ passthrough: true }) res: Response) {
+    this.authService.removeJwtToken(res);
+  }
+
   @JwtAuth()
   @Post('delete')
   delete(

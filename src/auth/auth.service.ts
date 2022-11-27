@@ -45,6 +45,10 @@ export class AuthService {
     res.cookie('Authorization', this.jwtService.sign({ email: user.email }));
   }
 
+  removeJwtToken(res: Response) {
+    res.clearCookie('Authorization');
+  }
+
   decodeJwtToken(str: string) {
     return this.jwtService.decode(str);
   }
