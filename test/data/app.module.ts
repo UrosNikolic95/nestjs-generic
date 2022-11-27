@@ -7,6 +7,17 @@ import { AuthModule } from '../../src/auth/auth.module';
 import { getGenericModule } from '../../src/crud/crud.module';
 import { UserEntity } from '../../src/entities/user.entity';
 import { getViewerController } from '../../src/viewer/viewer.controller';
+import { JwtAuth } from '../../src';
+
+@JwtAuth()
+class controller extends getViewerController('view', Test1Entity, {
+  select: {
+    a1: (el) => el.field,
+    a2: (el) => el.test_2.number,
+    a3: (el) => el.test_2.test_1.field,
+  },
+  limit: 3,
+}) {}
 
 @Module({
   imports: [
@@ -15,16 +26,7 @@ import { getViewerController } from '../../src/viewer/viewer.controller';
     getGenericModule([Test1Entity, Test2Entity, UserEntity]),
     AuthModule,
   ],
-  controllers: [
-    getViewerController('view', Test1Entity, {
-      select: {
-        a1: (el) => el.field,
-        a2: (el) => el.test_2.number,
-        a3: (el) => el.test_2.test_1.field,
-      },
-      limit: 3,
-    }),
-  ],
+  controllers: [controller],
   providers: [],
 })
 export class AppModule {}

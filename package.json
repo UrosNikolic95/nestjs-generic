@@ -9,6 +9,7 @@
     "dist/**/*"
   ],
   "scripts": {
+    "start": "nest start --watch",
     "test": "jest --detectOpenHandles",
     "test:watch": "jest --watch --detectOpenHandles",
     "test:cov": "jest --coverage",

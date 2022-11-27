@@ -16,3 +16,4 @@ export * from './helpers/bull.helper';
 export * from './helpers/handy.helpers';
 export * from './mail/mail.module';
 export * from './viewer/viewer.controller';
+export * from './main.helpers';
