@@ -60,4 +60,8 @@ describe('decorator.helper', () => {
   it('test decorator 3 c', () => {
     expect(val3[0]).toBe('field1');
   });
+
+  it('test decorator 3 d', () => {
+    expect(val3[1]).toBe('field2');
+  });
 });
