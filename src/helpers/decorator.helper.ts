@@ -29,7 +29,7 @@ export function getFieldDecoratorHelper<T>(key: string) {
 export function getFielListDecorator(key: string) {
   return {
     get(obj: Object): string[] {
-      return Reflect.getMetadata(key, obj);
+      return Reflect.getMetadata(key, obj) || [];
     },
 
     set(): PropertyDecorator {
