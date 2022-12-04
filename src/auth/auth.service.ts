@@ -9,6 +9,8 @@ import { compare, compareSync } from 'bcrypt';
 import { randomBytes } from 'crypto';
 import { Request, Response } from 'express';
 import { Repository } from 'typeorm';
+import { ids } from 'webpack';
+import { UserAvatarEntity } from '../entities/user-avatar.entity';
 import { UserEntity } from '../entities/user.entity';
 import { checkRequirements } from '../helpers/password.helpers';
 import { MailService } from '../mail/mail.service';
@@ -26,6 +28,8 @@ export class AuthService {
     private readonly userRepo: Repository<UserEntity>,
     private readonly jwtService: JwtService,
     private readonly mailService: MailService,
+    @InjectRepository(UserAvatarEntity)
+    private readonly userAvatarRepo: Repository<UserAvatarEntity>,
   ) {}
 
   validate(email: string) {
@@ -36,9 +40,11 @@ export class AuthService {
     });
   }
 
-  register(body: RegisterDto) {
+  async register(body: RegisterDto) {
     checkRequirements(body.password);
-    return this.userRepo.create(body).save();
+    const { username } = body;
+    const avatar = await this.userAvatarRepo.create({ username }).save();
+    return this.userRepo.create({ id: avatar.id, ...body }).save();
   }
 
   makeJwtToken(user: any, res: Response) {
@@ -117,4 +123,6 @@ export class AuthService {
     user.password = body.newPassword;
     await user.save();
   }
+
+  async validateEmail(code: string) {}
 }

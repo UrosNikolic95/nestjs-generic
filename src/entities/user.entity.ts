@@ -4,15 +4,24 @@ import {
   BaseEntity,
   Column,
   Entity,
+  JoinColumn,
+  ManyToOne,
+  OneToOne,
+  PrimaryColumn,
   PrimaryGeneratedColumn,
   Unique,
 } from 'typeorm';
+import { UserAvatarEntity } from './user-avatar.entity';
 
 @Entity({ name: 'user' })
 export class UserEntity extends BaseEntity {
   @ApiProperty()
-  @PrimaryGeneratedColumn()
+  @PrimaryColumn()
   id: number;
+
+  @OneToOne(() => UserAvatarEntity)
+  @JoinColumn({ name: 'id' })
+  avatar: UserAvatarEntity;
 
   @ApiProperty()
   @Column({ unique: true })

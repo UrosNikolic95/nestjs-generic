@@ -51,6 +51,11 @@ export class AuthController {
     this.authService.removeJwtToken(res);
   }
 
+  @Post('verify-email/:code')
+  verifyEmail(@Param('code') code: string) {
+    this.authService.validateEmail(code);
+  }
+
   @JwtAuth()
   @Post('delete')
   delete(
