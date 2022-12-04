@@ -29,7 +29,7 @@ export class UserSubscriber
     event: InsertEvent<UserDataEntity>,
   ): Promise<void | Promise<any>> {
     if (event?.entity?.password) {
-      event.entity.password = await hash(event.entity.password, randInt(30));
+      event.entity.password = await hash(event.entity.password, randInt(10));
     }
   }
 
@@ -37,7 +37,7 @@ export class UserSubscriber
     event: UpdateEvent<UserDataEntity>,
   ): Promise<void | Promise<any>> {
     if (event?.entity?.password) {
-      event.entity.password = await hash(event.entity.password, randInt(30));
+      event.entity.password = await hash(event.entity.password, randInt(10));
     }
   }
 }
