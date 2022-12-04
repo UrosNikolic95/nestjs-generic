@@ -1,7 +1,7 @@
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { DefaultNamingStrategy } from 'typeorm';
 import {
-  UserEntity,
+  UserDataEntity,
   WatchValueEntity,
   WatchLabelEntity,
   WatchIntValueEntity,
@@ -23,7 +23,7 @@ export const databaseConfig: TypeOrmModuleOptions = {
   entities: [
     Test1Entity,
     Test2Entity,
-    UserEntity,
+    UserDataEntity,
     WatchValueEntity,
     WatchLabelEntity,
     WatchIntValueEntity,
@@ -34,7 +34,7 @@ export const databaseConfig: TypeOrmModuleOptions = {
   namingStrategy: new SnakeNameingStrategy(),
   subscribers: [
     createWatchSubscriber(
-      UserEntity,
+      UserDataEntity,
       (el) => el.id,
       (el) => el.email,
     ),

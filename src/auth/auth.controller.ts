@@ -23,7 +23,7 @@ export class AuthController {
 
   @Post('reset-password')
   resetPassword(@Req() req: Request, @Body() body: ResetPasswordDto) {
-    return this.authService.resetPassword(req, body);
+    return this.authService.resetPassword(req.user, body);
   }
 
   @Post('set-password/:hash')

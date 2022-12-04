@@ -5,13 +5,15 @@ import {
   InsertEvent,
   UpdateEvent,
 } from 'typeorm';
-import { UserEntity } from '../entities/user.entity';
+import { UserDataEntity } from '../entities/user.entity';
 import { hash } from 'bcrypt';
 import { InjectDataSource } from '@nestjs/typeorm';
 import { Injectable } from '@nestjs/common';
 
 @Injectable()
-export class UserSubscriber implements EntitySubscriberInterface<UserEntity> {
+export class UserSubscriber
+  implements EntitySubscriberInterface<UserDataEntity>
+{
   constructor(
     @InjectDataSource()
     dataSource: DataSource,
@@ -20,7 +22,7 @@ export class UserSubscriber implements EntitySubscriberInterface<UserEntity> {
   }
 
   async beforeInsert(
-    event: InsertEvent<UserEntity>,
+    event: InsertEvent<UserDataEntity>,
   ): Promise<void | Promise<any>> {
     if (event?.entity?.password) {
       event.entity.password = await hash(event.entity.password, 10);
@@ -28,7 +30,7 @@ export class UserSubscriber implements EntitySubscriberInterface<UserEntity> {
   }
 
   async beforeUpdate(
-    event: UpdateEvent<UserEntity>,
+    event: UpdateEvent<UserDataEntity>,
   ): Promise<void | Promise<any>> {
     if (event?.entity?.password) {
       event.entity.password = await hash(event.entity.password, 10);

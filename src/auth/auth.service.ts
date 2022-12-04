@@ -9,7 +9,6 @@ import { compare, compareSync } from 'bcrypt';
 import { randomBytes } from 'crypto';
 import { Request, Response } from 'express';
 import { Repository } from 'typeorm';
-import { ids } from 'webpack';
 import { UserAvatarEntity } from '../entities/user-avatar.entity';
 import { UserEntity } from '../entities/user.entity';
 import { checkRequirements } from '../helpers/password.helpers';
@@ -47,7 +46,7 @@ export class AuthService {
     return this.userRepo.create({ id: avatar.id, ...body }).save();
   }
 
-  makeJwtToken(user: any, res: Response) {
+  makeJwtToken(user: UserEntity, res: Response) {
     res.cookie('Authorization', this.jwtService.sign({ email: user.email }));
   }
 
@@ -74,11 +73,10 @@ export class AuthService {
     }
   }
 
-  async delete(req: Request, body: DeleteDto) {
-    if (await compare(body.password, req.user['password'])) {
-      const user = req.user;
+  async delete(user: UserEntity, body: DeleteDto) {
+    if (await compare(body.password, user.password)) {
       await user.remove();
-      return req.user;
+      return user;
     }
     throw new UnauthorizedException('Wrong password.');
   }
@@ -102,10 +100,10 @@ export class AuthService {
     );
   }
 
-  async resetPassword(req: Request, body: ResetPasswordDto) {
-    if (compareSync(body.oldPassword, req.user.password)) {
-      req.user.password = body.newPassword;
-      await req.user.save();
+  async resetPassword(user: UserEntity, body: ResetPasswordDto) {
+    if (compareSync(body.oldPassword, user.password)) {
+      user.password = body.newPassword;
+      await user.save();
     }
     throw new UnprocessableEntityException('Old password does not match.');
   }

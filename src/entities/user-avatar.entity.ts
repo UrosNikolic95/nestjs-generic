@@ -8,6 +8,6 @@ export class UserAvatarEntity extends BaseEntity {
   @Column({ unique: true })
   username: string;
 
-  @Column()
+  @Column({ nullable: true })
   imageUrl: string;
 }
