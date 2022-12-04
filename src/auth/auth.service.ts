@@ -10,7 +10,7 @@ import { randomBytes } from 'crypto';
 import { Request, Response } from 'express';
 import { Repository } from 'typeorm';
 import { EmailValidationEntity } from '../entities/email-validation.entity';
-import { UserAvatarEntity } from '../entities/user-avatar.entity';
+import { UserEntity } from '../entities/user-avatar.entity';
 import { UserDataEntity } from '../entities/user-data.entity';
 import { checkRequirements } from '../helpers/password.helpers';
 import { MailService } from '../mail/mail.service';
@@ -28,8 +28,8 @@ export class AuthService {
     private readonly userRepo: Repository<UserDataEntity>,
     private readonly jwtService: JwtService,
     private readonly mailService: MailService,
-    @InjectRepository(UserAvatarEntity)
-    private readonly userAvatarRepo: Repository<UserAvatarEntity>,
+    @InjectRepository(UserEntity)
+    private readonly userAvatarRepo: Repository<UserEntity>,
     @InjectRepository(EmailValidationEntity)
     private readonly validateEmailRepo: Repository<EmailValidationEntity>,
   ) {}

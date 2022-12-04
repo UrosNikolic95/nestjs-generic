@@ -8,7 +8,7 @@ import {
   OneToOne,
   PrimaryColumn,
 } from 'typeorm';
-import { UserAvatarEntity } from './user-avatar.entity';
+import { UserEntity } from './user-avatar.entity';
 
 @Entity({ name: 'user_data' })
 export class UserDataEntity extends BaseEntity {
@@ -16,9 +16,9 @@ export class UserDataEntity extends BaseEntity {
   @PrimaryColumn()
   id: number;
 
-  @OneToOne(() => UserAvatarEntity)
+  @OneToOne(() => UserEntity)
   @JoinColumn({ name: 'id' })
-  avatar: UserAvatarEntity;
+  avatar: UserEntity;
 
   @ApiProperty()
   @Column({ unique: true })

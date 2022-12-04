@@ -11,14 +11,14 @@ import { PassportModule } from '@nestjs/passport';
 import { LocalStrategy } from './strategies/local.strategy';
 import { LocalGuard } from './guards/local.guard';
 import { MailModule } from '../mail/mail.module';
-import { UserAvatarEntity } from '../entities/user-avatar.entity';
+import { UserEntity } from '../entities/user-avatar.entity';
 import { EmailValidationEntity } from '../entities/email-validation.entity';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([
       UserDataEntity,
-      UserAvatarEntity,
+      UserEntity,
       EmailValidationEntity,
     ]),
     PassportModule.register({ session: true }),
