@@ -11,10 +11,16 @@ import { PassportModule } from '@nestjs/passport';
 import { LocalStrategy } from './strategies/local.strategy';
 import { LocalGuard } from './guards/local.guard';
 import { MailModule } from '../mail/mail.module';
+import { UserAvatarEntity } from '../entities/user-avatar.entity';
+import { EmailValidationEntity } from '../entities/email-validation.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([UserEntity]),
+    TypeOrmModule.forFeature([
+      UserEntity,
+      UserAvatarEntity,
+      EmailValidationEntity,
+    ]),
     PassportModule.register({ session: true }),
     JwtModule.register({
       secret: process.env.JWT_SECRET,

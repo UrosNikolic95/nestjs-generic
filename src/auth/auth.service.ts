@@ -92,7 +92,7 @@ export class AuthService {
     if (!user) {
       throw new UnprocessableEntityException('No user with this email.');
     }
-    user.setPasswordHash = randomBytes(20).toString('hex');
+    user.set_password_code = randomBytes(20).toString('hex');
     await user.save();
     this.mailService.sendMail(
       user.email,
@@ -113,13 +113,13 @@ export class AuthService {
   async setPassword(setPasswordHash: string, body: SetPasswordDto) {
     const user = await this.userRepo.findOne({
       where: {
-        setPasswordHash,
+        set_password_code: setPasswordHash,
       },
     });
     if (!user) {
       throw new UnprocessableEntityException('No user owns that hash.');
     }
-    user.setPasswordHash = null;
+    user.set_password_code = null;
     user.password = body.newPassword;
     await user.save();
   }

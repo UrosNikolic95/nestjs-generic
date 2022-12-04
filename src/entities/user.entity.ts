@@ -5,11 +5,8 @@ import {
   Column,
   Entity,
   JoinColumn,
-  ManyToOne,
   OneToOne,
   PrimaryColumn,
-  PrimaryGeneratedColumn,
-  Unique,
 } from 'typeorm';
 import { UserAvatarEntity } from './user-avatar.entity';
 
@@ -31,6 +28,9 @@ export class UserEntity extends BaseEntity {
   @Column({ unique: true })
   email: string;
 
+  @Column({ default: false })
+  email_validated: boolean;
+
   @ApiProperty()
   @Column({ nullable: true })
   phone: string;
@@ -39,7 +39,7 @@ export class UserEntity extends BaseEntity {
   @Column({ select: false })
   password: string;
 
-  @Column({ nullable: true, select: false })
+  @Column({ nullable: true, select: false, unique: true })
   @Exclude()
-  setPasswordHash: string;
+  set_password_code: string;
 }
