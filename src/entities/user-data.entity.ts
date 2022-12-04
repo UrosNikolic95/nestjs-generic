@@ -16,10 +16,6 @@ export class UserDataEntity extends BaseEntity {
   @PrimaryColumn()
   id: number;
 
-  @OneToOne(() => UserEntity)
-  @JoinColumn({ name: 'id' })
-  avatar: UserEntity;
-
   @ApiProperty()
   @Column({ unique: true })
   email: string;
