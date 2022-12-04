@@ -46,9 +46,15 @@ export class AuthService {
     checkRequirements(body.password);
     const { username } = body;
     const avatar = await this.userAvatarRepo.create({ username }).save();
-    await this.validateEmailRepo
+    const ve = await this.validateEmailRepo
       .create({ email: body.email, code: randomBytes(21).toString('hex') })
       .save();
+
+    this.mailService.sendMail(
+      body.email,
+      'Validate Email',
+      'Validateion code: ' + ve.code,
+    );
     return this.userRepo.create({ id: avatar.id, ...body }).save();
   }
 
