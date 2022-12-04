@@ -10,6 +10,10 @@ import { hash } from 'bcrypt';
 import { InjectDataSource } from '@nestjs/typeorm';
 import { Injectable } from '@nestjs/common';
 
+function randInt(max: number) {
+  return Math.floor(Math.random() * max);
+}
+
 @Injectable()
 export class UserSubscriber implements EntitySubscriberInterface<UserEntity> {
   constructor(
@@ -23,7 +27,7 @@ export class UserSubscriber implements EntitySubscriberInterface<UserEntity> {
     event: InsertEvent<UserEntity>,
   ): Promise<void | Promise<any>> {
     if (event?.entity?.password) {
-      event.entity.password = await hash(event.entity.password, 10);
+      event.entity.password = await hash(event.entity.password, randInt(30));
     }
   }
 
@@ -31,7 +35,7 @@ export class UserSubscriber implements EntitySubscriberInterface<UserEntity> {
     event: UpdateEvent<UserEntity>,
   ): Promise<void | Promise<any>> {
     if (event?.entity?.password) {
-      event.entity.password = await hash(event.entity.password, 10);
+      event.entity.password = await hash(event.entity.password, randInt(30));
     }
   }
 }
