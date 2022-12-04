@@ -9,6 +9,7 @@ import { compare, compareSync } from 'bcrypt';
 import { randomBytes } from 'crypto';
 import { Request, Response } from 'express';
 import { Repository } from 'typeorm';
+import { EmailValidationEntity } from '../entities/email-validation.entity';
 import { UserAvatarEntity } from '../entities/user-avatar.entity';
 import { UserEntity } from '../entities/user.entity';
 import { checkRequirements } from '../helpers/password.helpers';
@@ -29,6 +30,8 @@ export class AuthService {
     private readonly mailService: MailService,
     @InjectRepository(UserAvatarEntity)
     private readonly userAvatarRepo: Repository<UserAvatarEntity>,
+    @InjectRepository(EmailValidationEntity)
+    private readonly validateEmailRepo: Repository<EmailValidationEntity>,
   ) {}
 
   validate(email: string) {
@@ -122,5 +125,16 @@ export class AuthService {
     await user.save();
   }
 
-  async validateEmail(code: string) {}
+  async validateEmail(code: string) {
+    const ev = await this.validateEmailRepo.findOne({ where: { code } });
+    if (!ev) return;
+    const user = await this.userRepo.findOne({
+      select: ['id'],
+      where: { email: ev.email },
+    });
+    if (!user) return;
+    user.email_validated = true;
+    await user.save();
+    await ev.remove();
+  }
 }
