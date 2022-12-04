@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
-import { compare, compareSync } from 'bcrypt';
+import { compare, compareSync, hashSync } from 'bcrypt';
 import { randomBytes } from 'crypto';
 import { Request, Response } from 'express';
 import { Repository } from 'typeorm';
@@ -46,6 +46,9 @@ export class AuthService {
     checkRequirements(body.password);
     const { username } = body;
     const avatar = await this.userAvatarRepo.create({ username }).save();
+    await this.validateEmailRepo
+      .create({ email: body.email, code: randomBytes(21).toString('hex') })
+      .save();
     return this.userRepo.create({ id: avatar.id, ...body }).save();
   }
 
