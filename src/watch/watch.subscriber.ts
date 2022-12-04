@@ -6,7 +6,6 @@ import {
   EventSubscriber,
   UpdateEvent,
 } from 'typeorm';
-import { UserDataEntity } from '../entities/user.entity';
 import { WatchFloatValueEntity } from './watch-float-value.entity';
 import { WatchIntValueEntity } from './watch-int-value.entity';
 import { WatchLabelEntity } from './watch-label';
