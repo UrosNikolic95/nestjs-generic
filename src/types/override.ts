@@ -1,6 +1,6 @@
-import { UserEntity } from '../entities/user.entity';
+import { UserDataEntity } from '../entities/user-data.entity';
 declare global {
   namespace Express {
-    interface User extends UserEntity {}
+    interface User extends UserDataEntity {}
   }
 }

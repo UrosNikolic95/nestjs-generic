@@ -10,8 +10,8 @@ import {
 } from 'typeorm';
 import { UserAvatarEntity } from './user-avatar.entity';
 
-@Entity({ name: 'user' })
-export class UserEntity extends BaseEntity {
+@Entity({ name: 'user_data' })
+export class UserDataEntity extends BaseEntity {
   @ApiProperty()
   @PrimaryColumn()
   id: number;
@@ -19,10 +19,6 @@ export class UserEntity extends BaseEntity {
   @OneToOne(() => UserAvatarEntity)
   @JoinColumn({ name: 'id' })
   avatar: UserAvatarEntity;
-
-  @ApiProperty()
-  @Column({ unique: true })
-  username: string;
 
   @ApiProperty()
   @Column({ unique: true })

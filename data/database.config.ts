@@ -7,6 +7,8 @@ import {
   WatchIntValueEntity,
   WatchFloatValueEntity,
   createWatchSubscriber,
+  UserAvatarEntity,
+  EmailValidationEntity,
 } from '../src';
 import { Test1Entity } from '../test/data/test1.entity';
 import { Test2Entity } from '../test/data/test2.entity';
@@ -24,6 +26,8 @@ export const databaseConfig: TypeOrmModuleOptions = {
     Test1Entity,
     Test2Entity,
     UserDataEntity,
+    UserAvatarEntity,
+    EmailValidationEntity,
     WatchValueEntity,
     WatchLabelEntity,
     WatchIntValueEntity,

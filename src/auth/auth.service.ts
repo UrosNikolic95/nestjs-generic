@@ -11,7 +11,7 @@ import { Request, Response } from 'express';
 import { Repository } from 'typeorm';
 import { EmailValidationEntity } from '../entities/email-validation.entity';
 import { UserAvatarEntity } from '../entities/user-avatar.entity';
-import { UserEntity } from '../entities/user.entity';
+import { UserDataEntity } from '../entities/user-data.entity';
 import { checkRequirements } from '../helpers/password.helpers';
 import { MailService } from '../mail/mail.service';
 import { DeleteDto } from './dto/delete.dto';
@@ -24,8 +24,8 @@ import { SetPasswordDto } from './dto/set-password.dto';
 @Injectable()
 export class AuthService {
   constructor(
-    @InjectRepository(UserEntity)
-    private readonly userRepo: Repository<UserEntity>,
+    @InjectRepository(UserDataEntity)
+    private readonly userRepo: Repository<UserDataEntity>,
     private readonly jwtService: JwtService,
     private readonly mailService: MailService,
     @InjectRepository(UserAvatarEntity)
@@ -52,7 +52,7 @@ export class AuthService {
     return this.userRepo.create({ id: avatar.id, ...body }).save();
   }
 
-  makeJwtToken(user: UserEntity, res: Response) {
+  makeJwtToken(user: UserDataEntity, res: Response) {
     res.cookie('Authorization', this.jwtService.sign({ email: user.email }));
   }
 
@@ -79,7 +79,7 @@ export class AuthService {
     }
   }
 
-  async delete(user: UserEntity, body: DeleteDto) {
+  async delete(user: UserDataEntity, body: DeleteDto) {
     if (await compare(body.password, user.password)) {
       await user.remove();
       return user;
@@ -106,7 +106,7 @@ export class AuthService {
     );
   }
 
-  async resetPassword(user: UserEntity, body: ResetPasswordDto) {
+  async resetPassword(user: UserDataEntity, body: ResetPasswordDto) {
     if (compareSync(body.oldPassword, user.password)) {
       user.password = body.newPassword;
       await user.save();
