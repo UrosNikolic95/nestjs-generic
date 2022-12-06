@@ -12,6 +12,7 @@ import { Repository } from 'typeorm';
 import { EmailValidationEntity } from '../entities/email-validation.entity';
 import { UserEntity } from '../entities/user-avatar.entity';
 import { UserDataEntity } from '../entities/user-data.entity';
+import { generateCode } from '../helpers/code.helper';
 import { checkRequirements } from '../helpers/password.helpers';
 import { MailService } from '../mail/mail.service';
 import { DeleteDto } from './dto/delete.dto';
@@ -47,7 +48,7 @@ export class AuthService {
     const { username } = body;
     const avatar = await this.userAvatarRepo.create({ username }).save();
     const ve = await this.validateEmailRepo
-      .create({ email: body.email, code: randomBytes(21).toString('hex') })
+      .create({ email: body.email, code: generateCode(7) })
       .save();
 
     this.mailService.sendMail(
