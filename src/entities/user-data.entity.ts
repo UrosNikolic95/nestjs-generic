@@ -8,7 +8,7 @@ import {
   OneToOne,
   PrimaryColumn,
 } from 'typeorm';
-import { UserEntity } from './user-avatar.entity';
+import { UserAvatarEntity } from './user-avatar.entity';
 
 @Entity({ name: 'user_data' })
 export class UserDataEntity extends BaseEntity {

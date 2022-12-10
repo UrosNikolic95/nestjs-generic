@@ -9,6 +9,7 @@ export * from './watch/watch-label';
 export * from './watch/watch.subscriber';
 export * from './watch/watch.interface';
 export * from './auth/auth.module';
+export * from './auth/auth.service';
 export * from './auth/guards/jwt.guard';
 export * from './auth/guards/local.guard';
 export * from './entities/user-data.entity';

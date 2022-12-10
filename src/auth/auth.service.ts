@@ -10,7 +10,7 @@ import { randomBytes } from 'crypto';
 import { Request, Response } from 'express';
 import { Repository } from 'typeorm';
 import { EmailValidationEntity } from '../entities/email-validation.entity';
-import { UserEntity } from '../entities/user-avatar.entity';
+import { UserAvatarEntity } from '../entities/user-avatar.entity';
 import { UserDataEntity } from '../entities/user-data.entity';
 import { generateCode } from '../helpers/code.helper';
 import { checkRequirements } from '../helpers/password.helpers';
@@ -21,22 +21,42 @@ import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
 import { ResetPasswordDto } from './dto/reset-password.dto';
 import { SetPasswordDto } from './dto/set-password.dto';
+import { keyBy } from 'lodash';
 
 @Injectable()
 export class AuthService {
   constructor(
     @InjectRepository(UserDataEntity)
-    private readonly userRepo: Repository<UserDataEntity>,
+    private readonly userDataRepo: Repository<UserDataEntity>,
     private readonly jwtService: JwtService,
     private readonly mailService: MailService,
-    @InjectRepository(UserEntity)
-    private readonly userAvatarRepo: Repository<UserEntity>,
+    @InjectRepository(UserAvatarEntity)
+    private readonly userAvatarRepo: Repository<UserAvatarEntity>,
     @InjectRepository(EmailValidationEntity)
     private readonly validateEmailRepo: Repository<EmailValidationEntity>,
   ) {}
 
+  async addTestUsers(users: RegisterDto[]) {
+    const avatars = await this.userAvatarRepo.save(
+      users.map((user) =>
+        this.userAvatarRepo.create({ username: user.username }),
+      ),
+    );
+    const avatarsKeyByUsername = keyBy(avatars, (el) => el.username);
+    await this.userDataRepo.save(
+      users.map((user) =>
+        this.userDataRepo.create({
+          id: avatarsKeyByUsername[user.username]?.id,
+          email: user.email,
+          password: user.password,
+          email_validated: true,
+        }),
+      ),
+    );
+  }
+
   validate(email: string) {
-    return this.userRepo.findOne({
+    return this.userDataRepo.findOne({
       where: {
         email,
       },
@@ -56,7 +76,7 @@ export class AuthService {
       'Validate Email',
       'Validateion code: ' + ve.code,
     );
-    return this.userRepo.create({ id: avatar.id, ...body }).save();
+    return this.userDataRepo.create({ id: avatar.id, ...body }).save();
   }
 
   makeJwtToken(user: UserDataEntity, res: Response) {
@@ -72,13 +92,13 @@ export class AuthService {
   }
 
   async login(body: LoginDto) {
-    const found = await this.userRepo.findOne({
+    const found = await this.userDataRepo.findOne({
       select: ['password'],
       where: { email: body.email },
     });
     if (!found) throw new UnauthorizedException('No user by that email.');
     if (await compare(body.password, found.password)) {
-      return await this.userRepo.findOne({
+      return await this.userDataRepo.findOne({
         where: { email: body.email },
       });
     } else {
@@ -95,7 +115,7 @@ export class AuthService {
   }
 
   async forgotPassword(body: ForgotPasswordDto) {
-    const user = await this.userRepo.findOne({
+    const user = await this.userDataRepo.findOne({
       where: {
         email: body.email,
       },
@@ -122,7 +142,7 @@ export class AuthService {
   }
 
   async setPassword(setPasswordHash: string, body: SetPasswordDto) {
-    const user = await this.userRepo.findOne({
+    const user = await this.userDataRepo.findOne({
       where: {
         set_password_code: setPasswordHash,
       },
@@ -138,7 +158,7 @@ export class AuthService {
   async validateEmail(code: string) {
     const ev = await this.validateEmailRepo.findOne({ where: { code } });
     if (!ev) return;
-    const user = await this.userRepo.findOne({
+    const user = await this.userDataRepo.findOne({
       select: ['id'],
       where: { email: ev.email },
     });
