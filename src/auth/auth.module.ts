@@ -37,5 +37,6 @@ import { EmailValidationEntity } from '../entities/email-validation.entity';
     JwtGuard,
     UserSubscriber,
   ],
+  exports: [AuthService],
 })
 export class AuthModule {}

@@ -37,12 +37,23 @@ export class AuthService {
   ) {}
 
   async addTestUsers(users: RegisterDto[]) {
-    const avatars = await this.userAvatarRepo.save(
-      users.map((user) =>
-        this.userAvatarRepo.create({ username: user.username }),
-      ),
+    const oldAvatars = await this.userAvatarRepo.find({
+      where: users.map((user) => ({ username: user.username })),
+    });
+    const oldUsernames = new Set(oldAvatars.map((el) => el.username));
+    const newAvatars = await this.userAvatarRepo.save(
+      users
+        .filter((user) => !oldUsernames.has(user.username))
+        .map((user) =>
+          this.userAvatarRepo.create({
+            username: user.username,
+          }),
+        ),
     );
-    const avatarsKeyByUsername = keyBy(avatars, (el) => el.username);
+    const avatarsKeyByUsername = keyBy(
+      [...oldAvatars, ...newAvatars],
+      (el) => el.username,
+    );
     await this.userDataRepo.save(
       users.map((user) =>
         this.userDataRepo.create({
