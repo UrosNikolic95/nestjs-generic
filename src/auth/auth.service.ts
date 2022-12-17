@@ -140,7 +140,8 @@ export class AuthService {
       user.email,
       'Forgot email.',
       'Go to link in order to restart password: ' +
-        process.env.FORGOT_PASSWORD_LINK,
+        process.env.FORGOT_PASSWORD_LINK +
+        user.set_password_code,
     );
   }
 
