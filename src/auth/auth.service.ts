@@ -70,6 +70,7 @@ export class AuthService {
     return this.userDataRepo.findOne({
       where: {
         email,
+        email_validated: true,
       },
     });
   }
