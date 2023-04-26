@@ -34,7 +34,6 @@ export const databaseConfig: TypeOrmModuleOptions = {
     WatchFloatValueEntity,
   ],
   synchronize: true,
-  logging: true,
   namingStrategy: new SnakeNameingStrategy(),
   subscribers: [
     createWatchSubscriber(
