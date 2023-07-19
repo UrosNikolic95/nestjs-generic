@@ -1,11 +1,12 @@
 import { createClient } from 'redis';
+import { envConfig } from '../config';
 
-const { REDIS_HOST, REDIS_PORT } = process.env;
+const { REDIS_HOST, REDIS_PORT } = envConfig;
 const redisUrl = `redis://${REDIS_HOST}:${REDIS_PORT}`;
 
 const client = createClient({
   url: redisUrl,
-  password: process.env.REDIS_PASS,
+  password: envConfig.REDIS_PASS,
 });
 
 export async function getSyncData<T>(subKey: string): Promise<T> {

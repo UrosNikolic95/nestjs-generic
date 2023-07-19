@@ -5,7 +5,7 @@ export class UserAvatarEntity extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ unique: true })
+  @Column()
   username: string;
 
   @Column({ nullable: true })

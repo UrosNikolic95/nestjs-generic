@@ -9,6 +9,7 @@ import * as session from 'express-session';
 import * as dotenv from 'dotenv';
 dotenv.config();
 import * as cookieParser from 'cookie-parser';
+import { envConfig } from './config';
 
 export function setupSwagger(app: INestApplication) {
   const config = new DocumentBuilder()
@@ -27,7 +28,7 @@ export async function bootstrapInit(app: INestApplication) {
   app.use(cookieParser());
   app.use(
     session({
-      secret: process.env.JWT_SECRET,
+      secret: envConfig.JWT_SECRET,
       resave: false,
       saveUninitialized: false,
     }),

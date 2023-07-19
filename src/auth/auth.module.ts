@@ -13,6 +13,7 @@ import { LocalGuard } from './guards/local.guard';
 import { MailModule } from '../mail/mail.module';
 import { UserAvatarEntity } from '../entities/user-avatar.entity';
 import { EmailValidationEntity } from '../entities/email-validation.entity';
+import { envConfig } from '../config';
 
 @Module({
   imports: [
@@ -23,8 +24,8 @@ import { EmailValidationEntity } from '../entities/email-validation.entity';
     ]),
     PassportModule.register({ session: true }),
     JwtModule.register({
-      secret: process.env.JWT_SECRET,
-      signOptions: { expiresIn: process.env.JWT_EXPIRES },
+      secret: envConfig.JWT_SECRET,
+      signOptions: { expiresIn: envConfig.JWT_EXPIRES },
     }),
     MailModule,
   ],

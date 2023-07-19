@@ -22,6 +22,7 @@ import { RegisterDto } from './dto/register.dto';
 import { ResetPasswordDto } from './dto/reset-password.dto';
 import { SetPasswordDto } from './dto/set-password.dto';
 import { keyBy } from 'lodash';
+import { envConfig } from '../config';
 
 @Injectable()
 export class AuthService {
@@ -141,7 +142,7 @@ export class AuthService {
       user.email,
       'Forgot email.',
       'Go to link in order to restart password: ' +
-        process.env.FORGOT_PASSWORD_LINK +
+        envConfig.FORGOT_PASSWORD_LINK +
         user.set_password_code,
     );
   }

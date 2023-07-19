@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { createTransport, Transporter } from 'nodemailer';
 import { SentMessageInfo } from 'nodemailer/lib/smtp-transport';
+import { envConfig } from '../config';
 
 @Injectable()
 export class MailService {
@@ -8,18 +9,18 @@ export class MailService {
 
   constructor() {
     this.transport = createTransport({
-      host: process.env.SMTP_HOST,
-      port: Number(process.env.SMTP_PORT),
+      host: envConfig.SMTP_HOST,
+      port: Number(envConfig.SMTP_PORT),
       auth: {
-        user: process.env.SMTP_USER,
-        pass: process.env.SMTP_PASS,
+        user: envConfig.SMTP_USER,
+        pass: envConfig.SMTP_PASS,
       },
     });
   }
 
   async sendMail(to: string, subject: string, text: string) {
     return await this.transport.sendMail({
-      from: process.env.SMTP_FROM,
+      from: envConfig.SMTP_FROM,
       to,
       subject,
       text,

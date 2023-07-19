@@ -12,6 +12,7 @@ import {
 } from '../src';
 import { Test1Entity } from '../test/data/test1.entity';
 import { Test2Entity } from '../test/data/test2.entity';
+import { envConfig } from '../src/config';
 
 class SnakeNameingStrategy extends DefaultNamingStrategy {
   joinColumnName(relationName: string, referencedColumnName: string): string {
@@ -21,7 +22,7 @@ class SnakeNameingStrategy extends DefaultNamingStrategy {
 
 export const databaseConfig: TypeOrmModuleOptions = {
   type: 'postgres',
-  url: process.env.DB_URL,
+  url: envConfig.DB_URL,
   entities: [
     Test1Entity,
     Test2Entity,

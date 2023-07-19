@@ -4,12 +4,13 @@ import * as Queue from 'bull';
 import { QueueOptions, Queue as IQueue } from 'bull';
 import { getNonDefaultFunctionNames } from './handy.helpers';
 import { Type } from '@nestjs/common';
+import { envConfig } from '../config';
 
 const queueOptions = {
   redis: {
-    host: process.env.REDIS_HOST,
-    port: Number(process.env.REDIS_PORT),
-    password: process.env.REDIS_PASS,
+    host: envConfig.REDIS_HOST,
+    port: Number(envConfig.REDIS_PORT),
+    password: envConfig.REDIS_PASS,
   },
 } as QueueOptions;
 
