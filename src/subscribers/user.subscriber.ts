@@ -25,6 +25,10 @@ export class UserSubscriber
     dataSource.subscribers.push(this);
   }
 
+  listenTo() {
+    return UserDataEntity;
+  }
+
   async beforeInsert(
     event: InsertEvent<UserDataEntity>,
   ): Promise<void | Promise<any>> {

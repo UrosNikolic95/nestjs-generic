@@ -65,18 +65,22 @@ export class AuthService {
   }
 
   async register(body: RegisterDto) {
-    checkRequirements(body.password);
-    const user = await this.userRepo.create(body).save();
-    const ve = await this.validateEmailRepo
-      .create({ email: body.email, code: generateCode(7) })
-      .save();
+    try {
+      checkRequirements(body.password);
+      const user = await this.userRepo.create(body).save();
+      const ve = await this.validateEmailRepo
+        .create({ email: body.email, code: generateCode(7) })
+        .save();
 
-    this.mailService.sendMail(
-      body.email,
-      'Validate Email',
-      'Validateion code: ' + ve.code,
-    );
-    return user;
+      this.mailService.sendMail(
+        body.email,
+        'Validate Email',
+        'Validateion code: ' + ve.code,
+      );
+      return user;
+    } catch (err) {
+      throw new UnprocessableEntityException(err?.detail);
+    }
   }
 
   makeJwtToken(user: UserDataEntity, res: Response) {
