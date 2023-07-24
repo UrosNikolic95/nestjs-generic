@@ -19,4 +19,3 @@ export * from './mail/mail.module';
 export * from './viewer/viewer.controller';
 export * from './main.helpers';
 export * from './entities/email-validation.entity';
-export * from './entities/user-avatar.entity';
