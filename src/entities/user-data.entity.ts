@@ -1,20 +1,18 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Exclude } from 'class-transformer';
-import {
-  BaseEntity,
-  Column,
-  Entity,
-  JoinColumn,
-  OneToOne,
-  PrimaryColumn,
-} from 'typeorm';
-import { UserAvatarEntity } from './user-avatar.entity';
+import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
-@Entity({ name: 'user_data' })
-export class UserDataEntity extends BaseEntity {
+@Entity({ name: 'user' })
+export class UserEntity extends BaseEntity {
   @ApiProperty()
-  @PrimaryColumn()
+  @PrimaryGeneratedColumn()
   id: number;
+
+  @Column()
+  username: string;
+
+  @Column({ nullable: true })
+  imageUrl: string;
 
   @ApiProperty()
   @Column({ unique: true })
@@ -26,6 +24,9 @@ export class UserDataEntity extends BaseEntity {
   @ApiProperty()
   @Column({ nullable: true })
   phone: string;
+
+  @Column({ default: false })
+  phone_validated: boolean;
 
   @Exclude()
   @Column({ select: false })

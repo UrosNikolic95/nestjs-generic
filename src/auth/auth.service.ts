@@ -7,11 +7,10 @@ import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { compare, compareSync, hashSync } from 'bcrypt';
 import { randomBytes } from 'crypto';
-import { Request, Response } from 'express';
+import { Response } from 'express';
 import { Repository } from 'typeorm';
 import { EmailValidationEntity } from '../entities/email-validation.entity';
-import { UserAvatarEntity } from '../entities/user-avatar.entity';
-import { UserDataEntity } from '../entities/user-data.entity';
+import { UserEntity } from '../entities/user-data.entity';
 import { generateCode } from '../helpers/code.helper';
 import { checkRequirements } from '../helpers/password.helpers';
 import { MailService } from '../mail/mail.service';
@@ -27,48 +26,35 @@ import { envConfig } from '../config';
 @Injectable()
 export class AuthService {
   constructor(
-    @InjectRepository(UserDataEntity)
-    private readonly userDataRepo: Repository<UserDataEntity>,
+    @InjectRepository(UserEntity)
+    private readonly userRepo: Repository<UserEntity>,
     private readonly jwtService: JwtService,
     private readonly mailService: MailService,
-    @InjectRepository(UserAvatarEntity)
-    private readonly userAvatarRepo: Repository<UserAvatarEntity>,
     @InjectRepository(EmailValidationEntity)
     private readonly validateEmailRepo: Repository<EmailValidationEntity>,
   ) {}
 
   async addTestUsers(users: RegisterDto[]) {
-    const oldAvatars = await this.userAvatarRepo.find({
-      where: users.map((user) => ({ username: user.username })),
-    });
-    const oldUsernames = new Set(oldAvatars.map((el) => el.username));
-    const newAvatars = await this.userAvatarRepo.save(
-      users
-        .filter((user) => !oldUsernames.has(user.username))
-        .map((user) =>
-          this.userAvatarRepo.create({
-            username: user.username,
-          }),
+    await this.userRepo
+      .createQueryBuilder()
+      .insert()
+      .values(
+        users.map(
+          (user) =>
+            ({
+              email: user.email,
+              username: user.username,
+              password: user.password,
+              email_validated: true,
+            } as Partial<UserEntity>),
         ),
-    );
-    const avatarsKeyByUsername = keyBy(
-      [...oldAvatars, ...newAvatars],
-      (el) => el.username,
-    );
-    await this.userDataRepo.save(
-      users.map((user) =>
-        this.userDataRepo.create({
-          id: avatarsKeyByUsername[user.username]?.id,
-          email: user.email,
-          password: user.password,
-          email_validated: true,
-        }),
-      ),
-    );
+      )
+      .orIgnore()
+      .execute();
   }
 
   validate(email: string) {
-    return this.userDataRepo.findOne({
+    return this.userRepo.findOne({
       where: {
         email,
         email_validated: true,
@@ -78,8 +64,7 @@ export class AuthService {
 
   async register(body: RegisterDto) {
     checkRequirements(body.password);
-    const { username } = body;
-    const avatar = await this.userAvatarRepo.create({ username }).save();
+    const user = await this.userRepo.create(body).save();
     const ve = await this.validateEmailRepo
       .create({ email: body.email, code: generateCode(7) })
       .save();
@@ -89,10 +74,10 @@ export class AuthService {
       'Validate Email',
       'Validateion code: ' + ve.code,
     );
-    return this.userDataRepo.create({ id: avatar.id, ...body }).save();
+    return user;
   }
 
-  makeJwtToken(user: UserDataEntity, res: Response) {
+  makeJwtToken(user: UserEntity, res: Response) {
     res.cookie('Authorization', this.jwtService.sign({ email: user.email }));
   }
 
@@ -105,13 +90,13 @@ export class AuthService {
   }
 
   async login(body: LoginDto) {
-    const found = await this.userDataRepo.findOne({
+    const found = await this.userRepo.findOne({
       select: ['password'],
       where: { email: body.email },
     });
     if (!found) throw new UnauthorizedException('No user by that email.');
     if (await compare(body.password, found.password)) {
-      return await this.userDataRepo.findOne({
+      return await this.userRepo.findOne({
         where: { email: body.email },
       });
     } else {
@@ -119,7 +104,7 @@ export class AuthService {
     }
   }
 
-  async delete(user: UserDataEntity, body: DeleteDto) {
+  async delete(user: UserEntity, body: DeleteDto) {
     if (await compare(body.password, user.password)) {
       await user.remove();
       return user;
@@ -128,7 +113,7 @@ export class AuthService {
   }
 
   async forgotPassword(body: ForgotPasswordDto) {
-    const user = await this.userDataRepo.findOne({
+    const user = await this.userRepo.findOne({
       where: {
         email: body.email,
       },
@@ -147,7 +132,7 @@ export class AuthService {
     );
   }
 
-  async resetPassword(user: UserDataEntity, body: ResetPasswordDto) {
+  async resetPassword(user: UserEntity, body: ResetPasswordDto) {
     if (compareSync(body.oldPassword, user.password)) {
       user.password = body.newPassword;
       await user.save();
@@ -156,7 +141,7 @@ export class AuthService {
   }
 
   async setPassword(setPasswordHash: string, body: SetPasswordDto) {
-    const user = await this.userDataRepo.findOne({
+    const user = await this.userRepo.findOne({
       where: {
         set_password_code: setPasswordHash,
       },
@@ -172,7 +157,7 @@ export class AuthService {
   async validateEmail(code: string) {
     const ev = await this.validateEmailRepo.findOne({ where: { code } });
     if (!ev) return;
-    const user = await this.userDataRepo.findOne({
+    const user = await this.userRepo.findOne({
       select: ['id'],
       where: { email: ev.email },
     });

@@ -1,13 +1,12 @@
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { DefaultNamingStrategy } from 'typeorm';
 import {
-  UserDataEntity,
+  UserEntity,
   WatchValueEntity,
   WatchLabelEntity,
   WatchIntValueEntity,
   WatchFloatValueEntity,
   createWatchSubscriber,
-  UserAvatarEntity,
   EmailValidationEntity,
 } from '../src';
 import { Test1Entity } from '../test/data/test1.entity';
@@ -26,8 +25,7 @@ export const databaseConfig: TypeOrmModuleOptions = {
   entities: [
     Test1Entity,
     Test2Entity,
-    UserDataEntity,
-    UserAvatarEntity,
+    UserEntity,
     EmailValidationEntity,
     WatchValueEntity,
     WatchLabelEntity,
@@ -38,7 +36,7 @@ export const databaseConfig: TypeOrmModuleOptions = {
   namingStrategy: new SnakeNameingStrategy(),
   subscribers: [
     createWatchSubscriber(
-      UserDataEntity,
+      UserEntity,
       (el) => el.id,
       (el) => el.email,
     ),
