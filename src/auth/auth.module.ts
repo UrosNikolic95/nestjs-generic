@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { UserEntity } from '../entities/user-data.entity';
+import { UserDataEntity } from '../entities/user-data.entity';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { UserSubscriber } from '../subscribers/user.subscriber';
 import { JwtGuard } from './guards/jwt.guard';
@@ -13,26 +13,34 @@ import { LocalGuard } from './guards/local.guard';
 import { MailModule } from '../mail/mail.module';
 import { EmailValidationEntity } from '../entities/email-validation.entity';
 import { envConfig } from '../config';
+import { authData } from './auth.const';
 
-@Module({
-  imports: [
-    TypeOrmModule.forFeature([UserEntity, EmailValidationEntity]),
-    PassportModule.register({ session: true }),
-    JwtModule.register({
-      secret: envConfig.JWT_SECRET,
-      signOptions: { expiresIn: envConfig.JWT_EXPIRES },
-    }),
-    MailModule,
-  ],
-  controllers: [AuthController],
-  providers: [
-    AuthService,
-    LocalStrategy,
-    LocalGuard,
-    JwtStrategy,
-    JwtGuard,
-    UserSubscriber,
-  ],
-  exports: [AuthService],
-})
-export class AuthModule {}
+export function AuthModule(userDataDatabase = 'default') {
+  authData.userDataDatabase = userDataDatabase;
+  @Module({
+    imports: [
+      TypeOrmModule.forFeature(
+        [UserDataEntity, EmailValidationEntity],
+        userDataDatabase,
+      ),
+      PassportModule.register({ session: true }),
+      JwtModule.register({
+        secret: envConfig.JWT_SECRET,
+        signOptions: { expiresIn: envConfig.JWT_EXPIRES },
+      }),
+      MailModule,
+    ],
+    controllers: [AuthController],
+    providers: [
+      AuthService,
+      LocalStrategy,
+      LocalGuard,
+      JwtStrategy,
+      JwtGuard,
+      UserSubscriber,
+    ],
+    exports: [AuthService],
+  })
+  class AuthModule {}
+  return AuthModule;
+}

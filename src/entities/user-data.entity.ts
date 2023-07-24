@@ -3,7 +3,7 @@ import { Exclude } from 'class-transformer';
 import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity({ name: 'user' })
-export class UserEntity extends BaseEntity {
+export class UserDataEntity extends BaseEntity {
   @ApiProperty()
   @PrimaryGeneratedColumn()
   id: number;

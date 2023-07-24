@@ -10,7 +10,7 @@ import { randomBytes } from 'crypto';
 import { Response } from 'express';
 import { Repository } from 'typeorm';
 import { EmailValidationEntity } from '../entities/email-validation.entity';
-import { UserEntity } from '../entities/user-data.entity';
+import { UserDataEntity } from '../entities/user-data.entity';
 import { generateCode } from '../helpers/code.helper';
 import { checkRequirements } from '../helpers/password.helpers';
 import { MailService } from '../mail/mail.service';
@@ -20,19 +20,21 @@ import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
 import { ResetPasswordDto } from './dto/reset-password.dto';
 import { SetPasswordDto } from './dto/set-password.dto';
-import { keyBy } from 'lodash';
 import { envConfig } from '../config';
+import { authData } from './auth.const';
 
 @Injectable()
 export class AuthService {
   constructor(
-    @InjectRepository(UserEntity)
-    private readonly userRepo: Repository<UserEntity>,
+    @InjectRepository(UserDataEntity, authData.userDataDatabase)
+    private readonly userRepo: Repository<UserDataEntity>,
     private readonly jwtService: JwtService,
     private readonly mailService: MailService,
-    @InjectRepository(EmailValidationEntity)
+    @InjectRepository(EmailValidationEntity, authData.userDataDatabase)
     private readonly validateEmailRepo: Repository<EmailValidationEntity>,
-  ) {}
+  ) {
+    console.log(authData.userDataDatabase);
+  }
 
   async addTestUsers(users: RegisterDto[]) {
     await this.userRepo
@@ -46,7 +48,7 @@ export class AuthService {
               username: user.username,
               password: user.password,
               email_validated: true,
-            } as Partial<UserEntity>),
+            } as Partial<UserDataEntity>),
         ),
       )
       .orIgnore()
@@ -77,7 +79,7 @@ export class AuthService {
     return user;
   }
 
-  makeJwtToken(user: UserEntity, res: Response) {
+  makeJwtToken(user: UserDataEntity, res: Response) {
     res.cookie('Authorization', this.jwtService.sign({ email: user.email }));
   }
 
@@ -104,7 +106,7 @@ export class AuthService {
     }
   }
 
-  async delete(user: UserEntity, body: DeleteDto) {
+  async delete(user: UserDataEntity, body: DeleteDto) {
     if (await compare(body.password, user.password)) {
       await user.remove();
       return user;
@@ -132,7 +134,7 @@ export class AuthService {
     );
   }
 
-  async resetPassword(user: UserEntity, body: ResetPasswordDto) {
+  async resetPassword(user: UserDataEntity, body: ResetPasswordDto) {
     if (compareSync(body.oldPassword, user.password)) {
       user.password = body.newPassword;
       await user.save();
