@@ -15,4 +15,11 @@ export const envConfig = {
   SMTP_USER: process.env.SMTP_USER,
   SMTP_PASS: process.env.SMTP_PASS,
   SMTP_FROM: process.env.SMTP_FROM,
+
+  SWAGGER_TITLE: process.env.SWAGGER_TITLE,
+  SWAGGER_DESCRIPTION: process.env.SWAGGER_DESCRIPTION,
+  SWAGGER_PATH: process.env.SWAGGER_PATH,
+  SWAGGER_VERSION: process.env.SWAGGER_VERSION,
+
+  GLOBAL_PREFIX: process.env.GLOBAL_PREFIX,
 };

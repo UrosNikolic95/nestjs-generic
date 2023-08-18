@@ -13,12 +13,12 @@ import { envConfig } from './config';
 
 export function setupSwagger(app: INestApplication) {
   const config = new DocumentBuilder()
-    .setTitle('example')
-    .setDescription('API description')
-    .setVersion('1.0')
+    .setTitle(envConfig.SWAGGER_TITLE)
+    .setDescription(envConfig.SWAGGER_DESCRIPTION)
+    .setVersion(envConfig.SWAGGER_VERSION)
     .build();
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api/docs', app, document);
+  SwaggerModule.setup(envConfig.SWAGGER_PATH, app, document);
 }
 
 export async function bootstrapInit(app: INestApplication) {
@@ -33,6 +33,6 @@ export async function bootstrapInit(app: INestApplication) {
       saveUninitialized: false,
     }),
   );
-  app.setGlobalPrefix('api');
+  app.setGlobalPrefix(envConfig.GLOBAL_PREFIX);
   setupSwagger(app);
 }
