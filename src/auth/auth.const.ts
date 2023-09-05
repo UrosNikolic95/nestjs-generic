@@ -1,3 +1,1 @@
-export const authData = {
-  userDataDatabase: 'default',
-};
+export const userDatabase = 'user_db';

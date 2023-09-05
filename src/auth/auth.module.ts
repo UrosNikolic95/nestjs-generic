@@ -13,15 +13,19 @@ import { LocalGuard } from './guards/local.guard';
 import { MailModule } from '../mail/mail.module';
 import { EmailValidationEntity } from '../entities/email-validation.entity';
 import { envConfig } from '../config';
-import { authData } from './auth.const';
+import { userDatabase } from './auth.const';
+import { databaseConfig } from '../../data/database.config';
 
-export function AuthModule(userDataDatabase = 'default') {
-  authData.userDataDatabase = userDataDatabase;
+export function AuthModule() {
   @Module({
     imports: [
+      TypeOrmModule.forRoot({
+        ...databaseConfig,
+        name: userDatabase,
+      }),
       TypeOrmModule.forFeature(
         [UserDataEntity, EmailValidationEntity],
-        userDataDatabase,
+        userDatabase,
       ),
       PassportModule.register({ session: true }),
       JwtModule.register({

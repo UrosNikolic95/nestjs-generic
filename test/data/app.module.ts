@@ -8,6 +8,7 @@ import { getGenericModule } from '../../src/crud/crud.module';
 import { UserDataEntity } from '../../src/entities/user-data.entity';
 import { getViewerController } from '../../src/viewer/viewer.controller';
 import { JwtAuth } from '../../src';
+import { userDatabase } from '../../src/auth/auth.const';
 
 @JwtAuth()
 class controller extends getViewerController('view', Test1Entity, {
@@ -23,7 +24,7 @@ class controller extends getViewerController('view', Test1Entity, {
   imports: [
     TypeOrmModule.forRoot({
       ...databaseConfig,
-      name: 'abc',
+      name: userDatabase,
     }),
     TypeOrmModule.forRoot({
       ...databaseConfig,

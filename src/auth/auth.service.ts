@@ -21,20 +21,18 @@ import { RegisterDto } from './dto/register.dto';
 import { ResetPasswordDto } from './dto/reset-password.dto';
 import { SetPasswordDto } from './dto/set-password.dto';
 import { envConfig } from '../config';
-import { authData } from './auth.const';
+import { userDatabase } from './auth.const';
 
 @Injectable()
 export class AuthService {
   constructor(
-    @InjectRepository(UserDataEntity, authData.userDataDatabase)
+    @InjectRepository(UserDataEntity, userDatabase)
     private readonly userRepo: Repository<UserDataEntity>,
     private readonly jwtService: JwtService,
     private readonly mailService: MailService,
-    @InjectRepository(EmailValidationEntity, authData.userDataDatabase)
+    @InjectRepository(EmailValidationEntity, userDatabase)
     private readonly validateEmailRepo: Repository<EmailValidationEntity>,
-  ) {
-    console.log(authData.userDataDatabase);
-  }
+  ) {}
 
   async addTestUsers(users: RegisterDto[]) {
     await this.userRepo

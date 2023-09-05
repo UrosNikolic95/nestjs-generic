@@ -21,7 +21,7 @@ class SnakeNameingStrategy extends DefaultNamingStrategy {
 
 export const databaseConfig: TypeOrmModuleOptions = {
   type: 'postgres',
-  url: envConfig.DB_URL,
+  url: envConfig.USERS_DB_URL || envConfig.DB_URL,
   entities: [
     Test1Entity,
     Test2Entity,

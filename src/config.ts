@@ -5,6 +5,7 @@ export const envConfig = {
   FORGOT_PASSWORD_LINK: process.env.FORGOT_PASSWORD_LINK,
 
   DB_URL: process.env.DB_URL,
+  USERS_DB_URL: process.env.DB_URL,
 
   REDIS_HOST: process.env.REDIS_HOST,
   REDIS_PORT: process.env.REDIS_PORT,
