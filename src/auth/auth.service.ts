@@ -5,12 +5,11 @@ import {
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
-import { compare, compareSync, hashSync } from 'bcrypt';
+import { compare, compareSync } from 'bcrypt';
 import { randomBytes } from 'crypto';
-import { Response } from 'express';
+import { Response, Request } from 'express';
 import { Repository } from 'typeorm';
-import { EmailValidationEntity } from '../entities/email-validation.entity';
-import { UserDataEntity } from '../entities/user-data.entity';
+import { UserEntity } from '../entities/user.entity';
 import { generateCode } from '../helpers/code.helper';
 import { checkRequirements } from '../helpers/password.helpers';
 import { MailService } from '../mail/mail.service';
@@ -22,16 +21,18 @@ import { ResetPasswordDto } from './dto/reset-password.dto';
 import { SetPasswordDto } from './dto/set-password.dto';
 import { envConfig } from '../config';
 import { userDatabase } from './auth.const';
+import { DeviceEntity } from '../entities/device.entity';
+import { extractJwt } from './auth.helpers';
 
 @Injectable()
 export class AuthService {
   constructor(
-    @InjectRepository(UserDataEntity, userDatabase)
-    private readonly userRepo: Repository<UserDataEntity>,
+    @InjectRepository(UserEntity, userDatabase)
+    private readonly userRepo: Repository<UserEntity>,
+    @InjectRepository(DeviceEntity, userDatabase)
+    private readonly deviceRepo: Repository<DeviceEntity>,
     private readonly jwtService: JwtService,
     private readonly mailService: MailService,
-    @InjectRepository(EmailValidationEntity, userDatabase)
-    private readonly validateEmailRepo: Repository<EmailValidationEntity>,
   ) {}
 
   async addTestUsers(users: RegisterDto[]) {
@@ -46,34 +47,32 @@ export class AuthService {
               username: user.username,
               password: user.password,
               email_validated: true,
-            } as Partial<UserDataEntity>),
+            } as Partial<UserEntity>),
         ),
       )
       .orIgnore()
       .execute();
   }
 
-  validate(email: string) {
-    return this.userRepo.findOne({
-      where: {
-        email,
-        email_validated: true,
-      },
-    });
+  validate(token: string) {
+    return this.userRepo
+      .createQueryBuilder('user')
+      .leftJoin('user.device', 'device')
+      .where('device.token = :token', { token })
+      .getOne();
   }
 
   async register(body: RegisterDto) {
     try {
       checkRequirements(body.password);
       const user = await this.userRepo.create(body).save();
-      const ve = await this.validateEmailRepo
-        .create({ email: body.email, code: generateCode(7) })
-        .save();
+
+      user.email_validation_code = generateCode(7);
 
       this.mailService.sendMail(
         body.email,
         'Validate Email',
-        'Validateion code: ' + ve.code,
+        'Validateion code: ' + user.email_validation_code,
       );
       return user;
     } catch (err) {
@@ -81,11 +80,23 @@ export class AuthService {
     }
   }
 
-  makeJwtToken(user: UserDataEntity, res: Response) {
-    res.cookie('Authorization', this.jwtService.sign({ email: user.email }));
+  async makeJwtToken(user: UserEntity, res: Response) {
+    const token = randomBytes(21).toString('hex');
+    await this.deviceRepo
+      .create({
+        user_id: user.id,
+        token,
+      })
+      .save();
+
+    res.cookie('Authorization', this.jwtService.sign({ token }));
   }
 
-  removeJwtToken(res: Response) {
+  async removeJwtToken(res: Response, req: Request) {
+    const data = this.jwtService.decode(extractJwt(req));
+    await this.deviceRepo.delete({
+      token: data?.['token'],
+    });
     res.clearCookie('Authorization');
   }
 
@@ -108,7 +119,7 @@ export class AuthService {
     }
   }
 
-  async delete(user: UserDataEntity, body: DeleteDto) {
+  async delete(user: UserEntity, body: DeleteDto) {
     if (await compare(body.password, user.password)) {
       await user.remove();
       return user;
@@ -136,7 +147,7 @@ export class AuthService {
     );
   }
 
-  async resetPassword(user: UserDataEntity, body: ResetPasswordDto) {
+  async resetPassword(user: UserEntity, body: ResetPasswordDto) {
     if (compareSync(body.oldPassword, user.password)) {
       user.password = body.newPassword;
       await user.save();
@@ -159,15 +170,13 @@ export class AuthService {
   }
 
   async validateEmail(code: string) {
-    const ev = await this.validateEmailRepo.findOne({ where: { code } });
-    if (!ev) return;
     const user = await this.userRepo.findOne({
       select: ['id'],
-      where: { email: ev.email },
+      where: { email_validation_code: code },
     });
     if (!user) return;
     user.email_validated = true;
+    user.email_validation_code = null;
     await user.save();
-    await ev.remove();
   }
 }

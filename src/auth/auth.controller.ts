@@ -40,20 +40,19 @@ export class AuthController {
   @LocalAuth()
   @Post('login')
   async login(@Req() req: Request, @Res({ passthrough: true }) res: Response) {
-    this.authService.makeJwtToken(req.user, res);
+    await this.authService.makeJwtToken(req.user, res);
     return req.user;
   }
 
   @JwtAuth()
   @Post('logout')
   async logout(@Res({ passthrough: true }) res: Response, @Req() req: Request) {
-    console.log(req.user);
-    this.authService.removeJwtToken(res);
+    await this.authService.removeJwtToken(res, req);
   }
 
   @Post('verify-email/:code')
-  verifyEmail(@Param('code') code: string) {
-    this.authService.validateEmail(code);
+  async verifyEmail(@Param('code') code: string) {
+    await this.authService.validateEmail(code);
   }
 
   @JwtAuth()

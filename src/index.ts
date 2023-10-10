@@ -12,7 +12,7 @@ export * from './auth/auth.module';
 export * from './auth/auth.service';
 export * from './auth/guards/jwt.guard';
 export * from './auth/guards/local.guard';
-export * from './entities/user-data.entity';
+export * from './entities/user.entity';
 export * from './helpers/bull.helper';
 export * from './helpers/handy.helpers';
 export * from './mail/mail.module';

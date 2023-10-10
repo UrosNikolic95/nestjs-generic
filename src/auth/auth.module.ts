@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { UserDataEntity } from '../entities/user-data.entity';
+import { UserEntity } from '../entities/user.entity';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { UserSubscriber } from '../subscribers/user.subscriber';
 import { JwtGuard } from './guards/jwt.guard';
@@ -11,20 +11,17 @@ import { PassportModule } from '@nestjs/passport';
 import { LocalStrategy } from './strategies/local.strategy';
 import { LocalGuard } from './guards/local.guard';
 import { MailModule } from '../mail/mail.module';
-import { EmailValidationEntity } from '../entities/email-validation.entity';
 import { envConfig } from '../config';
 import { userDatabase } from './auth.const';
-import { databaseConfig } from '../../data/database.config';
+import { DeviceEntity } from '../entities/device.entity';
+import { AdminEntity } from '../entities/admin.entity';
+import { AdminDeviceEntity } from '../entities/admin-device.entity';
 
 export function AuthModule() {
   @Module({
     imports: [
-      TypeOrmModule.forRoot({
-        ...databaseConfig,
-        name: userDatabase,
-      }),
       TypeOrmModule.forFeature(
-        [UserDataEntity, EmailValidationEntity],
+        [UserEntity, DeviceEntity, AdminEntity, AdminDeviceEntity],
         userDatabase,
       ),
       PassportModule.register({ session: true }),
