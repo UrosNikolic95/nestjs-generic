@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { Strategy } from 'passport-local';
-import { jwtAdminLabel } from '../../auth.const';
+import { jwtAdminLabel, localAdminLabel } from '../../auth.const';
 import { AuthAdminService } from '../auth-admin.service';
 
 @Injectable()
 export class LocalAdminStrategy extends PassportStrategy(
   Strategy,
-  jwtAdminLabel,
+  localAdminLabel,
 ) {
   constructor(private authService: AuthAdminService) {
     super({

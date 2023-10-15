@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiHideProperty, ApiProperty } from '@nestjs/swagger';
 import { Exclude } from 'class-transformer';
 import {
   BaseEntity,
@@ -28,26 +28,34 @@ export class UserEntity extends BaseEntity implements IUser {
   @Column({ unique: true })
   email: string;
 
+  @ApiProperty()
   @Column({ default: false })
   email_validated: boolean;
 
+  @ApiHideProperty()
   @Column({ nullable: true, unique: true, select: false })
+  @Exclude()
   email_validation_code: string;
 
   @ApiProperty()
   @Column({ nullable: true })
   phone: string;
 
+  @ApiProperty()
   @Column({ default: false })
   phone_validated: boolean;
 
+  @ApiHideProperty()
   @Column({ nullable: true, unique: true, select: false })
+  @Exclude()
   phone_validation_code: string;
 
+  @ApiHideProperty()
   @Exclude()
   @Column({ select: false })
   password: string;
 
+  @ApiHideProperty()
   @Column({ nullable: true, select: false, unique: true })
   @Exclude()
   set_password_code: string;

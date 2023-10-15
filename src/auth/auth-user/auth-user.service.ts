@@ -23,6 +23,7 @@ import { RegisterDto } from '../dto/register.dto';
 import { ResetPasswordDto } from '../dto/reset-password.dto';
 import { SetPasswordDto } from '../dto/set-password.dto';
 import { extractJwt } from '../auth.helpers';
+import { RegisterUserDto } from '../dto/register-user.dto';
 
 @Injectable()
 export class AuthUserService {
@@ -62,7 +63,7 @@ export class AuthUserService {
       .getOne();
   }
 
-  async register(body: RegisterDto) {
+  async register(body: RegisterUserDto) {
     try {
       checkRequirements(body.password);
       const user = await this.userRepo.create(body).save();
@@ -76,7 +77,7 @@ export class AuthUserService {
       );
       return user;
     } catch (err) {
-      throw new UnprocessableEntityException(err?.detail);
+      throw new UnprocessableEntityException(err?.detail || err?.message);
     }
   }
 

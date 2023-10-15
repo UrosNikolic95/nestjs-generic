@@ -12,6 +12,7 @@ import { LocalUserStrategy } from './strategies/local-user.strategy';
 import { JwtUserStrategy } from './strategies/jwt-user.strategy';
 import { JwtUserAuth } from './guards/jwt-user.guard';
 import { LocalUserAuth } from './guards/local-user.guard';
+import { RegisterUserDto } from '../dto/register-user.dto';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -34,7 +35,7 @@ export class AuthUserController {
   }
 
   @Post('register')
-  register(@Body() body: RegisterDto) {
+  register(@Body() body: RegisterUserDto) {
     return this.authService.register(body);
   }
 
