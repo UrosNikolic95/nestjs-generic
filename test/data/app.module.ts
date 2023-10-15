@@ -5,11 +5,11 @@ import { Test1Entity } from './test1.entity';
 import { Test2Entity } from './test2.entity';
 import { AuthModule } from '../../src/auth/auth.module';
 import { getGenericModule } from '../../src/crud/crud.module';
-import { UserEntity } from '../../src/entities/user.entity';
+import { UserEntity } from '../../src/auth/auth-user/entities/user.entity';
 import { getViewerController } from '../../src/viewer/viewer.controller';
 import { JwtUserAuth } from '../../src/auth/auth-user/guards/jwt.guard';
 import { userDatabase } from '../../src/auth/auth.const';
-import { DeviceEntity } from '../../src/entities/device.entity';
+import { DeviceEntity } from '../../src/auth/auth-user/entities/device.entity';
 
 @JwtUserAuth()
 class controller extends getViewerController('view', Test1Entity, {

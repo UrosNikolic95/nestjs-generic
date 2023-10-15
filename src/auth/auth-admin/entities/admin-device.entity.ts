@@ -7,7 +7,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { AdminEntity } from './admin.entity';
-import { IDevice } from '../types/device.interface';
+import { IDevice } from '../../../types/device.interface';
 
 @Entity({ name: 'admin-device' })
 export class AdminDeviceEntity extends BaseEntity implements IDevice {

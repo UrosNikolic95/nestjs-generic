@@ -5,7 +5,7 @@ import {
   InsertEvent,
   UpdateEvent,
 } from 'typeorm';
-import { UserEntity } from '../entities/user.entity';
+import { UserEntity } from '../auth/auth-user/entities/user.entity';
 import { hash } from 'bcrypt';
 import { InjectDataSource } from '@nestjs/typeorm';
 import { Injectable } from '@nestjs/common';

@@ -8,7 +8,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { AdminDeviceEntity } from './admin-device.entity';
-import { IUser } from '../types/user.interface';
+import { IUser } from '../../../types/user.interface';
 
 @Entity({ name: 'admin' })
 export class AdminEntity extends BaseEntity implements IUser {

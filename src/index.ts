@@ -9,7 +9,7 @@ export * from './watch/watch-label';
 export * from './watch/watch.subscriber';
 export * from './watch/watch.interface';
 export * from './auth/auth.module';
-export * from './entities/user.entity';
+export * from './auth/auth-user/entities/user.entity';
 export * from './helpers/bull.helper';
 export * from './helpers/handy.helpers';
 export * from './mail/mail.module';

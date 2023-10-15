@@ -7,7 +7,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { UserEntity } from './user.entity';
-import { IDevice } from '../types/device.interface';
+import { IDevice } from '../../../types/device.interface';
 
 @Entity({ name: 'device' })
 export class DeviceEntity extends BaseEntity implements IDevice {
