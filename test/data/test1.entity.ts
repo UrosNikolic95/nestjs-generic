@@ -8,6 +8,7 @@ import {
   JoinColumn,
 } from 'typeorm';
 import { Test2Entity } from './test2.entity';
+import { EntityType } from '../../src';
 
 @Entity()
 export class Test1Entity extends BaseEntity {

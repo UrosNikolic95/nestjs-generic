@@ -5,6 +5,7 @@ import {
   IGenericController,
   IPaginationResponse,
 } from './crud.interface';
+import { csvString } from './crud.helper';
 
 export class GenericFunctions<T extends EntityType>
   implements IGenericController<T>
@@ -25,6 +26,11 @@ export class GenericFunctions<T extends EntityType>
       page,
       limit,
     };
+  }
+
+  async export(): Promise<string> {
+    const items = await this.repo.createQueryBuilder('root').getMany();
+    return csvString(items);
   }
 
   async requestOne(id: number): Promise<T> {

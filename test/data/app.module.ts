@@ -23,15 +23,15 @@ class controller extends getViewerController('view', Test1Entity, {
 
 @Module({
   imports: [
-    // TypeOrmModule.forRoot({
-    //   ...databaseConfig,
-    // }),
+    TypeOrmModule.forRoot({
+      ...databaseConfig,
+    }),
     TypeOrmModule.forRoot({
       ...databaseConfig,
       name: userDatabase,
     }),
-    // TypeOrmModule.forFeature([Test1Entity, Test2Entity, DeviceEntity]),
-    // getGenericModule([Test1Entity, Test2Entity, UserEntity]),
+    TypeOrmModule.forFeature([Test1Entity, Test2Entity]),
+    getGenericModule([Test1Entity, Test2Entity]),
     AuthModule,
   ],
   controllers: [],

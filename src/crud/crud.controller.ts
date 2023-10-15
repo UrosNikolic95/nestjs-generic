@@ -7,6 +7,7 @@ import {
   Post,
   Put,
   Query,
+  Res,
   Type,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -26,6 +27,7 @@ import {
   getSchemaPath,
 } from '@nestjs/swagger';
 import { ApiPaginatedResponse } from './crud.decorators';
+import { Response } from 'express';
 
 export function getController<T extends EntityType>(
   entity: Type<T>,
@@ -48,6 +50,14 @@ export function getController<T extends EntityType>(
       @Query() query: RequestManyDto,
     ): Promise<IPaginationResponse<T>> {
       return this.service.requestMany(query);
+    }
+
+    @Get('export')
+    async export(@Res() res: Response) {
+      const data = await this.service.export();
+      res.header('Content-Type', 'text/csv');
+      res.attachment('orders.csv');
+      res.send(data);
     }
 
     @ApiResponse({ type: entity })
