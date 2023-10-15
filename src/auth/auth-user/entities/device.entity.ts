@@ -17,7 +17,7 @@ export class DeviceEntity extends BaseEntity implements IDevice {
   @Column()
   user_id: number;
 
-  @ManyToOne(() => UserEntity, (el) => el.device)
+  @ManyToOne(() => UserEntity, (el) => el.device, { onDelete: 'CASCADE' })
   user: UserEntity;
 
   @Column({ unique: true })

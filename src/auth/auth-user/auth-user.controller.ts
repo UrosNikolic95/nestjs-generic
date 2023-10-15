@@ -68,6 +68,10 @@ export class AuthUserController {
     @Body() body: DeleteDto,
     @Res({ passthrough: true }) res: Response,
   ) {
+    console.log({
+      user: req.user,
+      body,
+    });
     res.clearCookie('Authorization');
     return this.authService.delete(req.user, body);
   }

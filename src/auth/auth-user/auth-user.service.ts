@@ -111,7 +111,7 @@ export class AuthUserService {
       where: { email: body.email },
     });
     if (!found) throw new UnauthorizedException('No user by that email.');
-    if (await compare(body.password, found.password)) {
+    if (compareSync(body.password, found.password)) {
       return await this.userRepo.findOne({
         where: { email: body.email },
       });
@@ -121,9 +121,12 @@ export class AuthUserService {
   }
 
   async delete(user: UserEntity, body: DeleteDto) {
-    if (await compare(body.password, user.password)) {
-      await user.remove();
-      return user;
+    const userWithPassword = await this.userRepo.findOne({
+      select: ['id', 'password'],
+      where: { id: user.id },
+    });
+    if (compareSync(body.password, userWithPassword.password)) {
+      await userWithPassword.remove();
     }
     throw new UnauthorizedException('Wrong password.');
   }

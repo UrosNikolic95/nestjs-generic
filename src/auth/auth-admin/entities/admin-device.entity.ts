@@ -17,7 +17,7 @@ export class AdminDeviceEntity extends BaseEntity implements IDevice {
   @Column()
   user_id: number;
 
-  @ManyToOne(() => AdminEntity, (el) => el.device)
+  @ManyToOne(() => AdminEntity, (el) => el.device, { onDelete: 'CASCADE' })
   user: AdminEntity;
 
   @Column({ unique: true })
