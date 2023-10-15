@@ -53,11 +53,8 @@ export function getController<T extends EntityType>(
     }
 
     @Get('export')
-    async export(@Res() res: Response) {
-      const data = await this.service.export();
-      res.header('Content-Type', 'text/csv');
-      res.attachment('orders.csv');
-      res.send(data);
+    async export(@Res() res: Response): Promise<void> {
+      await this.service.export(res);
     }
 
     @ApiResponse({ type: entity })
