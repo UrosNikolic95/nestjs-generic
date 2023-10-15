@@ -12,7 +12,7 @@ describe('AuthService', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      imports: [TypeOrmModule.forRoot(databaseConfig), AuthModule()],
+      imports: [TypeOrmModule.forRoot(databaseConfig), AuthModule],
     }).compile();
 
     service = module.get<AuthService>(AuthService);

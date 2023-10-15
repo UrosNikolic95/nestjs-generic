@@ -27,7 +27,7 @@ class controller extends getViewerController('view', Test1Entity, {
     }),
     TypeOrmModule.forFeature([Test1Entity]),
     getGenericModule([Test1Entity, Test2Entity, UserEntity]),
-    AuthModule(),
+    AuthModule,
   ],
   controllers: [controller],
   providers: [],

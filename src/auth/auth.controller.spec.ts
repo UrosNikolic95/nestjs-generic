@@ -12,7 +12,7 @@ describe('AuthController', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      imports: [AuthModule(), TypeOrmModule.forRoot(databaseConfig)],
+      imports: [AuthModule, TypeOrmModule.forRoot(databaseConfig)],
     }).compile();
 
     controller = module.get<AuthController>(AuthController);
