@@ -23,6 +23,6 @@ export class JwtUserStrategy extends PassportStrategy(Strategy, jwtLabel) {
   }
 
   async validate(payload: any) {
-    return await this.authService.validate(payload.token);
+    return await this.authService.validateJwt(payload.token);
   }
 }

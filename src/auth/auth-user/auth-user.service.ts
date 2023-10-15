@@ -55,7 +55,7 @@ export class AuthUserService {
       .execute();
   }
 
-  validate(token: string) {
+  validateJwt(token: string) {
     return this.userRepo
       .createQueryBuilder('user')
       .leftJoin('user.device', 'device')
@@ -66,9 +66,9 @@ export class AuthUserService {
   async register(body: RegisterUserDto) {
     try {
       checkRequirements(body.password);
-      const user = await this.userRepo.create(body).save();
-
-      user.email_validation_code = generateCode(7);
+      const user = await this.userRepo
+        .create({ ...body, email_validation_code: generateCode(7) })
+        .save();
 
       this.mailService.sendMail(
         body.email,
@@ -105,7 +105,7 @@ export class AuthUserService {
     return this.jwtService.decode(str);
   }
 
-  async login(body: LoginDto) {
+  async validateLocal(body: LoginDto) {
     const found = await this.userRepo.findOne({
       select: ['password'],
       where: { email: body.email },
@@ -134,9 +134,9 @@ export class AuthUserService {
         email: body.email,
       },
     });
-    if (!user) {
+    if (!user)
       throw new UnprocessableEntityException('No user with this email.');
-    }
+
     user.set_password_code = randomBytes(20).toString('hex');
     await user.save();
     this.mailService.sendMail(
@@ -157,14 +157,15 @@ export class AuthUserService {
   }
 
   async setPassword(setPasswordHash: string, body: SetPasswordDto) {
+    checkRequirements(body.newPassword);
     const user = await this.userRepo.findOne({
       where: {
         set_password_code: setPasswordHash,
       },
     });
-    if (!user) {
+    if (!user)
       throw new UnprocessableEntityException('No user owns that hash.');
-    }
+
     user.set_password_code = null;
     user.password = body.newPassword;
     await user.save();
@@ -175,7 +176,8 @@ export class AuthUserService {
       select: ['id'],
       where: { email_validation_code: code },
     });
-    if (!user) return;
+    if (!user)
+      throw new UnprocessableEntityException('No user owns that code.');
     user.email_validated = true;
     user.email_validation_code = null;
     await user.save();
