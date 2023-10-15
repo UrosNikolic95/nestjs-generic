@@ -1,4 +1,4 @@
-export const userDatabase = 'user_db';
+export const userDatabase = process.env.USER_DB_NAME;
 export const jwtLabel = 'jwt';
 export const localLabel = 'local';
 
