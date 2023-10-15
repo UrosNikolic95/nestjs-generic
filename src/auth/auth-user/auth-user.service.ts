@@ -182,4 +182,16 @@ export class AuthUserService {
     user.email_validation_code = null;
     await user.save();
   }
+
+  async validatePhone(code: string) {
+    const user = await this.userRepo.findOne({
+      select: ['id'],
+      where: { phone_validation_code: code },
+    });
+    if (!user)
+      throw new UnprocessableEntityException('No user owns that code.');
+    user.phone_validated = true;
+    user.phone_validation_code = null;
+    await user.save();
+  }
 }

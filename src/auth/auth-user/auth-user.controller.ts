@@ -5,11 +5,8 @@ import { AuthUserService } from './auth-user.service';
 import { DeleteDto } from '../dto/delete.dto';
 import { ForgotPasswordDto } from '../dto/forgot-password.dto';
 import { LoginDto } from '../dto/login.dto';
-import { RegisterDto } from '../dto/register.dto';
 import { ResetPasswordDto } from '../dto/reset-password.dto';
 import { SetPasswordDto } from '../dto/set-password.dto';
-import { LocalUserStrategy } from './strategies/local-user.strategy';
-import { JwtUserStrategy } from './strategies/jwt-user.strategy';
 import { JwtUserAuth } from './guards/jwt-user.guard';
 import { LocalUserAuth } from './guards/local-user.guard';
 import { RegisterUserDto } from '../dto/register-user.dto';
@@ -24,6 +21,7 @@ export class AuthUserController {
     return this.authService.forgotPassword(body);
   }
 
+  @JwtUserAuth()
   @Post('reset-password')
   resetPassword(@Req() req: Request, @Body() body: ResetPasswordDto) {
     return this.authService.resetPassword(req.user, body);
@@ -53,9 +51,14 @@ export class AuthUserController {
     await this.authService.removeJwtToken(res, req);
   }
 
-  @Post('verify-email/:code')
-  async verifyEmail(@Param('code') code: string) {
+  @Post('validate-email/:code')
+  async validateEmail(@Param('code') code: string) {
     await this.authService.validateEmail(code);
+  }
+
+  @Post('validate-phone/:code')
+  async validatePhone(@Param('code') code: string) {
+    await this.authService.validatePhone(code);
   }
 
   @JwtUserAuth()
