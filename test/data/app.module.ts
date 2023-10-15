@@ -8,6 +8,8 @@ import { getGenericModule } from '../../src/crud/crud.module';
 import { UserEntity } from '../../src/entities/user.entity';
 import { getViewerController } from '../../src/viewer/viewer.controller';
 import { JwtUserAuth } from '../../src/auth/auth-user/guards/jwt.guard';
+import { userDatabase } from '../../src/auth/auth.const';
+import { DeviceEntity } from '../../src/entities/device.entity';
 
 @JwtUserAuth()
 class controller extends getViewerController('view', Test1Entity, {
@@ -24,11 +26,15 @@ class controller extends getViewerController('view', Test1Entity, {
     TypeOrmModule.forRoot({
       ...databaseConfig,
     }),
-    TypeOrmModule.forFeature([Test1Entity]),
+    TypeOrmModule.forRoot({
+      ...databaseConfig,
+      name: userDatabase,
+    }),
+    TypeOrmModule.forFeature([Test1Entity, Test2Entity, DeviceEntity]),
     getGenericModule([Test1Entity, Test2Entity, UserEntity]),
     AuthModule,
   ],
-  controllers: [controller],
+  controllers: [],
   providers: [],
 })
 export class AppModule {}

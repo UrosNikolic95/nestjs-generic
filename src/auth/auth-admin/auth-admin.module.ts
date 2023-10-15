@@ -8,7 +8,6 @@ import { envConfig } from '../../config';
 import { AdminDeviceEntity } from '../../entities/admin-device.entity';
 import { AdminEntity } from '../../entities/admin.entity';
 import { MailModule } from '../../mail/mail.module';
-import { UserSubscriber } from '../../subscribers/user.subscriber';
 import { userDatabase } from '../auth.const';
 import { LocalAdminGuard } from './guards/local-admin.guard';
 import { LocalAdminStrategy } from './strategies/local-admin.strategy';
@@ -32,7 +31,6 @@ import { JwtAdminStrategy } from './strategies/jwt-admin.strategy';
     LocalAdminStrategy,
     JwtAdminGuard,
     JwtAdminStrategy,
-    ,
   ],
   exports: [AuthAdminService],
 })

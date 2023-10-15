@@ -1,16 +1,9 @@
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { DefaultNamingStrategy } from 'typeorm';
-import {
-  UserEntity,
-  WatchValueEntity,
-  WatchLabelEntity,
-  WatchIntValueEntity,
-  WatchFloatValueEntity,
-  createWatchSubscriber,
-} from '../src';
-import { Test1Entity } from '../test/data/test1.entity';
+import { UserEntity, createWatchSubscriber } from '../src';
 import { Test2Entity } from '../test/data/test2.entity';
 import { envConfig } from '../src/config';
+import { Test1Entity } from '../test/data/test1.entity';
 
 class SnakeNameingStrategy extends DefaultNamingStrategy {
   joinColumnName(relationName: string, referencedColumnName: string): string {
@@ -21,15 +14,7 @@ class SnakeNameingStrategy extends DefaultNamingStrategy {
 export const databaseConfig: TypeOrmModuleOptions = {
   type: 'postgres',
   url: envConfig.USERS_DB_URL || envConfig.DB_URL,
-  entities: [
-    Test1Entity,
-    Test2Entity,
-    UserEntity,
-    WatchValueEntity,
-    WatchLabelEntity,
-    WatchIntValueEntity,
-    WatchFloatValueEntity,
-  ],
+  autoLoadEntities: true,
   synchronize: true,
   namingStrategy: new SnakeNameingStrategy(),
   subscribers: [

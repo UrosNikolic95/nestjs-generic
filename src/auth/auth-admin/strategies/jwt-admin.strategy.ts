@@ -4,10 +4,13 @@ import { Request } from 'express';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { AuthAdminService } from '../auth-admin.service';
 import { envConfig } from '../../../config';
-import { jwtLabel } from '../../auth.const';
+import { jwtAdminLabel } from '../../auth.const';
 
 @Injectable()
-export class JwtAdminStrategy extends PassportStrategy(Strategy, jwtLabel) {
+export class JwtAdminStrategy extends PassportStrategy(
+  Strategy,
+  jwtAdminLabel,
+) {
   constructor(private readonly authService: AuthAdminService) {
     super({
       jwtFromRequest: ExtractJwt.fromExtractors([

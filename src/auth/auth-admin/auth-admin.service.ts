@@ -13,7 +13,6 @@ import { extractJwt } from './auth.helpers';
 import { AdminEntity } from '../../entities/admin.entity';
 import { AdminDeviceEntity } from '../../entities/admin-device.entity';
 import { envConfig } from '../../config';
-import { DeviceEntity } from '../../entities/device.entity';
 import { UserEntity } from '../../entities/user.entity';
 import { generateCode } from '../../helpers/code.helper';
 import { checkRequirements } from '../../helpers/password.helpers';
@@ -30,9 +29,9 @@ import { SetPasswordDto } from '../dto/set-password.dto';
 export class AuthAdminService {
   constructor(
     @InjectRepository(AdminEntity, userDatabase)
-    private readonly userRepo: Repository<UserEntity>,
+    private readonly userRepo: Repository<AdminEntity>,
     @InjectRepository(AdminDeviceEntity, userDatabase)
-    private readonly deviceRepo: Repository<DeviceEntity>,
+    private readonly deviceRepo: Repository<AdminDeviceEntity>,
     private readonly jwtService: JwtService,
     private readonly mailService: MailService,
   ) {}
