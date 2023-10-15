@@ -7,9 +7,9 @@ import { LoginDto } from '../dto/login.dto';
 import { RegisterDto } from '../dto/register.dto';
 import { ResetPasswordDto } from '../dto/reset-password.dto';
 import { SetPasswordDto } from '../dto/set-password.dto';
-import { JwtAuth } from '../guards/jwt.guard';
-import { LocalAuth } from '../guards/local.guard';
 import { AuthAdminService } from './auth-admin.service';
+import { LocalAdminAuth } from './guards/local-admin.guard';
+import { JwtAdminAuth } from './guards/jwt-admin.guard';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -37,14 +37,14 @@ export class AuthAdminController {
   }
 
   @ApiBody({ type: LoginDto })
-  @LocalAuth()
+  @LocalAdminAuth()
   @Post('login')
   async login(@Req() req: Request, @Res({ passthrough: true }) res: Response) {
     await this.authService.makeJwtToken(req.user, res);
     return req.user;
   }
 
-  @JwtAuth()
+  @JwtAdminAuth()
   @Post('logout')
   async logout(@Res({ passthrough: true }) res: Response, @Req() req: Request) {
     await this.authService.removeJwtToken(res, req);
@@ -55,7 +55,7 @@ export class AuthAdminController {
     await this.authService.validateEmail(code);
   }
 
-  @JwtAuth()
+  @JwtAdminAuth()
   @Post('delete')
   delete(
     @Req() req: Request,

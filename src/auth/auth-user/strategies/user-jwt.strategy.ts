@@ -2,13 +2,13 @@ import { Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { Request } from 'express';
 import { ExtractJwt, Strategy } from 'passport-jwt';
-import { AuthService } from '../auth.service';
-import { envConfig } from '../../config';
-import { jwtLabel } from '../auth.const';
+import { envConfig } from '../../../config';
+import { jwtLabel } from '../../auth.const';
+import { AuthUserService } from '../auth-user.service';
 
 @Injectable()
-export class JwtStrategy extends PassportStrategy(Strategy, jwtLabel) {
-  constructor(private readonly authService: AuthService) {
+export class JwtUserStrategy extends PassportStrategy(Strategy, jwtLabel) {
+  constructor(private readonly authService: AuthUserService) {
     super({
       jwtFromRequest: ExtractJwt.fromExtractors([
         (req: Request) => {

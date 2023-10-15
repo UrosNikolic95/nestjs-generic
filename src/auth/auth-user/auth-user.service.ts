@@ -9,7 +9,6 @@ import { compare, compareSync } from 'bcrypt';
 import { randomBytes } from 'crypto';
 import { Response, Request } from 'express';
 import { Repository } from 'typeorm';
-import { extractJwt } from './auth.helpers';
 import { envConfig } from '../../config';
 import { DeviceEntity } from '../../entities/device.entity';
 import { UserEntity } from '../../entities/user.entity';
@@ -23,6 +22,7 @@ import { LoginDto } from '../dto/login.dto';
 import { RegisterDto } from '../dto/register.dto';
 import { ResetPasswordDto } from '../dto/reset-password.dto';
 import { SetPasswordDto } from '../dto/set-password.dto';
+import { extractJwt } from '../auth.helpers';
 
 @Injectable()
 export class AuthUserService {

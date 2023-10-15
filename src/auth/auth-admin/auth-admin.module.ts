@@ -10,10 +10,10 @@ import { AdminEntity } from '../../entities/admin.entity';
 import { MailModule } from '../../mail/mail.module';
 import { UserSubscriber } from '../../subscribers/user.subscriber';
 import { userDatabase } from '../auth.const';
-import { JwtGuard } from '../guards/jwt.guard';
-import { LocalGuard } from '../guards/local.guard';
-import { JwtStrategy } from '../strategies/jwt.strategy';
-import { LocalStrategy } from '../strategies/local.strategy';
+import { LocalAdminGuard } from './guards/local-admin.guard';
+import { LocalAdminStrategy } from './strategies/local-admin.strategy';
+import { JwtAdminGuard } from './guards/jwt-admin.guard';
+import { JwtAdminStrategy } from './strategies/jwt-admin.strategy';
 
 @Module({
   imports: [
@@ -28,11 +28,11 @@ import { LocalStrategy } from '../strategies/local.strategy';
   controllers: [AuthAdminController],
   providers: [
     AuthAdminService,
-    LocalStrategy,
-    LocalGuard,
-    JwtStrategy,
-    JwtGuard,
-    UserSubscriber,
+    LocalAdminGuard,
+    LocalAdminStrategy,
+    JwtAdminGuard,
+    JwtAdminStrategy,
+    ,
   ],
   exports: [AuthAdminService],
 })

@@ -3,7 +3,7 @@ dotenv.config();
 import { Test, TestingModule } from '@nestjs/testing';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthUserController } from './auth-user.controller';
-import { AuthUserModule } from './auth.module';
+import { AuthUserModule } from './auth-user.module';
 import { databaseConfig } from '../../../data/database.config';
 import { closeBull } from '../../helpers/bull.helper';
 

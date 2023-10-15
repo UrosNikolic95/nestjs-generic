@@ -7,10 +7,9 @@ import { AuthModule } from '../../src/auth/auth.module';
 import { getGenericModule } from '../../src/crud/crud.module';
 import { UserEntity } from '../../src/entities/user.entity';
 import { getViewerController } from '../../src/viewer/viewer.controller';
-import { JwtAuth } from '../../src';
-import { userDatabase } from '../../src/auth/auth.const';
+import { JwtUserAuth } from '../../src/auth/auth-user/guards/jwt.guard';
 
-@JwtAuth()
+@JwtUserAuth()
 class controller extends getViewerController('view', Test1Entity, {
   select: {
     a1: (el) => el.field,

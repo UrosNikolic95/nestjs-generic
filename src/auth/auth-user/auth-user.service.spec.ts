@@ -2,7 +2,7 @@ import * as dotenv from 'dotenv';
 dotenv.config();
 import { Test, TestingModule } from '@nestjs/testing';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { AuthUserModule } from './auth.module';
+import { AuthUserModule } from './auth-user.module';
 import { AuthUserService } from './auth-user.service';
 import { databaseConfig } from '../../../data/database.config';
 import { closeBull } from '../../helpers/bull.helper';

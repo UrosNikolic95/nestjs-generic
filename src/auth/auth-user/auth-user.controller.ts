@@ -8,8 +8,10 @@ import { LoginDto } from '../dto/login.dto';
 import { RegisterDto } from '../dto/register.dto';
 import { ResetPasswordDto } from '../dto/reset-password.dto';
 import { SetPasswordDto } from '../dto/set-password.dto';
-import { JwtAuth } from '../guards/jwt.guard';
-import { LocalAuth } from '../guards/local.guard';
+import { LocalUserStrategy } from './strategies/user-local.strategy';
+import { JwtUserStrategy } from './strategies/user-jwt.strategy';
+import { JwtUserAuth } from './guards/jwt.guard';
+import { LocalUserAuth } from './guards/local.guard';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -37,14 +39,14 @@ export class AuthUserController {
   }
 
   @ApiBody({ type: LoginDto })
-  @LocalAuth()
+  @LocalUserAuth()
   @Post('login')
   async login(@Req() req: Request, @Res({ passthrough: true }) res: Response) {
     await this.authService.makeJwtToken(req.user, res);
     return req.user;
   }
 
-  @JwtAuth()
+  @JwtUserAuth()
   @Post('logout')
   async logout(@Res({ passthrough: true }) res: Response, @Req() req: Request) {
     await this.authService.removeJwtToken(res, req);
@@ -55,7 +57,7 @@ export class AuthUserController {
     await this.authService.validateEmail(code);
   }
 
-  @JwtAuth()
+  @JwtUserAuth()
   @Post('delete')
   delete(
     @Req() req: Request,
