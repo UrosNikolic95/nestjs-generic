@@ -7,7 +7,7 @@ import { AuthModule } from '../../src/auth/auth.module';
 import { getGenericModule } from '../../src/crud/crud.module';
 import { UserEntity } from '../../src/auth/auth-user/entities/user.entity';
 import { getViewerController } from '../../src/viewer/viewer.controller';
-import { JwtUserAuth } from '../../src/auth/auth-user/guards/jwt.guard';
+import { JwtUserAuth } from '../../src/auth/auth-user/guards/jwt-user.guard';
 import { userDatabase } from '../../src/auth/auth.const';
 import { DeviceEntity } from '../../src/auth/auth-user/entities/device.entity';
 
@@ -23,15 +23,15 @@ class controller extends getViewerController('view', Test1Entity, {
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot({
-      ...databaseConfig,
-    }),
+    // TypeOrmModule.forRoot({
+    //   ...databaseConfig,
+    // }),
     TypeOrmModule.forRoot({
       ...databaseConfig,
       name: userDatabase,
     }),
-    TypeOrmModule.forFeature([Test1Entity, Test2Entity, DeviceEntity]),
-    getGenericModule([Test1Entity, Test2Entity, UserEntity]),
+    // TypeOrmModule.forFeature([Test1Entity, Test2Entity, DeviceEntity]),
+    // getGenericModule([Test1Entity, Test2Entity, UserEntity]),
     AuthModule,
   ],
   controllers: [],

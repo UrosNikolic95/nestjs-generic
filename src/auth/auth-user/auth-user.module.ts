@@ -8,12 +8,12 @@ import { envConfig } from '../../config';
 import { DeviceEntity } from './entities/device.entity';
 import { UserEntity } from './entities/user.entity';
 import { MailModule } from '../../mail/mail.module';
-import { UserSubscriber } from '../../subscribers/user.subscriber';
+import { UserSubscriber } from './auth-user.subscriber';
 import { userDatabase } from '../auth.const';
-import { LocalUserGuard } from './guards/local.guard';
-import { LocalUserStrategy } from './strategies/user-local.strategy';
-import { JwtUserGuard } from './guards/jwt.guard';
-import { JwtUserStrategy } from './strategies/user-jwt.strategy';
+import { LocalUserGuard } from './guards/local-user.guard';
+import { LocalUserStrategy } from './strategies/local-user.strategy';
+import { JwtUserGuard } from './guards/jwt-user.guard';
+import { JwtUserStrategy } from './strategies/jwt-user.strategy';
 
 @Module({
   imports: [

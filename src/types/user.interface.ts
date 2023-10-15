@@ -9,9 +9,9 @@ export interface IUser {
 
   email: string;
 
-  email_validated: boolean;
+  email_validated?: boolean;
 
-  email_validation_code: string;
+  email_validation_code?: string;
 
   phone: string;
 

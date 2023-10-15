@@ -28,12 +28,6 @@ export class AdminEntity extends BaseEntity implements IUser {
   @Column({ unique: true })
   email: string;
 
-  @Column({ default: false })
-  email_validated: boolean;
-
-  @Column({ nullable: true, unique: true })
-  email_validation_code: string;
-
   @ApiProperty()
   @Column({ nullable: true })
   phone: string;

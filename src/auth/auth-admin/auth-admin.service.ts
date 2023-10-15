@@ -24,6 +24,8 @@ import { LoginDto } from '../dto/login.dto';
 import { RegisterDto } from '../dto/register.dto';
 import { ResetPasswordDto } from '../dto/reset-password.dto';
 import { SetPasswordDto } from '../dto/set-password.dto';
+import { AdminInvitationEntity } from './entities/admin-invitation.entity';
+import { InvitationDto } from '../dto/invitation.dto';
 
 @Injectable()
 export class AuthAdminService {
@@ -32,6 +34,8 @@ export class AuthAdminService {
     private readonly userRepo: Repository<AdminEntity>,
     @InjectRepository(AdminDeviceEntity, userDatabase)
     private readonly deviceRepo: Repository<AdminDeviceEntity>,
+    @InjectRepository(AdminInvitationEntity, userDatabase)
+    private readonly invitationRepo: Repository<AdminInvitationEntity>,
     private readonly jwtService: JwtService,
     private readonly mailService: MailService,
   ) {}
@@ -63,18 +67,35 @@ export class AuthAdminService {
       .getOne();
   }
 
+  async invite(body: InvitationDto) {
+    const code = generateCode(7);
+    await this.invitationRepo
+      .createQueryBuilder()
+      .insert()
+      .values({
+        email: body.email,
+        code,
+      })
+      .orUpdate(['code'], ['email'])
+      .execute();
+
+    this.mailService.sendMail(
+      body.email,
+      'Validate Email',
+      'Invitation code: ' + code,
+    );
+  }
+
   async register(body: RegisterDto) {
     try {
+      const invitation = await this.invitationRepo.findOne({
+        where: { code: body.invitation_code },
+      });
+      if (!invitation) throw new UnprocessableEntityException('No invitation');
+
       checkRequirements(body.password);
       const user = await this.userRepo.create(body).save();
 
-      user.email_validation_code = generateCode(7);
-
-      this.mailService.sendMail(
-        body.email,
-        'Validate Email',
-        'Validateion code: ' + user.email_validation_code,
-      );
       return user;
     } catch (err) {
       throw new UnprocessableEntityException(err?.detail);
@@ -167,17 +188,6 @@ export class AuthAdminService {
     }
     user.set_password_code = null;
     user.password = body.newPassword;
-    await user.save();
-  }
-
-  async validateEmail(code: string) {
-    const user = await this.userRepo.findOne({
-      select: ['id'],
-      where: { email_validation_code: code },
-    });
-    if (!user) return;
-    user.email_validated = true;
-    user.email_validation_code = null;
     await user.save();
   }
 }

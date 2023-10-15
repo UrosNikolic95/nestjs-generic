@@ -8,10 +8,10 @@ import { LoginDto } from '../dto/login.dto';
 import { RegisterDto } from '../dto/register.dto';
 import { ResetPasswordDto } from '../dto/reset-password.dto';
 import { SetPasswordDto } from '../dto/set-password.dto';
-import { LocalUserStrategy } from './strategies/user-local.strategy';
-import { JwtUserStrategy } from './strategies/user-jwt.strategy';
-import { JwtUserAuth } from './guards/jwt.guard';
-import { LocalUserAuth } from './guards/local.guard';
+import { LocalUserStrategy } from './strategies/local-user.strategy';
+import { JwtUserStrategy } from './strategies/jwt-user.strategy';
+import { JwtUserAuth } from './guards/jwt-user.guard';
+import { LocalUserAuth } from './guards/local-user.guard';
 
 @ApiTags('auth')
 @Controller('auth')

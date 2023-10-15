@@ -5,11 +5,11 @@ import {
   InsertEvent,
   UpdateEvent,
 } from 'typeorm';
-import { UserEntity } from '../auth/auth-user/entities/user.entity';
+import { UserEntity } from './entities/user.entity';
 import { hash } from 'bcrypt';
 import { InjectDataSource } from '@nestjs/typeorm';
 import { Injectable } from '@nestjs/common';
-import { userDatabase } from '../auth/auth.const';
+import { userDatabase } from '../auth.const';
 
 function randInt(max: number) {
   return Math.floor(Math.random() * max);

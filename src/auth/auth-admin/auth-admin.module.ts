@@ -13,10 +13,15 @@ import { LocalAdminGuard } from './guards/local-admin.guard';
 import { LocalAdminStrategy } from './strategies/local-admin.strategy';
 import { JwtAdminGuard } from './guards/jwt-admin.guard';
 import { JwtAdminStrategy } from './strategies/jwt-admin.strategy';
+import { AdminInvitationEntity } from './entities/admin-invitation.entity';
+import { AdminSubscriber } from './auth-admin.subscriber';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([AdminEntity, AdminDeviceEntity], userDatabase),
+    TypeOrmModule.forFeature(
+      [AdminEntity, AdminDeviceEntity, AdminInvitationEntity],
+      userDatabase,
+    ),
     PassportModule.register({ session: true }),
     JwtModule.register({
       secret: envConfig.JWT_SECRET,
@@ -31,6 +36,7 @@ import { JwtAdminStrategy } from './strategies/jwt-admin.strategy';
     LocalAdminStrategy,
     JwtAdminGuard,
     JwtAdminStrategy,
+    AdminSubscriber,
   ],
   exports: [AuthAdminService],
 })

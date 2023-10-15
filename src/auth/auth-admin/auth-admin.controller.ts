@@ -10,9 +10,10 @@ import { SetPasswordDto } from '../dto/set-password.dto';
 import { AuthAdminService } from './auth-admin.service';
 import { LocalAdminAuth } from './guards/local-admin.guard';
 import { JwtAdminAuth } from './guards/jwt-admin.guard';
+import { InvitationDto } from '../dto/invitation.dto';
 
-@ApiTags('auth')
-@Controller('auth')
+@ApiTags('auth/admin')
+@Controller('auth/admin')
 export class AuthAdminController {
   constructor(private readonly authService: AuthAdminService) {}
 
@@ -29,6 +30,11 @@ export class AuthAdminController {
   @Post('set-password/:hash')
   setPassword(@Param('hash') hash: string, @Body() body: SetPasswordDto) {
     return this.authService.setPassword(hash, body);
+  }
+
+  @Post('invite')
+  invite(@Body() body: InvitationDto) {
+    return this.authService.invite(body);
   }
 
   @Post('register')
@@ -48,11 +54,6 @@ export class AuthAdminController {
   @Post('logout')
   async logout(@Res({ passthrough: true }) res: Response, @Req() req: Request) {
     await this.authService.removeJwtToken(res, req);
-  }
-
-  @Post('verify-email/:code')
-  async verifyEmail(@Param('code') code: string) {
-    await this.authService.validateEmail(code);
   }
 
   @JwtAdminAuth()
