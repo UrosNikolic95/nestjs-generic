@@ -22,3 +22,10 @@ export interface IPaginationResponse<T> {
 
   limit: number;
 }
+
+export interface ICsvData {
+  columnSeparator: string;
+  rowSeparator: string;
+  columnsFromAllItems: boolean;
+  fileName: string;
+}

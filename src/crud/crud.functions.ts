@@ -5,7 +5,7 @@ import {
   IGenericController,
   IPaginationResponse,
 } from './crud.interface';
-import { csvString } from './crud.helper';
+import { csvRes, csvString } from './crud.helper';
 import { Response } from 'express';
 
 export class GenericFunctions<T extends EntityType>
@@ -31,10 +31,7 @@ export class GenericFunctions<T extends EntityType>
 
   async export(res: Response) {
     const items = await this.repo.createQueryBuilder('root').getMany();
-    const data = csvString(items);
-    res.header('Content-Type', 'text/csv');
-    res.attachment('orders.csv');
-    res.send(data);
+    csvRes(res, items);
   }
 
   async requestOne(id: number): Promise<T> {

@@ -1,8 +1,33 @@
-const columnSeparator = ',';
-const rowSeparator = '\n';
+import { ICsvData } from './crud.interface';
+import { Response } from 'express';
 
-export function csvString(items: any[]) {
-  const columns = items[0] ? Object.keys(items[0]) : [];
+function getColumns(items: any[]) {
+  const columns = new Set<string>();
+  items.forEach((item) => {
+    Object.keys(item).forEach((column) => columns.add(column));
+  });
+  return Array.from(columns);
+}
+
+export function csvRes(res: Response, items: any[], data?: ICsvData) {
+  const fileName = data?.fileName || 'data.csv';
+  const filenameWithExtention = fileName.endsWith('.csv')
+    ? fileName
+    : fileName + '.csv';
+  const csvStr = csvString(items, data);
+  res.header('Content-Type', 'text/csv');
+  res.attachment(filenameWithExtention);
+  res.send(csvStr);
+}
+
+export function csvString(items: any[], data?: ICsvData) {
+  const columnSeparator = data?.columnSeparator || ',';
+  const rowSeparator = data?.rowSeparator || '\n';
+  const columns = data?.columnsFromAllItems
+    ? getColumns(items)
+    : items.length
+    ? Object.keys(items[0])
+    : [];
   return (
     columns.join(columnSeparator) +
     rowSeparator +
