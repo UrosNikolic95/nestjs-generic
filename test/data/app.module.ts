@@ -10,6 +10,7 @@ import { getViewerController } from '../../src/viewer/viewer.controller';
 import { JwtUserAuth } from '../../src/auth/auth-user/guards/jwt-user.guard';
 import { userDatabase } from '../../src/auth/auth.const';
 import { DeviceEntity } from '../../src/auth/auth-user/entities/device.entity';
+import { AnalyticsModule } from '../../src/analytics/analytics.module';
 
 @JwtUserAuth()
 class controller extends getViewerController('view', Test1Entity, {
@@ -33,6 +34,7 @@ class controller extends getViewerController('view', Test1Entity, {
     TypeOrmModule.forFeature([Test1Entity, Test2Entity]),
     getGenericModule([Test1Entity, Test2Entity]),
     AuthModule,
+    AnalyticsModule,
   ],
   controllers: [],
   providers: [],
