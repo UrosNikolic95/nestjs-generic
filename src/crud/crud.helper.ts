@@ -34,14 +34,14 @@ export function csvString(items: any[], data?: ICsvData) {
     items
       .map((item) =>
         columns
-          .map((column) => formatValue(item[column]))
+          .map((column) => formatValueCsv(item[column]))
           .join(columnSeparator),
       )
       .join(rowSeparator)
   );
 }
 
-export function formatValue(val: any) {
+export function formatValueCsv(val: any) {
   if (val instanceof Date) return val.toISOString();
   if (typeof val == 'string') return `'${val}'`;
   return val;

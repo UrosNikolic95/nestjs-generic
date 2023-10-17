@@ -1,12 +1,15 @@
 import {
   BaseEntity,
   Column,
-  CreateDateColumn,
   Entity,
   PrimaryGeneratedColumn,
+  Unique,
 } from 'typeorm';
 
+export const endpointTimeUniq = ['method', 'path', 'time'];
+
 @Entity({ name: 'endpoint_time' })
+@Unique(endpointTimeUniq)
 export class EndpointTimeEntity extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
@@ -23,6 +26,6 @@ export class EndpointTimeEntity extends BaseEntity {
   @Column()
   calls: number;
 
-  @CreateDateColumn()
-  created_at: Date;
+  @Column()
+  time: Date;
 }
