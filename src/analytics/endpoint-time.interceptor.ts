@@ -23,7 +23,6 @@ export class EndpointTimeInterceptor implements NestInterceptor {
   @Cron(CronExpression.EVERY_30_SECONDS)
   async saveData() {
     const values = Object.values(this.data);
-    console.log('#', values.length);
     if (values.length) {
       await this.endpointTimeRepo.save(values);
       for (const key in this.data) {
