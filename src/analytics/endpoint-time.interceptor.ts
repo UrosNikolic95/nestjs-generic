@@ -38,14 +38,15 @@ export class EndpointTimeInterceptor implements NestInterceptor {
       tap(async () => {
         const method = req?.method;
         const path = req?.route?.path;
-        const data = this.data[[method, path].join()];
+        const key = [method, path].join();
+        const data = this.data[key];
         const time = Date.now() - start.getTime();
 
         if (data) {
           data.milliseconds += time;
           data.calls += 1;
         } else {
-          this.data[[method, path].join()] = this.endpointTimeRepo.create({
+          this.data[key] = this.endpointTimeRepo.create({
             method,
             path,
             milliseconds: time,
