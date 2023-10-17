@@ -21,6 +21,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
+    "@nestjs/schedule": "^3.0.4",
     "bcrypt": "^5.0.1",
     "bull": "^4.10.0",
     "class-transformer": "^0.5.1",
