@@ -10,7 +10,7 @@ import { Repository } from 'typeorm';
 import { EndpointTimeEntity } from './entities/endpoint-time.entity';
 import { Request } from 'express';
 import { Cron, CronExpression } from '@nestjs/schedule';
-import { formatValue } from './analytics.helpers';
+import { formatValue, formatValueArray } from './analytics.helpers';
 
 @Injectable()
 export class EndpointTimeInterceptor implements NestInterceptor {
@@ -25,18 +25,9 @@ export class EndpointTimeInterceptor implements NestInterceptor {
   async saveData() {
     const values = Object.values(this.data);
     if (values.length) {
-      const columns = Object.keys(values[0]);
       await this.endpointTimeRepo
         .query(`insert into endpoint_time (method,path,milliseconds,calls,time)
-        values ${values
-          .map(
-            (row) =>
-              `(${columns
-                .map((column) => formatValue(row[column]))
-                .concat(`date_trunc('minute',now())`)
-                .join(',')})`,
-          )
-          .join(',')}
+        values ${formatValueArray(values, [`date_trunc('minute',now())`])}
         ON conflict (method,path,time) 
         DO UPDATE SET 
         milliseconds = endpoint_time.milliseconds + EXCLUDED.milliseconds,
