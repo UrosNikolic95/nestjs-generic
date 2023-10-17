@@ -15,7 +15,7 @@ export class ErrorEntity extends BaseEntity {
   method: string;
 
   @Column()
-  enpoint: string;
+  path: string;
 
   @Column()
   message: string;

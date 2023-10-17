@@ -25,7 +25,7 @@ export class ErrorInterceptor implements NestInterceptor {
           await this.errorRepo
             .create({
               method: req?.method,
-              enpoint: req?.route?.path,
+              path: req?.route?.path,
               message: err?.message,
               stack: err?.stack,
             })
