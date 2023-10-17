@@ -18,13 +18,17 @@ export class EndpointTimeInterceptor implements NestInterceptor {
     readonly endpointTimeRepo: Repository<EndpointTimeEntity>,
   ) {}
 
-  data: EndpointTimeEntity[] = [];
+  data: { [key: string]: EndpointTimeEntity } = {};
 
-  @Cron(CronExpression.EVERY_10_SECONDS)
+  @Cron(CronExpression.EVERY_30_SECONDS)
   async saveData() {
-    if (this.data.length) {
-      await this.endpointTimeRepo.save(this.data);
-      this.data.splice(0);
+    const values = Object.values(this.data);
+    console.log('#', values.length);
+    if (values.length) {
+      await this.endpointTimeRepo.save(values);
+      for (const key in this.data) {
+        delete this.data[key];
+      }
     }
   }
 
@@ -33,14 +37,22 @@ export class EndpointTimeInterceptor implements NestInterceptor {
     const start = new Date();
     return next.handle().pipe(
       tap(async () => {
-        this.data.push(
-          this.endpointTimeRepo.create({
-            method: req?.method,
-            path: req?.route?.path,
-            milliseconds: Date.now() - start.getTime(),
-            called_at: start,
-          }),
-        );
+        const method = req?.method;
+        const path = req?.route?.path;
+        const data = this.data[[method, path].join()];
+        const time = Date.now() - start.getTime();
+
+        if (data) {
+          data.milliseconds += time;
+          data.calls += 1;
+        } else {
+          this.data[[method, path].join()] = this.endpointTimeRepo.create({
+            method,
+            path,
+            milliseconds: time,
+            calls: 1,
+          });
+        }
       }),
     );
   }

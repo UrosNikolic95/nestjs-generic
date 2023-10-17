@@ -23,6 +23,15 @@ export class ErrorEntity extends BaseEntity {
   @Column()
   stack: string;
 
+  @Column({ type: 'jsonb', nullable: true })
+  body: any;
+
+  @Column({ type: 'jsonb', nullable: true })
+  query: any;
+
+  @Column({ type: 'jsonb', nullable: true })
+  params: any;
+
   @CreateDateColumn()
   created_at: Date;
 }

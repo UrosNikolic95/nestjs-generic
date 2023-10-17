@@ -28,6 +28,9 @@ export class ErrorInterceptor implements NestInterceptor {
               path: req?.route?.path,
               message: err?.message,
               stack: err?.stack,
+              query: req?.query,
+              body: req?.body,
+              params: req?.params,
             })
             .save();
           return err;

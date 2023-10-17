@@ -1,4 +1,10 @@
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  BaseEntity,
+  Column,
+  CreateDateColumn,
+  Entity,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity({ name: 'endpoint_time' })
 export class EndpointTimeEntity extends BaseEntity {
@@ -15,5 +21,8 @@ export class EndpointTimeEntity extends BaseEntity {
   milliseconds: number;
 
   @Column()
-  called_at: Date;
+  calls: number;
+
+  @CreateDateColumn()
+  created_at: Date;
 }
