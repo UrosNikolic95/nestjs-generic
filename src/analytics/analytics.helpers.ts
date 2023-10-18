@@ -14,3 +14,32 @@ export function formatValueArray(values: any[]) {
     )
     .join(',');
 }
+
+export function dateFrom({
+  date = new Date(),
+  years,
+  months,
+  days,
+  hours,
+  minutes,
+  seconds,
+  milliseconds,
+}: {
+  date?: Date;
+  years?: number;
+  months?: number;
+  days?: number;
+  hours?: number;
+  minutes?: number;
+  seconds?: number;
+  milliseconds?: number;
+}) {
+  if (years) date.setFullYear(date.getFullYear() + years);
+  if (months) date.setMonth(date.getMonth() + months);
+  if (days) date.setDate(date.getDate() + days);
+  if (hours) date.setHours(date.getHours() + hours);
+  if (minutes) date.setMinutes(date.getMinutes() + minutes);
+  if (seconds) date.setSeconds(date.getSeconds() + seconds);
+  if (milliseconds) date.setMilliseconds(date.getMilliseconds() + milliseconds);
+  return date;
+}

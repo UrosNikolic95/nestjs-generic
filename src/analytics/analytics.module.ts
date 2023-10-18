@@ -6,6 +6,8 @@ import { ErrorEntity } from './entities/error.entity';
 import { EndpointTimeEntity } from './entities/endpoint-time.entity';
 import { EndpointTimeInterceptor } from './endpoint-time.interceptor';
 import { ScheduleModule } from '@nestjs/schedule';
+import { AnalyticsService } from './analytics.service';
+import { AnalyticsController } from './analytics.controller';
 
 @Module({
   imports: [
@@ -21,6 +23,8 @@ import { ScheduleModule } from '@nestjs/schedule';
       provide: APP_INTERCEPTOR,
       useClass: ErrorInterceptor,
     },
+    AnalyticsService,
   ],
+  controllers: [AnalyticsController],
 })
 export class AnalyticsModule {}
