@@ -25,9 +25,10 @@ export class EndpointTimeInterceptor implements NestInterceptor {
   async saveData() {
     const values = Object.values(this.data);
     if (values.length) {
+      values.forEach((val) => val.time.setSeconds(0, 0));
       await this.endpointTimeRepo
         .query(`insert into endpoint_time (method,path,milliseconds,calls,time)
-        values ${formatValueArray(values, [`date_trunc('minute',now())`])}
+        values ${formatValueArray(values)}
         ON conflict (method,path,time) 
         DO UPDATE SET 
         milliseconds = endpoint_time.milliseconds + EXCLUDED.milliseconds,
@@ -58,6 +59,7 @@ export class EndpointTimeInterceptor implements NestInterceptor {
             path,
             milliseconds: time,
             calls: 1,
+            time: new Date(),
           });
         }
       }),
