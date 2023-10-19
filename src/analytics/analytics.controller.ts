@@ -1,6 +1,7 @@
-import { Controller, Get, Query } from '@nestjs/common';
+import { Controller, Get, Param, Query } from '@nestjs/common';
 import { AnalyticsService } from './analytics.service';
 import { AnalyticsErrorDto } from './dtos/analytics-error.dto';
+import { AnalyticsTimeDto } from './dtos/analytics-time.dto';
 
 @Controller()
 export class AnalyticsController {
@@ -14,5 +15,10 @@ export class AnalyticsController {
   @Get('endpoints/paths')
   getWeekExceptionsPerPath() {
     return this.analyticsService.getWeekExceptionsPerPath();
+  }
+
+  @Get('endpoints/time-groups')
+  getWeekTimeGroups(@Query() query: AnalyticsTimeDto) {
+    return this.analyticsService.getWeekTimeGroups(query);
   }
 }

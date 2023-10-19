@@ -7,10 +7,14 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { Observable, async, catchError, tap, throwError } from 'rxjs';
 import { Repository } from 'typeorm';
-import { EndpointTimeEntity } from './entities/endpoint-time.entity';
+import {
+  EndpointTimeEntity,
+  endpointTimeUniq,
+} from './entities/endpoint-time.entity';
 import { Request } from 'express';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import { formatValue, formatValueArray } from './analytics.helpers';
+import { time_group_size } from './analytics.consts';
 
 @Injectable()
 export class EndpointTimeInterceptor implements NestInterceptor {
@@ -25,13 +29,11 @@ export class EndpointTimeInterceptor implements NestInterceptor {
   async saveData() {
     const values = Object.values(this.data);
     if (values.length) {
-      values.forEach((val) => val.time.setSeconds(0, 0));
-      await this.endpointTimeRepo
-        .query(`insert into endpoint_time (method,path,milliseconds,calls,time)
+      const columns = Object.keys(values[0]);
+      await this.endpointTimeRepo.query(`insert into endpoint_time (${columns})
         values ${formatValueArray(values)}
-        ON conflict (method,path,time) 
+        ON conflict (${endpointTimeUniq}) 
         DO UPDATE SET 
-        milliseconds = endpoint_time.milliseconds + EXCLUDED.milliseconds,
         calls = endpoint_time.calls + EXCLUDED.calls`);
       for (const key in this.data) {
         delete this.data[key];
@@ -42,24 +44,27 @@ export class EndpointTimeInterceptor implements NestInterceptor {
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     const req = context.switchToHttp().getRequest<Request>();
     const start = new Date();
+
     return next.handle().pipe(
       tap(async () => {
         const method = req?.method;
         const path = req?.route?.path;
-        const key = [method, path].join();
-        const data = this.data[key];
         const time = Date.now() - start.getTime();
+        const reminder = time % time_group_size;
+        const lower_limit = time - reminder;
+        start.setMinutes(0, 0, 0);
+        const key = [method, path, lower_limit, start.toISOString()].join();
+        const data = this.data[key];
 
         if (data) {
-          data.milliseconds += time;
           data.calls += 1;
         } else {
           this.data[key] = this.endpointTimeRepo.create({
             method,
             path,
-            milliseconds: time,
+            lower_limit,
             calls: 1,
-            time: new Date(),
+            time: start,
           });
         }
       }),
