@@ -15,6 +15,7 @@ import { JwtAdminGuard } from './guards/jwt-admin.guard';
 import { JwtAdminStrategy } from './strategies/jwt-admin.strategy';
 import { AdminInvitationEntity } from './entities/admin-invitation.entity';
 import { AdminSubscriber } from './auth-admin.subscriber';
+import { PhoneModule } from '../../phone/phone.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { AdminSubscriber } from './auth-admin.subscriber';
       signOptions: { expiresIn: envConfig.JWT_EXPIRES },
     }),
     MailModule,
+    PhoneModule,
   ],
   controllers: [AuthAdminController],
   providers: [

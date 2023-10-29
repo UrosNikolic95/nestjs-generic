@@ -14,6 +14,7 @@ import { LocalUserGuard } from './guards/local-user.guard';
 import { LocalUserStrategy } from './strategies/local-user.strategy';
 import { JwtUserGuard } from './guards/jwt-user.guard';
 import { JwtUserStrategy } from './strategies/jwt-user.strategy';
+import { PhoneModule } from '../../phone/phone.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { JwtUserStrategy } from './strategies/jwt-user.strategy';
       signOptions: { expiresIn: envConfig.JWT_EXPIRES },
     }),
     MailModule,
+    PhoneModule,
   ],
   controllers: [AuthUserController],
   providers: [

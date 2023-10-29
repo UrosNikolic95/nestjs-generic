@@ -1,3 +1,6 @@
+import * as dotenv from 'dotenv';
+dotenv.config();
+
 export const envConfig = {
   JWT_SECRET: process.env.JWT_SECRET,
   JWT_EXPIRES: process.env.JWT_EXPIRES,
@@ -23,4 +26,9 @@ export const envConfig = {
   SWAGGER_VERSION: process.env.SWAGGER_VERSION,
 
   GLOBAL_PREFIX: process.env.GLOBAL_PREFIX,
+
+  TWILIO_ACCOUNT_SID: process.env.TWILIO_ACCOUNT_SID,
+  TWILIO_AUTH_TOKEN: process.env.TWILIO_AUTH_TOKEN,
+  TWILIO_PHONE_NUMBER: process.env.TWILIO_PHONE_NUMBER,
+  TWILIO_PHONE_NUMBER_TO: process.env.TWILIO_PHONE_NUMBER_TO,
 };

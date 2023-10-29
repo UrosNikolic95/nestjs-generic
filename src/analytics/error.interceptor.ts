@@ -3,8 +3,9 @@ import {
   ExecutionContext,
   Injectable,
   NestInterceptor,
+  UnprocessableEntityException,
 } from '@nestjs/common';
-import { Observable, async, catchError, throwError } from 'rxjs';
+import { Observable, catchError, throwError } from 'rxjs';
 import { Repository } from 'typeorm';
 import { ErrorEntity } from './entities/error.entity';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -21,8 +22,8 @@ export class ErrorInterceptor implements NestInterceptor {
     const req = context.switchToHttp().getRequest<Request>();
     return next.handle().pipe(
       catchError((err) =>
-        throwError(async () => {
-          await this.errorRepo
+        throwError(() => {
+          this.errorRepo
             .create({
               method: req?.method,
               path: req?.route?.path,
@@ -32,8 +33,9 @@ export class ErrorInterceptor implements NestInterceptor {
               body: req?.body,
               params: req?.params,
             })
-            .save();
-          return err;
+            .save()
+            .catch(console.error);
+          return new UnprocessableEntityException(err?.response);
         }),
       ),
     );

@@ -1,6 +1,5 @@
 import {
   Encapsulate,
-  getFunctionNames,
   getNonDefaultFunctionNames,
   insertFunctions,
   times,

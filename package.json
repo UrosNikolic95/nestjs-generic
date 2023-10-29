@@ -10,7 +10,7 @@
   ],
   "scripts": {
     "start": "nest start --watch",
-    "test": "jest --detectOpenHandles",
+    "test": "jest  --forceExit",
     "test:watch": "jest --watch --detectOpenHandles",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
@@ -40,7 +40,8 @@
     "rimraf": "^3.0.2",
     "rxjs": "^7.2.0",
     "ts-loader": "^9.4.2",
-    "type-safe-select": "^1.0.29",
+    "twilio": "^4.19.0",
+    "type-safe-select": "^1.0.30",
     "typeorm": "^0.3.7",
     "webpack": "^5.74.0"
   },

@@ -8,9 +8,10 @@ import { AuthAdminModule } from './auth-admin.module';
 
 describe('AuthController', () => {
   let controller: AuthAdminService;
+  let module: TestingModule;
 
   beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
+    module = await Test.createTestingModule({
       imports: [AuthAdminModule, TypeOrmModule.forRoot(databaseConfig)],
     }).compile();
 
@@ -19,5 +20,9 @@ describe('AuthController', () => {
 
   it('should be defined', () => {
     expect(controller).toBeDefined();
+  });
+
+  afterAll(async () => {
+    await module.close();
   });
 });

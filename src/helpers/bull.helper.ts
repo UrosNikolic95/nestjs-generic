@@ -15,7 +15,6 @@ const queueOptions = {
 } as QueueOptions;
 
 const alreadyMade = new Set<string>();
-const queue = new Queue('default', queueOptions);
 
 export function createQueueHelper(queue: IQueue): Type {
   class QueueHelper {
@@ -39,9 +38,4 @@ export function createQueueHelper(queue: IQueue): Type {
     }
   }
   return QueueHelper;
-}
-
-export const QueueHelperClass = createQueueHelper(queue);
-export async function closeBull() {
-  await queue.close();
 }

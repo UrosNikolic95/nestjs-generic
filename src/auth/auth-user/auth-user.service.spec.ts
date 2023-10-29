@@ -5,13 +5,14 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthUserModule } from './auth-user.module';
 import { AuthUserService } from './auth-user.service';
 import { databaseConfig } from '../../../data/database.config';
-import { closeBull } from '../../helpers/bull.helper';
+import { async } from 'rxjs';
 
 describe('AuthService', () => {
   let service: AuthUserService;
+  let module: TestingModule;
 
-  beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
+  beforeAll(async () => {
+    module = await Test.createTestingModule({
       imports: [TypeOrmModule.forRoot(databaseConfig), AuthUserModule],
     }).compile();
 
@@ -20,5 +21,9 @@ describe('AuthService', () => {
 
   it('should be defined', () => {
     expect(service).toBeDefined();
+  });
+
+  afterAll(async () => {
+    await module.close();
   });
 });

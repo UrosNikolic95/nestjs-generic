@@ -24,6 +24,7 @@ import { ResetPasswordDto } from '../dto/reset-password.dto';
 import { SetPasswordDto } from '../dto/set-password.dto';
 import { extractJwt } from '../auth.helpers';
 import { RegisterUserDto } from '../dto/register-user.dto';
+import { PhoneService } from '../../phone/phone.service';
 
 @Injectable()
 export class AuthUserService {
@@ -34,6 +35,7 @@ export class AuthUserService {
     private readonly deviceRepo: Repository<DeviceEntity>,
     private readonly jwtService: JwtService,
     private readonly mailService: MailService,
+    private readonly phoneService: PhoneService,
   ) {}
 
   async addTestUsers(users: RegisterDto[]) {
@@ -67,7 +69,11 @@ export class AuthUserService {
     try {
       checkRequirements(body.password);
       const user = await this.userRepo
-        .create({ ...body, email_validation_code: generateCode(7) })
+        .create({
+          ...body,
+          email_validation_code: generateCode(7),
+          phone_validation_code: body.phone ? generateCode(6) : null,
+        })
         .save();
 
       this.mailService.sendMail(
@@ -75,6 +81,13 @@ export class AuthUserService {
         'Validate Email',
         'Validateion code: ' + user.email_validation_code,
       );
+
+      if (body.phone)
+        await this.phoneService.send({
+          phone: body.phone,
+          message: 'Phone validation code: ' + user.phone_validation_code,
+        });
+
       return user;
     } catch (err) {
       throw new UnprocessableEntityException(err?.detail || err?.message);
