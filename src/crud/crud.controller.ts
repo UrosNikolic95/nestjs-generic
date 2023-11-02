@@ -24,9 +24,9 @@ import { ApiPaginatedResponse } from './crud.decorators';
 import { Response } from 'express';
 import { Where, Flatten } from 'type-safe-select';
 
-export function getController<T extends EntityType>(
+export function getController<T extends EntityType, query>(
   entity: Type<T>,
-  queryParam: Where<Flatten<T>>,
+  queryParam: (el: query) => Where<Flatten<T>>,
 ): Type<IGenericController<T>> {
   const name = entity.prototype.constructor.name;
 

@@ -9,19 +9,22 @@ import { csvRes } from './crud.helper';
 import { Response } from 'express';
 import { QueryHelper, Where, Flatten } from 'type-safe-select';
 
-export class GenericFunctions<T extends EntityType>
+export class GenericFunctions<T extends EntityType, query = any>
   implements IGenericController<T>
 {
   constructor(
     private readonly repo: Repository<T>,
-    readonly queryParams: Where<Flatten<T>>,
+    readonly queryParams: (el: any) => Where<Flatten<T>>,
   ) {}
 
   async requestMany(query: RequestManyDto): Promise<IPaginationResponse<T>> {
     const { page, limit } = query;
     const skip = (page - 1) * limit;
+    console.log({
+      s: this.queryParams(query),
+    });
     const [items, count] = await new QueryHelper(this.repo).getManyAndCount({
-      where: this.queryParams,
+      where: this.queryParams(query),
       skip,
       take: limit,
     });

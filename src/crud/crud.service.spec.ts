@@ -11,11 +11,17 @@ describe('GenericFuntions', () => {
 
   beforeAll(async () => {
     connection = await getConnection();
-    service = new GenericFunctions(connection.getRepository(Test1Entity), {
-      id: '*',
-      field: '*',
-      test_2_id: '*',
-    });
+    service = new GenericFunctions(
+      connection.getRepository(Test1Entity),
+      (query) => ({
+        id: '*',
+        field: '*',
+        test_2_id: '*',
+        test_2: {
+          id: '*',
+        },
+      }),
+    );
   });
 
   it('should be defined', () => {
