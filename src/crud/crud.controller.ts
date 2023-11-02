@@ -11,7 +11,7 @@ import {
   Type,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { EntityMetadata, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { RequestManyDto, RequestManyResponeDto } from './crud.dto';
 import {
   EntityType,
@@ -19,18 +19,14 @@ import {
   IPaginationResponse,
 } from './crud.interface';
 import { GenericFunctions } from './crud.functions';
-import {
-  ApiBody,
-  ApiExtraModels,
-  ApiResponse,
-  ApiTags,
-  getSchemaPath,
-} from '@nestjs/swagger';
+import { ApiBody, ApiExtraModels, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ApiPaginatedResponse } from './crud.decorators';
 import { Response } from 'express';
+import { Where, Flatten } from 'type-safe-select';
 
 export function getController<T extends EntityType>(
   entity: Type<T>,
+  queryParam: Where<Flatten<T>>,
 ): Type<IGenericController<T>> {
   const name = entity.prototype.constructor.name;
 
@@ -41,7 +37,7 @@ export function getController<T extends EntityType>(
     service: GenericFunctions<T>;
 
     constructor(@InjectRepository(entity) repo: Repository<T>) {
-      this.service = new GenericFunctions(repo);
+      this.service = new GenericFunctions(repo, queryParam);
     }
 
     @ApiPaginatedResponse(entity)
