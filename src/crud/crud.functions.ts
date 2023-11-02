@@ -15,6 +15,7 @@ export class GenericFunctions<T extends EntityType, query = any>
   constructor(
     private readonly repo: Repository<T>,
     readonly queryParams: (el: any) => Where<Flatten<T>>,
+    readonly after?: (arr: T[], repo: Repository<T>) => Promise<any[]>,
   ) {}
 
   async requestMany(query: RequestManyDto): Promise<IPaginationResponse<T>> {
@@ -25,8 +26,11 @@ export class GenericFunctions<T extends EntityType, query = any>
       skip,
       take: limit,
     });
+    const afterTransform = this.after
+      ? await this.after(items, this.repo)
+      : items;
     return {
-      items,
+      items: afterTransform,
       count,
       page,
       limit,
