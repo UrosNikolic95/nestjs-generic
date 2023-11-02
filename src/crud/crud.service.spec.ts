@@ -14,9 +14,9 @@ describe('GenericFuntions', () => {
     service = new GenericFunctions(
       connection.getRepository(Test1Entity),
       (query) => ({
-        id: '*',
-        field: '*',
-        test_2_id: '*',
+        id: query.id,
+        field: query.field,
+        test_2_id: query.test_2_id,
         test_2: {
           id: '*',
         },

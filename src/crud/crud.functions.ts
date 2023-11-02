@@ -20,9 +20,6 @@ export class GenericFunctions<T extends EntityType, query = any>
   async requestMany(query: RequestManyDto): Promise<IPaginationResponse<T>> {
     const { page, limit } = query;
     const skip = (page - 1) * limit;
-    console.log({
-      s: this.queryParams(query),
-    });
     const [items, count] = await new QueryHelper(this.repo).getManyAndCount({
       where: this.queryParams(query),
       skip,
