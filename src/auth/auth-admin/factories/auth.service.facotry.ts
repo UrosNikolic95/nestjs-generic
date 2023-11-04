@@ -17,22 +17,27 @@ import { RegisterDto } from '../../dto/register.dto';
 import { ResetPasswordDto } from '../../dto/reset-password.dto';
 import { SetPasswordDto } from '../../dto/set-password.dto';
 import { extractJwt } from '../auth.helpers';
-import { IGenerateModule } from '../interfaces/generate-module.interface';
+import {
+  IAuthService,
+  IGenerateModule,
+} from '../interfaces/generate-module.interface';
 import {
   Injectable,
   UnauthorizedException,
   UnprocessableEntityException,
 } from '@nestjs/common';
 import { Response, Request } from 'express';
+import { IUser } from '../../../types/user.interface';
+import { IDevice } from '../../../types/device.interface';
 
 export function authServiceFactory(data: IGenerateModule) {
   @Injectable()
-  class AuthService {
+  class AuthService implements IAuthService {
     constructor(
       @InjectRepository(data.UserEntity, userDatabase)
-      private readonly userRepo: Repository<any>,
+      private readonly userRepo: Repository<IUser>,
       @InjectRepository(data.DeviceEntity, userDatabase)
-      private readonly deviceRepo: Repository<any>,
+      private readonly deviceRepo: Repository<IDevice>,
       @InjectRepository(data.InvitationEntity, userDatabase)
       private readonly invitationRepo: Repository<any>,
       private readonly jwtService: JwtService,
@@ -86,20 +91,15 @@ export function authServiceFactory(data: IGenerateModule) {
     }
 
     async register(body: RegisterDto) {
-      try {
-        const invitation = await this.invitationRepo.findOne({
-          where: { code: body.invitation_code },
-        });
-        if (!invitation)
-          throw new UnprocessableEntityException('No invitation');
+      const invitation = await this.invitationRepo.findOne({
+        where: { code: body.invitation_code },
+      });
+      if (!invitation) throw new UnprocessableEntityException('No invitation');
 
-        checkRequirements(body.password);
-        const user = await this.userRepo.create(body).save();
+      checkRequirements(body.password);
+      const user = await this.userRepo.create(body).save();
 
-        return user;
-      } catch (err) {
-        throw new UnprocessableEntityException(err?.detail);
-      }
+      return user;
     }
 
     async makeJwtToken(user: UserEntity, res: Response) {

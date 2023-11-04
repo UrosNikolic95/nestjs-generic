@@ -15,7 +15,10 @@ import { LoginDto } from '../../dto/login.dto';
 import { RegisterDto } from '../../dto/register.dto';
 import { ResetPasswordDto } from '../../dto/reset-password.dto';
 import { SetPasswordDto } from '../../dto/set-password.dto';
-import { IGenerateModule } from '../interfaces/generate-module.interface';
+import {
+  IAuthService,
+  IGenerateModule,
+} from '../interfaces/generate-module.interface';
 import { Request, Response } from 'express';
 
 export function authControllerFactory(data: IGenerateModule) {
@@ -24,7 +27,7 @@ export function authControllerFactory(data: IGenerateModule) {
   class AuthController {
     constructor(
       @Inject(data.AuthService)
-      private readonly authService: any,
+      private readonly authService: IAuthService,
     ) {}
 
     @Post('forgot-password')
@@ -74,12 +77,12 @@ export function authControllerFactory(data: IGenerateModule) {
 
     @data.LocalAuth()
     @Post('delete')
-    delete(
+    async delete(
       @Req() req: Request,
       @Body() body: DeleteDto,
       @Res({ passthrough: true }) res: Response,
     ) {
-      res.clearCookie('Authorization');
+      await this.authService.removeJwtToken(res, req);
       return this.authService.delete(req.user, body);
     }
   }

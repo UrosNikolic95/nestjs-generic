@@ -1,6 +1,7 @@
+import { BaseEntity } from 'typeorm';
 import { IDevice } from './device.interface';
 
-export interface IUser {
+export interface IUser extends BaseEntity {
   id: number;
 
   username: string;

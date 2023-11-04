@@ -2,7 +2,10 @@ import { Inject, Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { Strategy as JwtStrategy, ExtractJwt } from 'passport-jwt';
 import { envConfig } from '../../../config';
-import { IGenerateModule } from '../interfaces/generate-module.interface';
+import {
+  IAuthService,
+  IGenerateModule,
+} from '../interfaces/generate-module.interface';
 import { Strategy as LocalPassportStrategy } from 'passport-local';
 import { Request } from 'express';
 
@@ -14,7 +17,7 @@ export function authStrategyFactory(data: IGenerateModule) {
   ) {
     constructor(
       @Inject(data.AuthService)
-      private readonly authService: any,
+      private readonly authService: IAuthService,
     ) {
       super({
         jwtFromRequest: ExtractJwt.fromExtractors([
@@ -43,7 +46,7 @@ export function authStrategyFactory(data: IGenerateModule) {
   ) {
     constructor(
       @Inject(data.AuthService)
-      private authService: any,
+      private authService: IAuthService,
     ) {
       super({
         usernameField: 'email',
