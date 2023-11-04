@@ -2,4 +2,7 @@ import { authFactory } from './factories/auth.factory';
 
 const adminData = authFactory('admin');
 
-export class AuthAdminModule extends adminData.AuthModule {}
+export class AdminAuthModule extends adminData.AuthModule {}
+
+export const AdminLocalAuth = adminData.LocalAuth;
+export const AdminJwtAuth = adminData.JwtAuth;
