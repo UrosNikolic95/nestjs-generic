@@ -14,18 +14,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { userDatabase } from '../../auth.const';
 import { envConfig } from '../../../config';
 
-export function authModuleFactory(name: string) {
-  const data = {
-    name,
-    jwtLabel: `${name}-jwt`,
-    localLabel: `${name}-local`,
-  } as IGenerateModule;
-  authEntityFactory(data);
-  authServiceFactory(data);
-  authSubscriberFactory(data);
-  authStrategyFactory(data);
-  authGuardFactory(data);
-  authControllerFactory(data);
+export function authModuleFactory(data: IGenerateModule) {
   @Module({
     imports: [
       TypeOrmModule.forFeature(
@@ -53,6 +42,4 @@ export function authModuleFactory(name: string) {
   class AuthModule {}
 
   data.AuthModule = AuthModule;
-
-  return data;
 }

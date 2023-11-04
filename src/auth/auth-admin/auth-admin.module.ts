@@ -1,5 +1,5 @@
-import { authModuleFactory } from './factories/auth-module.factory';
+import { authFactory } from './factories/auth.factory';
 
-const adminData = authModuleFactory('admin');
+const adminData = authFactory('admin');
 
 export class AuthAdminModule extends adminData.AuthModule {}
