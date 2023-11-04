@@ -29,7 +29,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 
 export function getController<T extends EntityType, query>(
   entity: Type<T>,
-  queryParam: (el: query) => Where<Flatten<T>>,
+  queryParam?: (el: query) => Where<Flatten<T>>,
 ): Type<IGenericController<T>> {
   const name = entity.prototype.constructor.name;
 
