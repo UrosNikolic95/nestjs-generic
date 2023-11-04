@@ -9,6 +9,8 @@ import {
   Query,
   Res,
   Type,
+  UploadedFile,
+  UseInterceptors,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -23,6 +25,7 @@ import { ApiBody, ApiExtraModels, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ApiPaginatedResponse } from './crud.decorators';
 import { Response } from 'express';
 import { Where, Flatten } from 'type-safe-select';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 export function getController<T extends EntityType, query>(
   entity: Type<T>,
@@ -46,6 +49,12 @@ export function getController<T extends EntityType, query>(
       @Query() query: RequestManyDto,
     ): Promise<IPaginationResponse<T>> {
       return this.service.requestMany(query);
+    }
+
+    @UseInterceptors(FileInterceptor('file'))
+    @Post('import')
+    async import(@UploadedFile() file: Express.Multer.File) {
+      await this.service.import(file);
     }
 
     @Get('export')

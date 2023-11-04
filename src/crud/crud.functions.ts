@@ -5,7 +5,7 @@ import {
   IGenericController,
   IPaginationResponse,
 } from './crud.interface';
-import { csvRes } from './crud.helper';
+import { csvRes, fromBufferToJson } from './crud.helper';
 import { Response } from 'express';
 import { QueryHelper, Where, Flatten } from 'type-safe-select';
 
@@ -35,6 +35,12 @@ export class GenericFunctions<T extends EntityType, query = any>
       page,
       limit,
     };
+  }
+
+  async import(file: Express.Multer.File) {
+    const data = fromBufferToJson(file, this.repo.target);
+    const saved = await this.repo.save(data);
+    return saved;
   }
 
   async export(res: Response) {
