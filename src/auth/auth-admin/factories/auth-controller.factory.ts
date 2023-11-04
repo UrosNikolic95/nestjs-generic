@@ -1,4 +1,12 @@
-import { Controller, Post, Body, Req, Param, Res } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  Req,
+  Param,
+  Res,
+  Inject,
+} from '@nestjs/common';
 import { ApiTags, ApiBody } from '@nestjs/swagger';
 import { DeleteDto } from '../../dto/delete.dto';
 import { ForgotPasswordDto } from '../../dto/forgot-password.dto';
@@ -7,9 +15,6 @@ import { LoginDto } from '../../dto/login.dto';
 import { RegisterDto } from '../../dto/register.dto';
 import { ResetPasswordDto } from '../../dto/reset-password.dto';
 import { SetPasswordDto } from '../../dto/set-password.dto';
-import { AuthAdminService } from '../auth-admin.service';
-import { JwtAdminAuth } from '../guards/jwt-admin.guard';
-import { LocalAdminAuth } from '../guards/local-admin.guard';
 import { IGenerateModule } from '../interfaces/generate-module.interface';
 import { Request, Response } from 'express';
 
@@ -17,7 +22,10 @@ export function authControllerFactory(data: IGenerateModule) {
   @ApiTags(`auth/${data.name}`)
   @Controller(`auth/${data.name}`)
   class AuthController {
-    constructor(private readonly authService: AuthAdminService) {}
+    constructor(
+      @Inject(data.AuthService)
+      private readonly authService: any,
+    ) {}
 
     @Post('forgot-password')
     forgotPassword(@Body() body: ForgotPasswordDto) {
@@ -45,7 +53,7 @@ export function authControllerFactory(data: IGenerateModule) {
     }
 
     @ApiBody({ type: LoginDto })
-    @LocalAdminAuth()
+    @data.LocalAuth()
     @Post('login')
     async login(
       @Req() req: Request,
@@ -55,7 +63,7 @@ export function authControllerFactory(data: IGenerateModule) {
       return req.user;
     }
 
-    @JwtAdminAuth()
+    @data.LocalAuth()
     @Post('logout')
     async logout(
       @Res({ passthrough: true }) res: Response,
@@ -64,7 +72,7 @@ export function authControllerFactory(data: IGenerateModule) {
       await this.authService.removeJwtToken(res, req);
     }
 
-    @JwtAdminAuth()
+    @data.LocalAuth()
     @Post('delete')
     delete(
       @Req() req: Request,

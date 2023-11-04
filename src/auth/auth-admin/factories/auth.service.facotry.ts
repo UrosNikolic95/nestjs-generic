@@ -17,9 +17,6 @@ import { RegisterDto } from '../../dto/register.dto';
 import { ResetPasswordDto } from '../../dto/reset-password.dto';
 import { SetPasswordDto } from '../../dto/set-password.dto';
 import { extractJwt } from '../auth.helpers';
-import { AdminDeviceEntity } from '../entities/admin-device.entity';
-import { AdminInvitationEntity } from '../entities/admin-invitation.entity';
-import { AdminEntity } from '../entities/admin.entity';
 import { IGenerateModule } from '../interfaces/generate-module.interface';
 import {
   Injectable,
@@ -33,11 +30,11 @@ export function authServiceFactory(data: IGenerateModule) {
   class AuthService {
     constructor(
       @InjectRepository(data.UserEntity, userDatabase)
-      private readonly userRepo: Repository<AdminEntity>,
+      private readonly userRepo: Repository<any>,
       @InjectRepository(data.DeviceEntity, userDatabase)
-      private readonly deviceRepo: Repository<AdminDeviceEntity>,
+      private readonly deviceRepo: Repository<any>,
       @InjectRepository(data.InvitationEntity, userDatabase)
-      private readonly invitationRepo: Repository<AdminInvitationEntity>,
+      private readonly invitationRepo: Repository<any>,
       private readonly jwtService: JwtService,
       private readonly mailService: MailService,
     ) {}

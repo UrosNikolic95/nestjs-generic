@@ -14,12 +14,12 @@ export function authGuardFactory(data: IGenerateModule) {
   data.JwtAuth = JwtAuth;
 
   @Injectable()
-  class LocalAdminGuard extends AuthGuard(data.localLabel) {}
+  class LocalGuard extends AuthGuard(data.localLabel) {}
 
-  function LocalAdminAuth() {
-    return UseGuards(LocalAdminGuard);
+  function LocalAuth() {
+    return UseGuards(LocalGuard);
   }
 
-  data.LocalGuard = LocalAdminGuard;
-  data.LocalAuth = LocalAdminAuth;
+  data.LocalGuard = LocalGuard;
+  data.LocalAuth = LocalAuth;
 }

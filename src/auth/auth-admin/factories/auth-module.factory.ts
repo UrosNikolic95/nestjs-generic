@@ -50,9 +50,9 @@ export function authModuleFactory(name: string) {
       data.AdminSubscriber,
     ],
   })
-  class AuthAdminModule {}
+  class AuthModule {}
 
-  data.AuthAdminModule = AuthAdminModule;
+  data.AuthModule = AuthModule;
 
   return data;
 }

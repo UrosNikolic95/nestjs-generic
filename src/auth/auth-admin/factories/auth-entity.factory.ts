@@ -9,7 +9,6 @@ import {
 } from 'typeorm';
 import { IDevice } from '../../../types/device.interface';
 import { IGenerateModule } from '../interfaces/generate-module.interface';
-import { AdminEntity } from '../entities/admin.entity';
 import { ApiProperty } from '@nestjs/swagger';
 import { Exclude } from 'class-transformer';
 import { IUser } from '../../../types/user.interface';
@@ -24,7 +23,7 @@ export function authEntityFactory(data: IGenerateModule) {
     user_id: number;
 
     @ManyToOne(() => UserEntity, (el) => el.device, { onDelete: 'CASCADE' })
-    user: UserEntity;
+    user: IUser;
 
     @Column({ unique: true })
     token: string;
@@ -82,7 +81,7 @@ export function authEntityFactory(data: IGenerateModule) {
     set_password_code: string;
 
     @OneToMany(() => DeviceEntity, (el) => el.user)
-    device: DeviceEntity;
+    device: IDevice;
   }
 
   data.UserEntity = UserEntity;

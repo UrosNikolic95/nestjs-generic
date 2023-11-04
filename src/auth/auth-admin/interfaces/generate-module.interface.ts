@@ -16,5 +16,5 @@ export interface IGenerateModule {
   LocalStrategy: Type;
   AdminSubscriber: Type;
   AuthController: Type;
-  AuthAdminModule: Type;
+  AuthModule: Type;
 }

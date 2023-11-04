@@ -5,7 +5,7 @@ export interface IDevice {
 
   user_id: number;
 
-  user: IUser;
+  user?: IUser;
 
   token: string;
 
