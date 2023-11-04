@@ -10,10 +10,7 @@ import { InjectDataSource } from '@nestjs/typeorm';
 import { Injectable } from '@nestjs/common';
 import { userDatabase } from '../auth.const';
 import { AdminEntity } from './entities/admin.entity';
-
-function randInt(max: number) {
-  return Math.floor(Math.random() * max);
-}
+import { randInt } from './auth.helpers';
 
 @Injectable()
 export class AdminSubscriber implements EntitySubscriberInterface<AdminEntity> {

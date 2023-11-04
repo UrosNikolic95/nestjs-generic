@@ -8,3 +8,7 @@ export const extractJwt = ExtractJwt.fromExtractors([
   },
   ExtractJwt.fromAuthHeaderAsBearerToken(),
 ]);
+
+export function randInt(max: number) {
+  return Math.floor(Math.random() * max);
+}
