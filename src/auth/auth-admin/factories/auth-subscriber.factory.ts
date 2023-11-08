@@ -6,18 +6,15 @@ import {
   DataSource,
   InsertEvent,
   UpdateEvent,
-  BaseEntity,
 } from 'typeorm';
-import { userDatabase } from '../../auth.const';
 import { IGenerateModule } from '../interfaces/generate-module.interface';
 import { randInt } from '../auth.helpers';
-import { EntityClassOrSchema } from '@nestjs/typeorm/dist/interfaces/entity-class-or-schema.type';
 
 export function authSubscriberFactory(data: IGenerateModule) {
   @Injectable()
   class AdminSubscriber implements EntitySubscriberInterface<any> {
     constructor(
-      @InjectDataSource(userDatabase)
+      @InjectDataSource(data?.userDatabase)
       dataSource: DataSource,
     ) {
       dataSource.subscribers.push(this);

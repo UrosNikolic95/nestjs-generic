@@ -8,7 +8,6 @@ import { generateCode } from '../../../helpers/code.helper';
 import { checkRequirements } from '../../../helpers/password.helpers';
 import { MailService } from '../../../mail/mail.service';
 import { UserEntity } from '../../auth-user/entities/user.entity';
-import { userDatabase } from '../../auth.const';
 import { DeleteDto } from '../../dto/delete.dto';
 import { ForgotPasswordDto } from '../../dto/forgot-password.dto';
 import { InvitationDto } from '../../dto/invitation.dto';
@@ -34,11 +33,11 @@ export function authServiceFactory(data: IGenerateModule) {
   @Injectable()
   class AuthService implements IAuthService {
     constructor(
-      @InjectRepository(data.UserEntity, userDatabase)
+      @InjectRepository(data.UserEntity, data?.userDatabase)
       private readonly userRepo: Repository<IUser>,
-      @InjectRepository(data.DeviceEntity, userDatabase)
+      @InjectRepository(data.DeviceEntity, data?.userDatabase)
       private readonly deviceRepo: Repository<IDevice>,
-      @InjectRepository(data.InvitationEntity, userDatabase)
+      @InjectRepository(data.InvitationEntity, data?.userDatabase)
       private readonly invitationRepo: Repository<any>,
       private readonly jwtService: JwtService,
       private readonly mailService: MailService,

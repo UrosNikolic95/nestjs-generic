@@ -14,6 +14,7 @@ export interface IGenerateModule {
   name: string;
   jwtLabel: string;
   localLabel: string;
+  userDatabase: string;
   DeviceEntity: Type;
   InvitationEntity: Type;
   UserEntity: Type;

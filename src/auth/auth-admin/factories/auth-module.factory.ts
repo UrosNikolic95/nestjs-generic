@@ -1,17 +1,10 @@
 import { Module } from '@nestjs/common';
 import { IGenerateModule } from '../interfaces/generate-module.interface';
-import { authControllerFactory } from './auth-controller.factory';
-import { authEntityFactory } from './auth-entity.factory';
-import { authGuardFactory } from './auth-guard.factory';
-import { authStrategyFactory } from './auth-strategy.factory';
-import { authSubscriberFactory } from './auth-subscriber.factory';
-import { authServiceFactory } from './auth.service.facotry';
 import { PhoneModule } from '../../../phone/phone.module';
 import { MailModule } from '../../../mail/mail.module';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { userDatabase } from '../../auth.const';
 import { envConfig } from '../../../config';
 
 export function authModuleFactory(data: IGenerateModule) {
@@ -19,7 +12,7 @@ export function authModuleFactory(data: IGenerateModule) {
     imports: [
       TypeOrmModule.forFeature(
         [data.UserEntity, data.DeviceEntity, data.InvitationEntity],
-        userDatabase,
+        data?.userDatabase,
       ),
       PassportModule.register({ session: true }),
       JwtModule.register({
