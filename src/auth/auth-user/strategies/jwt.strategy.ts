@@ -4,11 +4,11 @@ import { Request } from 'express';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { envConfig } from '../../../config';
 import { jwtLabel } from '../../auth.const';
-import { AuthUserService } from '../auth-user.service';
+import { AuthService } from '../auth.service';
 
 @Injectable()
-export class JwtUserStrategy extends PassportStrategy(Strategy, jwtLabel) {
-  constructor(private readonly authService: AuthUserService) {
+export class JwtStrategy extends PassportStrategy(Strategy, jwtLabel) {
+  constructor(private readonly authService: AuthService) {
     super({
       jwtFromRequest: ExtractJwt.fromExtractors([
         (req: Request) => {

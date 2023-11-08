@@ -7,12 +7,12 @@ import { AuthModule } from '../../src/auth/auth.module';
 import { getGenericModule } from '../../src/crud/crud.module';
 import { UserEntity } from '../../src/auth/auth-user/entities/user.entity';
 import { getViewerController } from '../../src/viewer/viewer.controller';
-import { JwtUserAuth } from '../../src/auth/auth-user/guards/jwt-user.guard';
+import { JwtAuth } from '../../src/auth/auth-user/guards/jwt.guard';
 import { userDatabase } from '../../src/auth/auth.const';
 import { DeviceEntity } from '../../src/auth/auth-user/entities/device.entity';
 import { AnalyticsModule } from '../../src/analytics/analytics.module';
 
-@JwtUserAuth()
+@JwtAuth()
 class controller extends getViewerController('view', Test1Entity, {
   select: {
     a1: (el) => el.field,

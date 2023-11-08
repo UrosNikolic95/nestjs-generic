@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
-import { AuthUserService } from './auth-user.service';
-import { AuthUserController } from './auth-user.controller';
+import { AuthService } from './auth.service';
+import { AuthController } from './auth.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
@@ -8,12 +8,12 @@ import { envConfig } from '../../config';
 import { DeviceEntity } from './entities/device.entity';
 import { UserEntity } from './entities/user.entity';
 import { MailModule } from '../../mail/mail.module';
-import { UserSubscriber } from './auth-user.subscriber';
+import { UserSubscriber } from './user.subscriber';
 import { userDatabase } from '../auth.const';
-import { LocalUserGuard } from './guards/local-user.guard';
-import { LocalUserStrategy } from './strategies/local-user.strategy';
-import { JwtUserGuard } from './guards/jwt-user.guard';
-import { JwtUserStrategy } from './strategies/jwt-user.strategy';
+import { LocalGuard } from './guards/local.guard';
+import { LocalStrategy } from './strategies/local.strategy';
+import { JwtGuard } from './guards/jwt.guard';
+import { JwtStrategy } from './strategies/jwt.strategy';
 import { PhoneModule } from '../../phone/phone.module';
 
 @Module({
@@ -27,15 +27,15 @@ import { PhoneModule } from '../../phone/phone.module';
     MailModule,
     PhoneModule,
   ],
-  controllers: [AuthUserController],
+  controllers: [AuthController],
   providers: [
-    AuthUserService,
-    LocalUserStrategy,
-    LocalUserGuard,
-    JwtUserStrategy,
-    JwtUserGuard,
+    AuthService,
+    LocalStrategy,
+    LocalGuard,
+    JwtStrategy,
+    JwtGuard,
     UserSubscriber,
   ],
-  exports: [AuthUserService],
+  exports: [AuthService],
 })
-export class AuthUserModule {}
+export class AuthModule {}

@@ -5,7 +5,7 @@ import {
   IGenericController,
   IPaginationResponse,
 } from './crud.interface';
-import { csvRes, fromBufferToJson } from './crud.helper';
+import { csvRes, csvResXlsx, fromBufferToJson } from './crud.helper';
 import { Response } from 'express';
 import { QueryHelper, Where, Flatten } from 'type-safe-select';
 
@@ -45,7 +45,7 @@ export class GenericFunctions<T extends EntityType, query = any>
 
   async export(res: Response) {
     const items = await this.repo.createQueryBuilder('root').getMany();
-    csvRes(res, items);
+    csvResXlsx(res, items);
   }
 
   async requestOne(id: number): Promise<T> {

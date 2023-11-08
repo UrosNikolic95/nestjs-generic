@@ -3,8 +3,8 @@ import { AuthGuard } from '@nestjs/passport';
 import { localLabel } from '../../auth.const';
 
 @Injectable()
-export class LocalUserGuard extends AuthGuard(localLabel) {}
+export class LocalGuard extends AuthGuard(localLabel) {}
 
-export function LocalUserAuth() {
-  return UseGuards(LocalUserGuard);
+export function LocalAuth() {
+  return UseGuards(LocalGuard);
 }

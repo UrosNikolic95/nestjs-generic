@@ -3,8 +3,8 @@ import { AuthGuard } from '@nestjs/passport';
 import { jwtLabel } from '../../auth.const';
 
 @Injectable()
-export class JwtUserGuard extends AuthGuard(jwtLabel) {}
+export class JwtGuard extends AuthGuard(jwtLabel) {}
 
-export function JwtUserAuth() {
-  return UseGuards(JwtUserGuard);
+export function JwtAuth() {
+  return UseGuards(JwtGuard);
 }

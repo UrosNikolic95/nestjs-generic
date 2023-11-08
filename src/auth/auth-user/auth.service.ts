@@ -27,7 +27,7 @@ import { RegisterUserDto } from '../dto/register-user.dto';
 import { PhoneService } from '../../phone/phone.service';
 
 @Injectable()
-export class AuthUserService {
+export class AuthService {
   constructor(
     @InjectRepository(UserEntity, userDatabase)
     private readonly userRepo: Repository<UserEntity>,

@@ -9,27 +9,27 @@ import {
 } from '@nestjs/common';
 import { ApiBody, ApiTags } from '@nestjs/swagger';
 import { Request, Response } from 'express';
-import { AuthUserService } from './auth-user.service';
+import { AuthService } from './auth.service';
 import { DeleteDto } from '../dto/delete.dto';
 import { ForgotPasswordDto } from '../dto/forgot-password.dto';
 import { LoginDto } from '../dto/login.dto';
 import { ResetPasswordDto } from '../dto/reset-password.dto';
 import { SetPasswordDto } from '../dto/set-password.dto';
-import { JwtUserAuth } from './guards/jwt-user.guard';
-import { LocalUserAuth } from './guards/local-user.guard';
+import { JwtAuth } from './guards/jwt.guard';
+import { LocalAuth } from './guards/local.guard';
 import { RegisterUserDto } from '../dto/register-user.dto';
 
 @ApiTags('auth')
 @Controller('auth')
-export class AuthUserController {
-  constructor(private readonly authService: AuthUserService) {}
+export class AuthController {
+  constructor(private readonly authService: AuthService) {}
 
   @Post('forgot-password')
   forgotPassword(@Body() body: ForgotPasswordDto) {
     return this.authService.forgotPassword(body);
   }
 
-  @JwtUserAuth()
+  @JwtAuth()
   @Post('reset-password')
   resetPassword(@Req() req: Request, @Body() body: ResetPasswordDto) {
     return this.authService.resetPassword(req.user, body);
@@ -46,14 +46,14 @@ export class AuthUserController {
   }
 
   @ApiBody({ type: LoginDto })
-  @LocalUserAuth()
+  @LocalAuth()
   @Post('login')
   async login(@Req() req: Request, @Res({ passthrough: true }) res: Response) {
     await this.authService.makeJwtToken(req.user, res);
     return req.user;
   }
 
-  @JwtUserAuth()
+  @JwtAuth()
   @Post('logout')
   async logout(@Res({ passthrough: true }) res: Response, @Req() req: Request) {
     await this.authService.removeJwtToken(res, req);
@@ -69,7 +69,7 @@ export class AuthUserController {
     await this.authService.validatePhone(code);
   }
 
-  @JwtUserAuth()
+  @JwtAuth()
   @Post('delete')
   delete(
     @Req() req: Request,
