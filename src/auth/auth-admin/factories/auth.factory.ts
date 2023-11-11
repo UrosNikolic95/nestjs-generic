@@ -10,6 +10,7 @@ import { authServiceFactory } from './auth.service.facotry';
 export function authFactory(name: string) {
   const data = {
     name,
+    userDatabase: `${name}-database`,
     jwtLabel: `${name}-jwt`,
     localLabel: `${name}-local`,
   } as IGenerateModule;
