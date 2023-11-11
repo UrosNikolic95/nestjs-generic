@@ -3,7 +3,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { databaseConfig } from '../../data/database.config';
 import { Test1Entity } from './test1.entity';
 import { Test2Entity } from './test2.entity';
-import { AuthModule } from '../../src/auth/auth.module';
 import { getGenericModule } from '../../src/crud/crud.module';
 import { getViewerController } from '../../src/viewer/viewer.controller';
 import { JwtAuth } from '../../src/auth/auth-user/guards/jwt.guard';
@@ -31,7 +30,6 @@ class controller extends getViewerController('view', Test1Entity, {
     }),
     TypeOrmModule.forFeature([Test1Entity, Test2Entity]),
     getGenericModule([Test1Entity, Test2Entity]),
-    AuthModule,
     AnalyticsModule,
   ],
   controllers: [],
