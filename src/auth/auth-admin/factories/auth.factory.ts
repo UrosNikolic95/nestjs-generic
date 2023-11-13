@@ -12,8 +12,8 @@ import { authServiceFactory } from './auth.service.facotry';
 
 export function authFactory(params: IGenericAuthModuleParams) {
   const data = {
-    name: params.name,
-    userDatabase: params.userDatabase,
+    ...params,
+    databaseName: params.databaseUrl ? `${params.name}-database` : undefined,
     jwtLabel: `${params.name}-jwt`,
     localLabel: `${params.name}-local`,
   } as IGenerateModule;

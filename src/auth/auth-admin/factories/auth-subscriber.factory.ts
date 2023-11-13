@@ -14,7 +14,7 @@ export function authSubscriberFactory(data: IGenerateModule) {
   @Injectable()
   class AdminSubscriber implements EntitySubscriberInterface<any> {
     constructor(
-      @InjectDataSource(data?.userDatabase)
+      @InjectDataSource(data?.databaseName)
       dataSource: DataSource,
     ) {
       dataSource.subscribers.push(this);

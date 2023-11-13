@@ -33,11 +33,11 @@ export function authServiceFactory(data: IGenerateModule) {
   @Injectable()
   class AuthService implements IAuthService {
     constructor(
-      @InjectRepository(data.UserEntity, data?.userDatabase)
+      @InjectRepository(data.UserEntity, data?.databaseName)
       private readonly userRepo: Repository<IUser>,
-      @InjectRepository(data.DeviceEntity, data?.userDatabase)
+      @InjectRepository(data.DeviceEntity, data?.databaseName)
       private readonly deviceRepo: Repository<IDevice>,
-      @InjectRepository(data.InvitationEntity, data?.userDatabase)
+      @InjectRepository(data.InvitationEntity, data?.databaseName)
       private readonly invitationRepo: Repository<any>,
       private readonly jwtService: JwtService,
       private readonly mailService: MailService,

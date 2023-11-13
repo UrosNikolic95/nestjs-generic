@@ -6,13 +6,22 @@ import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { envConfig } from '../../../config';
+import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 
 export function authModuleFactory(data: IGenerateModule) {
   @Module({
     imports: [
+      TypeOrmModule.forRoot({
+        name: data.databaseName,
+        type: data.databaseType,
+        url: data.databaseUrl,
+        autoLoadEntities: true,
+        synchronize: true,
+        namingStrategy: new SnakeNamingStrategy(),
+      }),
       TypeOrmModule.forFeature(
         [data.UserEntity, data.DeviceEntity, data.InvitationEntity],
-        data?.userDatabase,
+        data?.databaseName,
       ),
       PassportModule.register({ session: true }),
       JwtModule.register({

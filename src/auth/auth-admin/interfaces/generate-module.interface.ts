@@ -12,10 +12,12 @@ import { ResetPasswordDto } from '../../dto/reset-password.dto';
 
 export interface IGenericAuthModuleParams {
   name: string;
-  userDatabase?: string;
+  databaseType?: 'postgres' | any;
+  databaseUrl?: string;
 }
 
 export interface IGenerateModule extends IGenericAuthModuleParams {
+  databaseName: string;
   jwtLabel: string;
   localLabel: string;
   DeviceEntity: Type;
