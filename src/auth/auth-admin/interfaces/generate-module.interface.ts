@@ -10,11 +10,14 @@ import { DeleteDto } from '../../dto/delete.dto';
 import { ForgotPasswordDto } from '../../dto/forgot-password.dto';
 import { ResetPasswordDto } from '../../dto/reset-password.dto';
 
-export interface IGenerateModule {
+export interface IGenericAuthModuleParams {
   name: string;
+  userDatabase?: string;
+}
+
+export interface IGenerateModule extends IGenericAuthModuleParams {
   jwtLabel: string;
   localLabel: string;
-  userDatabase: string;
   DeviceEntity: Type;
   InvitationEntity: Type;
   UserEntity: Type;
