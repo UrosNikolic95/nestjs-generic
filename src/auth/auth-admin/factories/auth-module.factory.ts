@@ -11,14 +11,16 @@ import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 export function authModuleFactory(data: IGenerateModule) {
   @Module({
     imports: [
-      TypeOrmModule.forRoot({
-        name: data.databaseName,
-        type: 'postgres',
-        url: data.databaseUrl,
-        autoLoadEntities: true,
-        synchronize: true,
-        namingStrategy: new SnakeNamingStrategy(),
-      }),
+      data?.databaseName
+        ? TypeOrmModule.forRoot({
+            type: 'postgres',
+            name: data?.databaseName,
+            url: data?.databaseUrl,
+            autoLoadEntities: true,
+            synchronize: true,
+            namingStrategy: new SnakeNamingStrategy(),
+          })
+        : null,
       TypeOrmModule.forFeature(
         [data.UserEntity, data.DeviceEntity, data.InvitationEntity],
         data?.databaseName,
@@ -30,7 +32,7 @@ export function authModuleFactory(data: IGenerateModule) {
       }),
       MailModule,
       PhoneModule,
-    ],
+    ].filter((el) => el),
     controllers: [data.AuthController],
     providers: [
       data.AuthService,
