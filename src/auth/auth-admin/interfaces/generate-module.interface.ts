@@ -12,7 +12,6 @@ import { ResetPasswordDto } from '../../dto/reset-password.dto';
 
 export interface IGenericAuthModuleParams {
   name: string;
-  databaseType?: 'postgres' | any;
   databaseUrl?: string;
 }
 

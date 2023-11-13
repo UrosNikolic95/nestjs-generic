@@ -13,7 +13,7 @@ export function authModuleFactory(data: IGenerateModule) {
     imports: [
       TypeOrmModule.forRoot({
         name: data.databaseName,
-        type: data.databaseType,
+        type: 'postgres',
         url: data.databaseUrl,
         autoLoadEntities: true,
         synchronize: true,
