@@ -36,16 +36,18 @@ export class EnvVariables {
   @EnvDecorators.Email()
   SMTP_FROM: string;
 
-  @EnvDecorators.String()
+  @EnvDecorators.Boolean({ required: false })
+  SWAGGER_SETUP: boolean;
+  @EnvDecorators.String({ required: false })
   SWAGGER_TITLE: string;
-  @EnvDecorators.String()
+  @EnvDecorators.String({ required: false })
   SWAGGER_DESCRIPTION: string;
   @EnvDecorators.String()
-  SWAGGER_PATH: string;
-  @EnvDecorators.String()
+  SWAGGER_PATH: string = 'api/docs';
+  @EnvDecorators.String({ required: false })
   SWAGGER_VERSION: string;
 
-  @EnvDecorators.String()
+  @EnvDecorators.String({ required: false })
   GLOBAL_PREFIX: string;
 
   @EnvDecorators.String()
