@@ -1,34 +1,80 @@
+import { Type, plainToClass } from 'class-transformer';
+import {
+  IsEmail,
+  IsInt,
+  IsPhoneNumber,
+  IsString,
+  validateSync,
+} from 'class-validator';
 import * as dotenv from 'dotenv';
 dotenv.config();
 
-export const envConfig = {
-  JWT_SECRET: process.env.JWT_SECRET,
-  JWT_EXPIRES: process.env.JWT_EXPIRES,
+export class EnvVariables {
+  @IsString()
+  JWT_SECRET: string;
+  @IsString()
+  JWT_EXPIRES: string;
 
-  FORGOT_PASSWORD_LINK: process.env.FORGOT_PASSWORD_LINK,
+  @IsString()
+  FORGOT_PASSWORD_LINK: string;
 
-  DB_URL: process.env.DB_URL,
-  USERS_DB_URL: process.env.DB_URL,
+  @IsString()
+  DB_URL: string;
+  @IsString()
+  USERS_DB_URL: string;
 
-  REDIS_HOST: process.env.REDIS_HOST,
-  REDIS_PORT: process.env.REDIS_PORT,
-  REDIS_PASS: process.env.REDIS_PASS,
+  @IsString()
+  REDIS_HOST: string;
+  @Type(() => Number)
+  @IsInt()
+  REDIS_PORT: number;
+  @IsString()
+  REDIS_PASS: string;
 
-  SMTP_HOST: process.env.SMTP_HOST,
-  SMTP_PORT: process.env.SMTP_PORT,
-  SMTP_USER: process.env.SMTP_USER,
-  SMTP_PASS: process.env.SMTP_PASS,
-  SMTP_FROM: process.env.SMTP_FROM,
+  @IsString()
+  SMTP_HOST: string;
+  @Type(() => Number)
+  @IsInt()
+  SMTP_PORT: number;
+  @IsEmail()
+  SMTP_USER: string;
+  @IsString()
+  SMTP_PASS: string;
+  @IsEmail()
+  SMTP_FROM: string;
 
-  SWAGGER_TITLE: process.env.SWAGGER_TITLE,
-  SWAGGER_DESCRIPTION: process.env.SWAGGER_DESCRIPTION,
-  SWAGGER_PATH: process.env.SWAGGER_PATH,
-  SWAGGER_VERSION: process.env.SWAGGER_VERSION,
+  @IsString()
+  SWAGGER_TITLE: string;
+  @IsString()
+  SWAGGER_DESCRIPTION: string;
+  @IsString()
+  SWAGGER_PATH: string;
+  @IsString()
+  SWAGGER_VERSION: string;
 
-  GLOBAL_PREFIX: process.env.GLOBAL_PREFIX,
+  @IsString()
+  GLOBAL_PREFIX: string;
 
-  TWILIO_ACCOUNT_SID: process.env.TWILIO_ACCOUNT_SID,
-  TWILIO_AUTH_TOKEN: process.env.TWILIO_AUTH_TOKEN,
-  TWILIO_PHONE_NUMBER: process.env.TWILIO_PHONE_NUMBER,
-  TWILIO_PHONE_NUMBER_TO: process.env.TWILIO_PHONE_NUMBER_TO,
-};
+  @IsString()
+  TWILIO_ACCOUNT_SID: string;
+  @IsString()
+  TWILIO_AUTH_TOKEN: string;
+  @IsPhoneNumber()
+  TWILIO_PHONE_NUMBER: string;
+  @IsString()
+  TWILIO_PHONE_NUMBER_TO: string;
+}
+
+function init() {
+  const data = plainToClass(EnvVariables, process.env);
+  const err = validateSync(data, {
+    whitelist: true,
+  });
+  if (err.length) {
+    console.error(err);
+    throw new Error();
+  }
+  return data;
+}
+
+export const envConfig = init();
