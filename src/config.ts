@@ -1,67 +1,60 @@
-import { Type, plainToClass } from 'class-transformer';
-import {
-  IsEmail,
-  IsInt,
-  IsPhoneNumber,
-  IsString,
-  validateSync,
-} from 'class-validator';
+import { plainToClass } from 'class-transformer';
+import { validateSync } from 'class-validator';
 import * as dotenv from 'dotenv';
+import { EnvDecorators } from './decorators/env.decorators';
 dotenv.config();
 
 export class EnvVariables {
-  @IsString()
+  @EnvDecorators.String()
   JWT_SECRET: string;
-  @IsString()
+  @EnvDecorators.String()
   JWT_EXPIRES: string;
 
-  @IsString()
+  @EnvDecorators.String()
   FORGOT_PASSWORD_LINK: string;
 
-  @IsString()
+  @EnvDecorators.String()
   DB_URL: string;
-  @IsString()
+  @EnvDecorators.String()
   USERS_DB_URL: string;
 
-  @IsString()
+  @EnvDecorators.String()
   REDIS_HOST: string;
-  @Type(() => Number)
-  @IsInt()
+  @EnvDecorators.Int()
   REDIS_PORT: number;
-  @IsString()
+  @EnvDecorators.String()
   REDIS_PASS: string;
 
-  @IsString()
+  @EnvDecorators.String()
   SMTP_HOST: string;
-  @Type(() => Number)
-  @IsInt()
+  @EnvDecorators.Number()
   SMTP_PORT: number;
-  @IsEmail()
+  @EnvDecorators.Email()
   SMTP_USER: string;
-  @IsString()
+  @EnvDecorators.String()
   SMTP_PASS: string;
-  @IsEmail()
+  @EnvDecorators.Email()
   SMTP_FROM: string;
 
-  @IsString()
+  @EnvDecorators.String()
   SWAGGER_TITLE: string;
-  @IsString()
+  @EnvDecorators.String()
   SWAGGER_DESCRIPTION: string;
-  @IsString()
+  @EnvDecorators.String()
   SWAGGER_PATH: string;
-  @IsString()
+  @EnvDecorators.String()
   SWAGGER_VERSION: string;
 
-  @IsString()
+  @EnvDecorators.String()
   GLOBAL_PREFIX: string;
 
-  @IsString()
+  @EnvDecorators.String()
   TWILIO_ACCOUNT_SID: string;
-  @IsString()
+  @EnvDecorators.String()
   TWILIO_AUTH_TOKEN: string;
-  @IsPhoneNumber()
+  @EnvDecorators.Phone()
   TWILIO_PHONE_NUMBER: string;
-  @IsString()
+  @EnvDecorators.String()
   TWILIO_PHONE_NUMBER_TO: string;
 }
 
