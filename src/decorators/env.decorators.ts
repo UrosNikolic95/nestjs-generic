@@ -15,108 +15,68 @@ import {
   IsString,
 } from 'class-validator';
 
-interface QueryOptions {
+interface EnvOptions {
   required?: boolean;
   isArray?: boolean;
   numOpt?: IsNumberOptions;
   enumType?: any;
 }
 
-export class QueryDecorators {
-  static Int(data?: QueryOptions) {
+export class EnvDecorators {
+  static Int(data?: EnvOptions) {
     return applyDecorators(
-      ApiProperty({
-        required: data?.required,
-        type: Number,
-        isArray: data?.isArray,
-      }),
       data?.required ? IsDefined() : IsOptional(),
       IsInt({ each: data?.isArray }),
       Type(() => Number),
     );
   }
 
-  static Number(data?: QueryOptions) {
+  static Number(data?: EnvOptions) {
     return applyDecorators(
-      ApiProperty({
-        required: data?.required,
-        type: Number,
-        isArray: data?.isArray,
-      }),
       data?.required ? IsDefined() : IsOptional(),
       IsNumber(data.numOpt, { each: data?.isArray }),
       Type(() => Number),
     );
   }
 
-  static String(data?: QueryOptions) {
+  static String(data?: EnvOptions) {
     return applyDecorators(
-      ApiProperty({
-        required: data?.required,
-        type: String,
-        isArray: data?.isArray,
-      }),
       data?.required ? IsDefined() : IsOptional(),
       IsString({ each: data?.isArray }),
     );
   }
 
-  static Email(data?: QueryOptions) {
+  static Email(data?: EnvOptions) {
     return applyDecorators(
-      ApiProperty({
-        required: data?.required,
-        type: String,
-        isArray: data?.isArray,
-      }),
       data?.required ? IsDefined() : IsOptional(),
       IsEmail({ each: data?.isArray }),
     );
   }
 
-  static Phone(data?: QueryOptions) {
+  static Phone(data?: EnvOptions) {
     return applyDecorators(
-      ApiProperty({
-        required: data?.required,
-        type: String,
-        isArray: data?.isArray,
-      }),
       data?.required ? IsDefined() : IsOptional(),
       IsPhoneNumber(),
     );
   }
 
-  static Enum(data?: QueryOptions) {
+  static Enum(data?: EnvOptions) {
     return applyDecorators(
-      ApiProperty({
-        required: data?.required,
-        type: data?.enumType,
-        isArray: data?.isArray,
-      }),
       data?.required ? IsDefined() : IsOptional(),
       IsEnum(data?.enumType, { each: data?.isArray }),
     );
   }
 
-  static Date(data?: QueryOptions) {
+  static Date(data?: EnvOptions) {
     return applyDecorators(
-      ApiProperty({
-        required: data?.required,
-        type: Date,
-        isArray: data?.isArray,
-      }),
       data?.required ? IsDefined() : IsOptional(),
       IsDate({ each: data?.isArray }),
       Type(() => Date),
     );
   }
 
-  static Boolean(data?: QueryOptions) {
+  static Boolean(data?: EnvOptions) {
     return applyDecorators(
-      ApiProperty({
-        required: data?.required,
-        type: Boolean,
-        isArray: data?.isArray,
-      }),
       data?.required ? IsDefined() : IsOptional(),
       IsBoolean({ each: data?.isArray }),
       Transform((o) =>
