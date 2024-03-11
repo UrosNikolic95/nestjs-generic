@@ -16,3 +16,4 @@ export * from './viewer/viewer.controller';
 export * from './main.helpers';
 export * from './auth/auth-admin/factories/auth.factory';
 export * from './auth/auth-user/auth.module';
+export * from './decorators/query.decorators';
