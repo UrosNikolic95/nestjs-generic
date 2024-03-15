@@ -5,7 +5,7 @@ import {
   CallHandler,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Observable, async, catchError, tap, throwError } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 import { Repository } from 'typeorm';
 import {
   EndpointTimeEntity,
@@ -13,7 +13,7 @@ import {
 } from './entities/endpoint-time.entity';
 import { Request } from 'express';
 import { Cron, CronExpression } from '@nestjs/schedule';
-import { formatValue, formatValueArray } from './analytics.helpers';
+import { formatValueArray } from './analytics.helpers';
 import { time_group_size } from './analytics.consts';
 
 @Injectable()
@@ -55,6 +55,10 @@ export class EndpointTimeInterceptor implements NestInterceptor {
         start.setMinutes(0, 0, 0);
         const key = [method, path, lower_limit, start.toISOString()].join();
         const data = this.data[key];
+
+        console.log({
+          data: this.data,
+        });
 
         if (data) {
           data.calls += 1;

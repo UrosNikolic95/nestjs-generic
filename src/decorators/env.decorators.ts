@@ -34,7 +34,7 @@ export class EnvDecorators {
   static Number(data?: EnvOptions) {
     return applyDecorators(
       data?.required ? IsDefined() : IsOptional(),
-      IsNumber(data.numOpt, { each: data?.isArray }),
+      IsNumber(data?.numOpt, { each: data?.isArray }),
       Type(() => Number),
     );
   }

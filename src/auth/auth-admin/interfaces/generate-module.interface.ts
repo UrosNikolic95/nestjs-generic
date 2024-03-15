@@ -13,8 +13,8 @@ import { ResetPasswordDto } from '../../dto/reset-password.dto';
 export interface IGenericAuthModuleParams {
   name: string;
   databaseUrl?: string;
-  env_variables: {
-    database_url: string;
+  env_variables?: {
+    database_url?: string;
   };
 }
 

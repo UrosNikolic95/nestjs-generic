@@ -42,6 +42,10 @@ export class AnalyticsService {
   }
 
   getWeekExceptionsPerPath() {
+    console.log({
+      date: dateFrom({ days: -7 }),
+    });
+
     const queryBuilder = this.errorRepo
       .createQueryBuilder('errors')
       .select([

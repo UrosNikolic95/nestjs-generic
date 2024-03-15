@@ -44,7 +44,7 @@ export class QueryDecorators {
         isArray: data?.isArray,
       }),
       data?.required ? IsDefined() : IsOptional(),
-      IsNumber(data.numOpt, { each: data?.isArray }),
+      IsNumber(data?.numOpt, { each: data?.isArray }),
       Type(() => Number),
     );
   }

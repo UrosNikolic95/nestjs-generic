@@ -15,16 +15,7 @@ export function formatValueArray(values: any[]) {
     .join(',');
 }
 
-export function dateFrom({
-  date = new Date(),
-  years,
-  months,
-  days,
-  hours,
-  minutes,
-  seconds,
-  milliseconds,
-}: {
+interface IFromDateParam {
   date?: Date;
   years?: number;
   months?: number;
@@ -33,13 +24,27 @@ export function dateFrom({
   minutes?: number;
   seconds?: number;
   milliseconds?: number;
-}) {
-  if (years) date.setFullYear(date.getFullYear() + years);
-  if (months) date.setMonth(date.getMonth() + months);
-  if (days) date.setDate(date.getDate() + days);
-  if (hours) date.setHours(date.getHours() + hours);
-  if (minutes) date.setMinutes(date.getMinutes() + minutes);
-  if (seconds) date.setSeconds(date.getSeconds() + seconds);
-  if (milliseconds) date.setMilliseconds(date.getMilliseconds() + milliseconds);
-  return date;
+}
+
+export function dateFrom({
+  date,
+  years,
+  months,
+  days,
+  hours,
+  minutes,
+  seconds,
+  milliseconds,
+}: IFromDateParam) {
+  // new Date(undefined) throws error
+  const clone = date ? new Date(date) : new Date();
+  if (years) clone.setFullYear(clone.getFullYear() + years);
+  if (months) clone.setMonth(clone.getMonth() + months);
+  if (days) clone.setDate(clone.getDate() + days);
+  if (hours) clone.setHours(clone.getHours() + hours);
+  if (minutes) clone.setMinutes(clone.getMinutes() + minutes);
+  if (seconds) clone.setSeconds(clone.getSeconds() + seconds);
+  if (milliseconds)
+    clone.setMilliseconds(clone.getMilliseconds() + milliseconds);
+  return clone;
 }

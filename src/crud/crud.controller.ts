@@ -24,12 +24,10 @@ import { GenericFunctions } from './crud.functions';
 import { ApiBody, ApiExtraModels, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ApiPaginatedResponse } from './crud.decorators';
 import { Response } from 'express';
-import { Where, Flatten } from 'type-safe-select';
 import { FileInterceptor } from '@nestjs/platform-express';
 
 export function getController<T extends EntityType, query>(
   entity: Type<T>,
-  queryParam?: (el: query) => Where<Flatten<T>>,
 ): Type<IGenericController<T>> {
   const name = entity.prototype.constructor.name;
 
@@ -40,7 +38,7 @@ export function getController<T extends EntityType, query>(
     service: GenericFunctions<T>;
 
     constructor(@InjectRepository(entity) repo: Repository<T>) {
-      this.service = new GenericFunctions(repo, queryParam);
+      this.service = new GenericFunctions(repo);
     }
 
     @ApiPaginatedResponse(entity)

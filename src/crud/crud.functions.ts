@@ -5,32 +5,24 @@ import {
   IGenericController,
   IPaginationResponse,
 } from './crud.interface';
-import { csvRes, csvResXlsx, fromBufferToJson } from './crud.helper';
+import { csvResXlsx, fromBufferToJson } from './crud.helper';
 import { Response } from 'express';
-import { QueryHelper, Where, Flatten } from 'type-safe-select';
 
-export class GenericFunctions<T extends EntityType, query = any>
+export class GenericFunctions<T extends EntityType>
   implements IGenericController<T>
 {
-  constructor(
-    private readonly repo: Repository<T>,
-    readonly queryParams: (el: any) => Where<Flatten<T>>,
-    readonly after?: (arr: T[], repo: Repository<T>) => Promise<any[]>,
-  ) {}
+  constructor(private readonly repo: Repository<T>) {}
 
   async requestMany(query: RequestManyDto): Promise<IPaginationResponse<T>> {
     const { page, limit } = query;
     const skip = (page - 1) * limit;
-    const [items, count] = await new QueryHelper(this.repo).getManyAndCount({
-      where: this.queryParams(query),
+    const [items, count] = await this.repo.findAndCount({
       skip,
       take: limit,
     });
-    const afterTransform = this.after
-      ? await this.after(items, this.repo)
-      : items;
+
     return {
-      items: afterTransform,
+      items: items,
       count,
       page,
       limit,
