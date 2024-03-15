@@ -12,13 +12,18 @@ export class AnalyticsController {
     return this.analyticsService.getWeekExceptions(queryReq);
   }
 
-  @Get('endpoints/paths')
+  @Get('endpoints/errors/paths')
   getWeekExceptionsPerPath() {
     return this.analyticsService.getWeekExceptionsPerPath();
   }
 
-  @Get('endpoints/time-groups')
-  getWeekTimeGroups(@Query() query: AnalyticsTimeDto) {
-    return this.analyticsService.getWeekTimeGroups(query);
+  @Get('endpoints/time')
+  getWeekTime(@Query() query: AnalyticsTimeDto) {
+    return this.analyticsService.getWeekTime(query);
+  }
+
+  @Get('endpoints/time/groups')
+  getWeekTimeGroups() {
+    return this.analyticsService.getWeekTimeGroups();
   }
 }

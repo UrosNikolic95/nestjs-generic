@@ -61,7 +61,7 @@ export class AnalyticsService {
     return queryBuilder.getRawMany();
   }
 
-  async getWeekTimeGroups(query: AnalyticsTimeDto) {
+  async getWeekTime(query: AnalyticsTimeDto) {
     const queryBuilder = this.endpointTimeRepo
       .createQueryBuilder('time')
       .select([
@@ -82,9 +82,23 @@ export class AnalyticsService {
       calls: number;
     }>();
 
-    return data.map((el) => ({
-      ...el,
-      uper_limit: el.lower_limit + time_group_size,
-    }));
+    return {
+      query: Object.keys(query).length ? query : null,
+      date: data.map((el) => ({
+        ...el,
+        uper_limit: el.lower_limit + time_group_size,
+      })),
+    };
+  }
+
+  async getWeekTimeGroups() {
+    return this.endpointTimeRepo
+      .createQueryBuilder('time')
+      .select(['time.method as method', 'time.path as path'])
+      .addGroupBy('time.method')
+      .addGroupBy('time.path')
+      .addOrderBy('time.method')
+      .addOrderBy('time.path')
+      .getRawMany();
   }
 }
