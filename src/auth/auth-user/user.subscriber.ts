@@ -1,4 +1,3 @@
-import { exec } from 'child_process';
 import {
   DataSource,
   EntitySubscriberInterface,
@@ -9,7 +8,7 @@ import { UserEntity } from './entities/user.entity';
 import { hash } from 'bcrypt';
 import { InjectDataSource } from '@nestjs/typeorm';
 import { Injectable } from '@nestjs/common';
-import { userDatabase } from '../auth.const';
+import { envConfig } from '../../config';
 
 function randInt(max: number) {
   return Math.floor(Math.random() * max);
@@ -18,7 +17,7 @@ function randInt(max: number) {
 @Injectable()
 export class UserSubscriber implements EntitySubscriberInterface<UserEntity> {
   constructor(
-    @InjectDataSource(userDatabase)
+    @InjectDataSource(envConfig.USER_DB_NAME)
     dataSource: DataSource,
   ) {
     dataSource.subscribers.push(this);

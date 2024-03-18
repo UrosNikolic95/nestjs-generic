@@ -9,7 +9,6 @@ import { DeviceEntity } from './entities/device.entity';
 import { UserEntity } from './entities/user.entity';
 import { MailModule } from '../../mail/mail.module';
 import { UserSubscriber } from './user.subscriber';
-import { userDatabase } from '../auth.const';
 import { LocalGuard } from './guards/local.guard';
 import { LocalStrategy } from './strategies/local.strategy';
 import { JwtGuard } from './guards/jwt.guard';
@@ -18,7 +17,10 @@ import { PhoneModule } from '../../phone/phone.module';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([UserEntity, DeviceEntity], userDatabase),
+    TypeOrmModule.forFeature(
+      [UserEntity, DeviceEntity],
+      envConfig.USER_DB_NAME,
+    ),
     PassportModule.register({ session: true }),
     JwtModule.register({
       secret: envConfig.JWT_SECRET,

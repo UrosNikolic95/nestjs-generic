@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
-import { compare, compareSync } from 'bcrypt';
+import { compareSync } from 'bcrypt';
 import { randomBytes } from 'crypto';
 import { Response, Request } from 'express';
 import { Repository } from 'typeorm';
@@ -15,7 +15,6 @@ import { UserEntity } from './entities/user.entity';
 import { generateCode } from '../../helpers/code.helper';
 import { checkRequirements } from '../../helpers/password.helpers';
 import { MailService } from '../../mail/mail.service';
-import { userDatabase } from '../auth.const';
 import { DeleteDto } from '../dto/delete.dto';
 import { ForgotPasswordDto } from '../dto/forgot-password.dto';
 import { LoginDto } from '../dto/login.dto';
@@ -29,9 +28,9 @@ import { PhoneService } from '../../phone/phone.service';
 @Injectable()
 export class AuthService {
   constructor(
-    @InjectRepository(UserEntity, userDatabase)
+    @InjectRepository(UserEntity, envConfig.USER_DB_NAME)
     private readonly userRepo: Repository<UserEntity>,
-    @InjectRepository(DeviceEntity, userDatabase)
+    @InjectRepository(DeviceEntity, envConfig.USER_DB_NAME)
     private readonly deviceRepo: Repository<DeviceEntity>,
     private readonly jwtService: JwtService,
     private readonly mailService: MailService,

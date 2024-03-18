@@ -6,8 +6,8 @@ import { Test2Entity } from './test2.entity';
 import { getGenericModule } from '../../src/crud/crud.module';
 import { getViewerController } from '../../src/viewer/viewer.controller';
 import { JwtAuth } from '../../src/auth/auth-user/guards/jwt.guard';
-import { userDatabase } from '../../src/auth/auth.const';
 import { AnalyticsModule } from '../../src/analytics/analytics.module';
+import { envConfig } from '../../src/config';
 
 @JwtAuth()
 class controller extends getViewerController('view', Test1Entity, {
@@ -26,7 +26,7 @@ class controller extends getViewerController('view', Test1Entity, {
     }),
     TypeOrmModule.forRoot({
       ...databaseConfig,
-      name: userDatabase,
+      name: envConfig.USER_DB_NAME,
     }),
     TypeOrmModule.forFeature([Test1Entity, Test2Entity]),
     getGenericModule([Test1Entity, Test2Entity]),

@@ -17,6 +17,8 @@ export class EnvVariables {
   DB_URL: string;
   @EnvDecorators.String()
   USERS_DB_URL: string;
+  @EnvDecorators.String()
+  USER_DB_NAME = 'default';
 
   @EnvDecorators.String()
   REDIS_HOST: string;
