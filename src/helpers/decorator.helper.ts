@@ -44,3 +44,22 @@ export function getFielListDecorator(key: string) {
     },
   };
 }
+
+export function getObjectDecorator<T>(key: string) {
+  return {
+    get(obj: Object): { [key: string]: T } {
+      return Reflect.getMetadata(key, obj) || {};
+    },
+
+    set(val: T): PropertyDecorator {
+      return (target, property: string) => {
+        const obj = Reflect.getMetadata(key, target) as any;
+        if (obj) {
+          obj[property] = val;
+        } else {
+          Reflect.defineMetadata(key, { [property]: val }, target);
+        }
+      };
+    },
+  };
+}

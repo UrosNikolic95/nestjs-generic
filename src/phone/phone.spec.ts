@@ -1,9 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { PhoneModule } from './phone.module';
 import { PhoneService } from './phone.service';
-import { async } from 'rxjs';
 import { envConfig } from '../config';
-import { nextTick } from 'process';
 
 describe('phone module test', () => {
   let module: TestingModule;
